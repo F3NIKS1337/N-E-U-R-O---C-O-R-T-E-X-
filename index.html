@@ -9,6 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
+  --primary:#7C5CFF; --on-primary:#fff;
+  --primary-container:#2A1F55; --on-primary-container:#DAD0FF;
+  --secondary-container:#25213A; --on-secondary-container:#D5CDFF;
+  --surface:#0F0D13; --surface-container:#17141F; --surface-container-high:#221E2E;
+  --surface-container-low:#131019;
+  --on-surface:#ECE7F2; --on-surface-variant:#A79FBF;
+  --outline:#3A3350; --outline-variant:#2A2440;
+  --bg:#0B0910;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.35);
+  --shadow-lg:0 4px 12px rgba(0,0,0,.55),0 8px 32px rgba(0,0,0,.5);
+  --accent-frontal:#7C8DFF; --accent-parietal:#4ADFC4;
+  --accent-temporal:#FFB259; --accent-occipital:#C79BFF;
+  --danger:#FF6B70; --danger-container:#2E1014;
+}
+[data-theme="light"]{
   --primary:#6750A4; --on-primary:#fff;
   --primary-container:#EADDFF; --on-primary-container:#21005D;
   --secondary-container:#E8DEF8; --on-secondary-container:#1D192B;
@@ -22,21 +37,6 @@
   --accent-frontal:#5B7CFA; --accent-parietal:#2FB79B;
   --accent-temporal:#F29B30; --accent-occipital:#A96BF0;
   --danger:#E5484D; --danger-container:#FFE0E2;
-}
-[data-theme="dark"]{
-  --primary:#D0BCFF; --on-primary:#381E72;
-  --primary-container:#4F378B; --on-primary-container:#EADDFF;
-  --secondary-container:#4A4458; --on-secondary-container:#E8DEF8;
-  --surface:#141218; --surface-container:#211F26; --surface-container-high:#2B2930;
-  --surface-container-low:#1D1B20;
-  --on-surface:#E6E0E9; --on-surface-variant:#CAC4D0;
-  --outline:#938F99; --outline-variant:#49454F;
-  --bg:#0F0D13;
-  --shadow:0 1px 2px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.4);
-  --shadow-lg:0 4px 12px rgba(0,0,0,.6),0 8px 32px rgba(0,0,0,.5);
-  --accent-frontal:#8FA6FF; --accent-parietal:#5FD9C0;
-  --accent-temporal:#FFBB66; --accent-occipital:#C79BFF;
-  --danger:#FF6B70; --danger-container:#4A1F22;
 }
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
@@ -63,7 +63,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   width:36px;height:36px;border-radius:12px;flex:none;
   background:linear-gradient(135deg,var(--primary),var(--accent-occipital));
   display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;
-  box-shadow:var(--shadow);
+  box-shadow:0 0 20px color-mix(in srgb,var(--primary) 40%,transparent);
 }
 .brand h1{font-size:16px;font-weight:500;margin:0;white-space:nowrap}
 .brand small{display:block;font-size:11px;color:var(--on-surface-variant);font-weight:400}
@@ -86,11 +86,15 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   padding:6px 8px;border-radius:9px;color:var(--on-surface-variant);
   transition:all .18s ease;
 }
-.lang-switch button.active{background:var(--primary);color:var(--on-primary)}
+.lang-switch button.active{
+  background:var(--primary);color:var(--on-primary);
+  box-shadow:0 0 12px color-mix(in srgb,var(--primary) 50%,transparent);
+}
 @media (max-width:640px){ .lang-switch button{padding:6px 6px;font-size:10px} }
 
-.body{display:grid;grid-template-columns:296px 1fr 372px;overflow:hidden;position:relative}
+.body{display:grid;grid-template-columns:296px 1fr 380px;overflow:hidden;position:relative}
 
+/* ==== DRAWER ==== */
 .drawer{
   background:var(--surface-container-low);border-right:1px solid var(--outline-variant);
   overflow-y:auto;padding:12px 12px 24px;scrollbar-width:thin;
@@ -118,7 +122,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   border:1px solid var(--outline-variant);line-height:1;
   transition:all .18s ease;
 }
-.info-btn:hover{background:var(--secondary-container);color:var(--on-secondary-container)}
+.info-btn:hover{background:var(--primary);color:#fff}
 
 .region-item{
   display:flex;align-items:center;gap:12px;width:100%;
@@ -129,7 +133,8 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .region-item.selected{background:var(--secondary-container);color:var(--on-secondary-container)}
 .region-dot{
   width:14px;height:14px;border-radius:50%;flex:none;
-  box-shadow:0 0 0 3px color-mix(in srgb,currentColor 12%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,currentColor 20%,transparent),
+             0 0 12px currentColor;
 }
 .region-item .txt{min-width:0}
 .region-item .txt b{display:block;font-size:14px;font-weight:500}
@@ -139,12 +144,15 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .legend{margin-top:18px;padding:14px 12px;border-top:1px solid var(--outline-variant)}
 .legend-row{display:flex;align-items:center;gap:10px;font-size:12px;
   color:var(--on-surface-variant);padding:5px 0}
-.legend-row i{width:10px;height:10px;border-radius:3px;flex:none}
+.legend-row i{width:10px;height:10px;border-radius:3px;flex:none;
+  box-shadow:0 0 8px currentColor}
 
+/* ==== VIEWPORT ==== */
 .viewport{
   position:relative;overflow:hidden;
   background:
-    radial-gradient(circle at 50% 42%, color-mix(in srgb,var(--primary) 10%,transparent), transparent 65%),
+    radial-gradient(circle at 50% 40%, rgba(124,92,255,.14), transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(199,155,255,.08), transparent 55%),
     var(--bg);
 }
 #scene{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
@@ -175,20 +183,25 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   display:inline-flex;align-items:center;gap:7px;
   height:34px;padding:0 14px;border-radius:10px;
   border:1px solid var(--outline-variant);
-  background:color-mix(in srgb,var(--surface) 88%,transparent);
+  background:color-mix(in srgb,var(--surface-container) 88%,transparent);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   color:var(--on-surface-variant);font-size:12.5px;font-weight:500;
   transition:all .18s ease;white-space:nowrap;
 }
-.chip.on{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
-.chip.danger-on{background:var(--danger-container);color:var(--danger);border-color:transparent}
+.chip.on{
+  background:var(--secondary-container);color:var(--on-secondary-container);
+  border-color:transparent;
+  box-shadow:0 0 14px color-mix(in srgb,var(--primary) 25%,transparent);
+}
+.chip.danger-on{background:var(--danger-container);color:var(--danger);border-color:transparent;
+  box-shadow:0 0 14px color-mix(in srgb,var(--danger) 35%,transparent)}
 .chip i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
-.chip.on i{opacity:1}
+.chip.on i{opacity:1;box-shadow:0 0 6px currentColor}
 
 .hint{
   position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
   font-size:11.5px;color:var(--on-surface-variant);
-  background:color-mix(in srgb,var(--surface) 85%,transparent);
+  background:color-mix(in srgb,var(--surface-container) 85%,transparent);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   padding:8px 14px;border-radius:20px;border:1px solid var(--outline-variant);
   pointer-events:none;text-align:center;max-width:90%;z-index:5;
@@ -217,6 +230,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .popover h4{margin:0 0 6px;font-size:13px;color:var(--primary)}
 .popover p{margin:0;color:var(--on-surface-variant)}
 
+/* ==== PANEL ==== */
 .panel{
   background:var(--surface-container-low);border-left:1px solid var(--outline-variant);
   display:flex;flex-direction:column;overflow:hidden;
@@ -246,7 +260,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .region-head .big-dot{
   width:44px;height:44px;border-radius:14px;flex:none;
   display:grid;place-items:center;font-size:19px;font-weight:700;color:#fff;
-  box-shadow:var(--shadow);
+  box-shadow:0 0 24px color-mix(in srgb,currentColor 45%,transparent);
 }
 .region-head h2{margin:0;font-size:20px;font-weight:500;line-height:1.2}
 .region-head .latin{margin:3px 0 0;font-size:12px;font-style:italic;
@@ -280,8 +294,9 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   background:var(--surface-container);text-align:left;color:var(--on-surface);
   font-size:13px;transition:all .16s ease;
 }
-.sub-item:active{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 8%,transparent)}
-.sub-item .pin{width:9px;height:9px;border-radius:50%;flex:none;background:var(--primary)}
+.sub-item:active{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,transparent)}
+.sub-item .pin{width:9px;height:9px;border-radius:50%;flex:none;background:var(--primary);
+  box-shadow:0 0 8px var(--primary)}
 .sub-item .go{margin-left:auto;opacity:.4;font-size:11px}
 
 .disease-card{
@@ -292,20 +307,24 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   transition:all .18s ease;cursor:pointer;
 }
 .disease-card:active,.disease-card.active{background:var(--surface-container-high)}
-.disease-card.active{border-left-color:var(--danger);box-shadow:0 0 0 2px var(--danger-container)}
+.disease-card.active{
+  border-left-color:var(--danger);
+  box-shadow:0 0 0 2px var(--danger-container),
+             0 0 22px color-mix(in srgb,var(--danger) 30%,transparent);
+}
 .disease-card h4{
   margin:0 0 4px;font-size:14px;font-weight:500;
   color:var(--on-surface);
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
 }
 .disease-card .latin-sub{
   font-size:11px;font-style:italic;color:var(--on-surface-variant);
   margin:0 0 4px;
 }
 .disease-card .badge{
-  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
-  padding:3px 8px;border-radius:6px;background:var(--danger-container);color:var(--danger);
-  flex:none;
+  font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  padding:3px 7px;border-radius:6px;background:var(--danger-container);color:var(--danger);
+  flex:none;text-align:right;line-height:1.3;max-width:60%;
 }
 .disease-body{display:none;margin-top:12px}
 .disease-card.active .disease-body{display:block;animation:fade .2s ease}
@@ -313,7 +332,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   display:flex;gap:10px;font-size:12px;margin-top:6px;line-height:1.5;
 }
 .disease-card .row b{
-  flex:none;width:96px;color:var(--on-surface-variant);font-weight:500;
+  flex:none;width:100px;color:var(--on-surface-variant);font-weight:500;
 }
 .disease-card .row span{color:var(--on-surface)}
 
@@ -329,7 +348,8 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .cog-bar .track{flex:1;height:6px;border-radius:3px;
   background:var(--surface-container-high);overflow:hidden}
 .cog-bar .track i{display:block;height:100%;background:var(--danger);
-  border-radius:3px;transition:width .35s ease}
+  border-radius:3px;transition:width .35s ease;
+  box-shadow:0 0 8px var(--danger)}
 .cog-bar .pct{width:42px;text-align:right;font-weight:700;font-size:11px;
   color:var(--danger)}
 
@@ -361,12 +381,12 @@ input[type=range]::-webkit-slider-runnable-track{
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
   background:var(--primary);margin-top:-8px;border:none;
-  box-shadow:0 1px 4px rgba(0,0,0,.3);
+  box-shadow:0 0 10px var(--primary),0 1px 4px rgba(0,0,0,.3);
 }
 input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--outline-variant)}
 input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--primary)}
 input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
-  background:var(--primary);border:none}
+  background:var(--primary);border:none;box-shadow:0 0 10px var(--primary)}
 
 .meter{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
 .meter-row{display:flex;align-items:center;gap:12px;font-size:12.5px}
@@ -375,7 +395,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   background:var(--surface-container-high);overflow:hidden}
 .meter-bar i{display:block;height:100%;border-radius:4px;
   background:linear-gradient(90deg,var(--primary),var(--accent-occipital));
-  transition:width .3s ease}
+  transition:width .3s ease;box-shadow:0 0 10px var(--primary)}
 .meter-row b{width:42px;text-align:right;font-size:12px}
 
 .note{
@@ -384,6 +404,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   padding:12px 14px;border-radius:0 10px 10px 0;margin-top:8px;
 }
 
+/* ==== SCRIM ==== */
 .scrim{
   position:fixed;inset:64px 0 0 0;background:rgba(0,0,0,.5);z-index:34;
   opacity:0;pointer-events:none;transition:opacity .25s ease;
@@ -409,7 +430,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
 @media (max-width:880px){
   .body{grid-template-columns:1fr}
   .panel{
-    position:fixed;top:64px;bottom:0;right:0;width:min(380px,92vw);z-index:35;
+    position:fixed;top:64px;bottom:0;right:0;width:min(390px,94vw);z-index:35;
     transform:translateX(100%);
     transition:transform .28s cubic-bezier(.2,.8,.2,1);
     box-shadow:var(--shadow-lg);background:var(--surface-container-low);
@@ -418,9 +439,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   #panelBtn{display:grid!important}
   .brand small{display:none}
 }
-@media (min-width:881px){
-  #panelBtn{display:none}
-}
+@media (min-width:881px){ #panelBtn{display:none} }
 @media (max-width:520px){
   .app{grid-template-rows:56px 1fr}
   .brand h1{font-size:15px}
@@ -484,10 +503,10 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
             <button class="info-btn" data-term="legend">i</button>
           </span>
         </div>
-        <div class="legend-row"><i style="background:var(--accent-frontal)"></i><span data-i18n="regionFrontal"></span></div>
-        <div class="legend-row"><i style="background:var(--accent-parietal)"></i><span data-i18n="regionParietal"></span></div>
-        <div class="legend-row"><i style="background:var(--accent-temporal)"></i><span data-i18n="regionTemporal"></span></div>
-        <div class="legend-row"><i style="background:var(--accent-occipital)"></i><span data-i18n="regionOccipital"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-frontal);color:var(--accent-frontal)"></i><span data-i18n="regionFrontal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-parietal);color:var(--accent-parietal)"></i><span data-i18n="regionParietal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-temporal);color:var(--accent-temporal)"></i><span data-i18n="regionTemporal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-occipital);color:var(--accent-occipital)"></i><span data-i18n="regionOccipital"></span></div>
       </div>
     </nav>
 
@@ -528,1746 +547,4 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   </div>
 </div>
 
-<div class="scrim" id="scrim"></div>
-<div class="popover" id="popover"></div>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
-
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-/* ==========================================================================
-   1. ЛОКАЛИЗАЦИЯ (5 языков)
-   ========================================================================== */
-const I18N = {
-  ru: {
-    brandSub: 'Интерактивный атлас коры',
-    lobesTitle: 'Доли коры', legendTitle: 'Легенда',
-    regionFrontal: 'Лобная', regionParietal: 'Теменная',
-    regionTemporal: 'Височная', regionOccipital: 'Затылочная',
-    chipZones: 'Зоны коры', chipPathways: 'Проводящие пути',
-    chipEndings: 'Окончания', chipRotate: 'Автоповорот',
-    chipPathology: 'Патологии', loading: 'Загрузка модели…',
-    hint: 'Вращение — перетаскивание · Масштаб — щипок · Выбор — клик',
-    tabRegion: 'Область', tabPathology: 'Патологии', tabParams: 'Параметры',
-    sectionStats: 'Характеристики', sectionFunctions: 'Ключевые функции',
-    sectionSubareas: 'Зоны внутри доли',
-    sectionSymptoms: 'Симптомы', sectionCognition: 'Влияние на когнитивные функции',
-    sectionMechanism: 'Механизм', sectionRegionsAffected: 'Поражённые области',
-    emptyInfo: 'Выберите область на 3D-модели или в списке слева, чтобы изучить её строение.',
-    emptyPathology: 'Выберите патологию, чтобы увидеть поражённые области, симптомы и влияние на когнитивные функции.',
-    paramsTitle: 'Нейрофизиологические параметры',
-    paramsBalance: 'Нейромедиаторный баланс',
-    paramsNote: 'Параметры влияют на визуализацию: скорость импульсов, плотность окончаний и свечение коры.',
-    cogMemory: 'Память', cogSpeech: 'Речь', cogAttention: 'Внимание',
-    cogMotor: 'Моторика', cogPerception: 'Восприятие',
-    showOnModel: 'Показать на модели',
-    selectHint: 'Нажмите патологию, чтобы подсветить поражённую зону',
-    terms: {
-      lobes: { t:'Доли коры', d:'Четыре основных отдела каждого полушария: лобная, теменная, височная и затылочная доли. Разделены бороздами.' },
-      legend: { t:'Легенда', d:'Цветовая маркировка долей коры головного мозга, используемая на 3D-модели и в списках.' },
-      subarea: { t:'Зона внутри доли', d:'Функционально обособленный участок коры внутри крупной доли. Например, зона Брока — внутри лобной.' },
-      pathway: { t:'Проводящий путь', d:'Совокупность аксонов, соединяющих разные области мозга. Передаёт сигналы между долями.' },
-      ending: { t:'Нервное окончание', d:'Терминальная часть аксона или дендрита, где происходит передача сигнала — синапс.' },
-      param: { t:'Параметр', d:'Числовая характеристика работы коры: скорость проведения, миелинизация, плотность нейронов и др.' },
-      pathology: { t:'Патология', d:'Заболевание или повреждение, изменяющее работу коры и её когнитивные функции.' }
-    }
-  },
-  en: {
-    brandSub: 'Interactive cortex atlas',
-    lobesTitle: 'Cortical lobes', legendTitle: 'Legend',
-    regionFrontal: 'Frontal', regionParietal: 'Parietal',
-    regionTemporal: 'Temporal', regionOccipital: 'Occipital',
-    chipZones: 'Cortical zones', chipPathways: 'Pathways',
-    chipEndings: 'Endings', chipRotate: 'Auto-rotate',
-    chipPathology: 'Pathologies', loading: 'Loading model…',
-    hint: 'Rotate — drag · Zoom — pinch · Select — click',
-    tabRegion: 'Region', tabPathology: 'Pathologies', tabParams: 'Parameters',
-    sectionStats: 'Characteristics', sectionFunctions: 'Key functions',
-    sectionSubareas: 'Subareas',
-    sectionSymptoms: 'Symptoms', sectionCognition: 'Cognitive impact',
-    sectionMechanism: 'Mechanism', sectionRegionsAffected: 'Affected regions',
-    emptyInfo: 'Select a region on the 3D model or from the list on the left to explore its anatomy.',
-    emptyPathology: 'Select a pathology to see affected regions, symptoms and cognitive impact.',
-    paramsTitle: 'Neurophysiological parameters',
-    paramsBalance: 'Neurotransmitter balance',
-    paramsNote: 'Parameters affect visualization: pulse speed, ending density and cortical glow.',
-    cogMemory: 'Memory', cogSpeech: 'Speech', cogAttention: 'Attention',
-    cogMotor: 'Motor', cogPerception: 'Perception',
-    showOnModel: 'Show on model',
-    selectHint: 'Click a pathology to highlight the affected area',
-    terms: {
-      lobes: { t:'Cortical lobes', d:'Four main divisions of each hemisphere: frontal, parietal, temporal and occipital. Separated by sulci.' },
-      legend: { t:'Legend', d:'Color coding of the cortical lobes used on the 3D model and in lists.' },
-      subarea: { t:'Subarea', d:'A functionally distinct patch of cortex within a larger lobe. For example, Broca\'s area lies within the frontal lobe.' },
-      pathway: { t:'Pathway', d:'A bundle of axons connecting different brain regions. It transmits signals between lobes.' },
-      ending: { t:'Nerve ending', d:'The terminal part of an axon or dendrite where signal transmission — a synapse — occurs.' },
-      param: { t:'Parameter', d:'A numeric characteristic of cortical function: conduction speed, myelination, neuron density, etc.' },
-      pathology: { t:'Pathology', d:'A disease or injury that alters cortical function and its cognitive processes.' }
-    }
-  },
-  es: {
-    brandSub: 'Atlas interactivo de la corteza',
-    lobesTitle: 'Lóbulos corticales', legendTitle: 'Leyenda',
-    regionFrontal: 'Frontal', regionParietal: 'Parietal',
-    regionTemporal: 'Temporal', regionOccipital: 'Occipital',
-    chipZones: 'Zonas corticales', chipPathways: 'Vías',
-    chipEndings: 'Terminaciones', chipRotate: 'Autorrotación',
-    chipPathology: 'Patologías', loading: 'Cargando modelo…',
-    hint: 'Rotar — arrastrar · Zoom — pellizcar · Elegir — clic',
-    tabRegion: 'Región', tabPathology: 'Patologías', tabParams: 'Parámetros',
-    sectionStats: 'Características', sectionFunctions: 'Funciones clave',
-    sectionSubareas: 'Subáreas',
-    sectionSymptoms: 'Síntomas', sectionCognition: 'Impacto cognitivo',
-    sectionMechanism: 'Mecanismo', sectionRegionsAffected: 'Regiones afectadas',
-    emptyInfo: 'Seleccione una región en el modelo 3D o en la lista izquierda para explorar su anatomía.',
-    emptyPathology: 'Seleccione una patología para ver regiones afectadas, síntomas e impacto cognitivo.',
-    paramsTitle: 'Parámetros neurofisiológicos',
-    paramsBalance: 'Equilibrio de neurotransmisores',
-    paramsNote: 'Los parámetros afectan la visualización: velocidad de pulsos, densidad de terminaciones y brillo cortical.',
-    cogMemory: 'Memoria', cogSpeech: 'Habla', cogAttention: 'Atención',
-    cogMotor: 'Motora', cogPerception: 'Percepción',
-    showOnModel: 'Mostrar en el modelo',
-    selectHint: 'Haga clic en una patología para resaltar la zona afectada',
-    terms: {
-      lobes: { t:'Lóbulos corticales', d:'Cuatro divisiones principales de cada hemisferio: frontal, parietal, temporal y occipital. Separadas por surcos.' },
-      legend: { t:'Leyenda', d:'Código de colores de los lóbulos corticales usado en el modelo 3D y en las listas.' },
-      subarea: { t:'Subárea', d:'Una región funcional dentro de un lóbulo mayor. Por ejemplo, el área de Broca está dentro del lóbulo frontal.' },
-      pathway: { t:'Vía', d:'Un haz de axones que conecta diferentes regiones del cerebro. Transmite señales entre lóbulos.' },
-      ending: { t:'Terminación nerviosa', d:'La parte terminal de un axón o dendrita donde ocurre la transmisión — la sinapsis.' },
-      param: { t:'Parámetro', d:'Una característica numérica de la función cortical: velocidad de conducción, mielinización, densidad neuronal, etc.' },
-      pathology: { t:'Patología', d:'Una enfermedad o lesión que altera la función cortical y sus procesos cognitivos.' }
-    }
-  },
-  fr: {
-    brandSub: 'Atlas interactif du cortex',
-    lobesTitle: 'Lobes corticaux', legendTitle: 'Légende',
-    regionFrontal: 'Frontal', regionParietal: 'Pariétal',
-    regionTemporal: 'Temporal', regionOccipital: 'Occipital',
-    chipZones: 'Zones corticales', chipPathways: 'Voies',
-    chipEndings: 'Terminaisons', chipRotate: 'Autorotation',
-    chipPathology: 'Pathologies', loading: 'Chargement du modèle…',
-    hint: 'Rotation — glisser · Zoom — pincer · Choix — clic',
-    tabRegion: 'Région', tabPathology: 'Pathologies', tabParams: 'Paramètres',
-    sectionStats: 'Caractéristiques', sectionFunctions: 'Fonctions clés',
-    sectionSubareas: 'Sous-régions',
-    sectionSymptoms: 'Symptômes', sectionCognition: 'Impact cognitif',
-    sectionMechanism: 'Mécanisme', sectionRegionsAffected: 'Régions affectées',
-    emptyInfo: 'Sélectionnez une région sur le modèle 3D ou dans la liste à gauche pour explorer son anatomie.',
-    emptyPathology: 'Sélectionnez une pathologie pour voir les régions affectées, les symptômes et l\'impact cognitif.',
-    paramsTitle: 'Paramètres neurophysiologiques',
-    paramsBalance: 'Équilibre des neurotransmetteurs',
-    paramsNote: 'Les paramètres influencent la visualisation : vitesse des impulsions, densité des terminaisons et lueur corticale.',
-    cogMemory: 'Mémoire', cogSpeech: 'Langage', cogAttention: 'Attention',
-    cogMotor: 'Motricité', cogPerception: 'Perception',
-    showOnModel: 'Afficher sur le modèle',
-    selectHint: 'Cliquez sur une pathologie pour mettre en évidence la zone affectée',
-    terms: {
-      lobes: { t:'Lobes corticaux', d:'Quatre divisions principales de chaque hémisphère : frontal, pariétal, temporal et occipital. Séparées par des sillons.' },
-      legend: { t:'Légende', d:'Code couleur des lobes corticaux utilisé sur le modèle 3D et dans les listes.' },
-      subarea: { t:'Sous-région', d:'Une zone fonctionnelle au sein d\'un lobe plus grand. Par exemple, l\'aire de Broca dans le lobe frontal.' },
-      pathway: { t:'Voie', d:'Un faisceau d\'axones reliant différentes régions du cerveau. Transmet des signaux entre les lobes.' },
-      ending: { t:'Terminaison nerveuse', d:'La partie terminale d\'un axone ou d\'une dendrite où se produit la transmission — la synapse.' },
-      param: { t:'Paramètre', d:'Une caractéristique numérique de la fonction corticale : vitesse de conduction, myélinisation, densité neuronale, etc.' },
-      pathology: { t:'Pathologie', d:'Une maladie ou lésion qui altère la fonction corticale et ses processus cognitifs.' }
-    }
-  },
-  ja: {
-    brandSub: '大脳皮質インタラクティブアトラス',
-    lobesTitle: '皮質の葉', legendTitle: '凡例',
-    regionFrontal: '前頭葉', regionParietal: '頭頂葉',
-    regionTemporal: '側頭葉', regionOccipital: '後頭葉',
-    chipZones: '皮質領域', chipPathways: '伝導路',
-    chipEndings: '神経終末', chipRotate: '自動回転',
-    chipPathology: '病態', loading: 'モデルを読み込み中…',
-    hint: '回転 — ドラッグ · ズーム — ピンチ · 選択 — クリック',
-    tabRegion: '領域', tabPathology: '病態', tabParams: 'パラメータ',
-    sectionStats: '特徴', sectionFunctions: '主要機能',
-    sectionSubareas: '下位領域',
-    sectionSymptoms: '症状', sectionCognition: '認知機能への影響',
-    sectionMechanism: '機序', sectionRegionsAffected: '罹患領域',
-    emptyInfo: '3Dモデルまたは左のリストから領域を選択して、その構造を調べてください。',
-    emptyPathology: '病態を選択すると、罹患領域・症状・認知機能への影響が表示されます。',
-    paramsTitle: '神経生理学的パラメータ',
-    paramsBalance: '神経伝達物質バランス',
-    paramsNote: 'パラメータは可視化に影響します：インパルス速度、終末密度、皮質の輝き。',
-    cogMemory: '記憶', cogSpeech: '言語', cogAttention: '注意',
-    cogMotor: '運動', cogPerception: '知覚',
-    showOnModel: 'モデルで表示',
-    selectHint: '病態をクリックして罹患領域を強調表示',
-    terms: {
-      lobes: { t:'皮質の葉', d:'各半球の4つの主要な区分：前頭葉、頭頂葉、側頭葉、後頭葉。溝によって分けられます。' },
-      legend: { t:'凡例', d:'3Dモデルとリストで使用される皮質の葉の色分け。' },
-      subarea: { t:'下位領域', d:'大きな葉の中の機能的に独立した皮質の一部。例：前頭葉内のブローカ野。' },
-      pathway: { t:'伝導路', d:'脳の異なる領域を結ぶ軸索の束。葉間で信号を伝達します。' },
-      ending: { t:'神経終末', d:'軸索または樹状突起の末端で、信号伝達（シナプス）が起こる部分。' },
-      param: { t:'パラメータ', d:'皮質機能の数値的特性：伝導速度、髄鞘化、ニューロン密度など。' },
-      pathology: { t:'病態', d:'皮質機能とその認知過程を変化させる疾患または損傷。' }
-    }
-  }
-};
-
-/* ==========================================================================
-   2. ДАННЫЕ О ДОЛЯХ
-   ========================================================================== */
-const REGIONS = {
-  frontal: {
-    key:'frontal',
-    name: { ru:'Лобная доля', en:'Frontal lobe', es:'Lóbulo frontal', fr:'Lobe frontal', ja:'前頭葉' },
-    latin: 'Lobus frontalis',
-    color: 0x5B7CFA, letter: 'F',
-    short: {
-      ru:'Планирование · моторика · речь', en:'Planning · motor · speech',
-      es:'Planificación · motora · habla', fr:'Planification · motricité · langage',
-      ja:'計画 · 運動 · 言語'
-    },
-    desc: {
-      ru:'Самая крупная доля коры, занимающая переднюю треть полушарий. Обеспечивает высшие когнитивные функции: планирование, рабочую память, произвольное внимание, тормозный контроль и социальное поведение.',
-      en:'The largest cortical lobe, occupying the anterior third of each hemisphere. It supports higher cognitive functions: planning, working memory, voluntary attention, inhibitory control and social behavior.',
-      es:'El lóbulo cortical más grande, que ocupa el tercio anterior de cada hemisferio. Sustenta funciones cognitivas superiores: planificación, memoria de trabajo, atención voluntaria, control inhibitorio y comportamiento social.',
-      fr:'Le plus grand lobe cortical, occupant le tiers antérieur de chaque hémisphère. Il soutient les fonctions cognitives supérieures : planification, mémoire de travail, attention volontaire, contrôle inhibiteur et comportement social.',
-      ja:'皮質で最大の葉で、各半球の前部3分の1を占めます。計画、作業記憶、随意注意、抑制制御、社会的行動などの高次認知機能を担います。'
-    },
-    functions: {
-      ru:['Произвольные движения','Планирование','Рабочая память','Речь','Тормозный контроль','Эмоции'],
-      en:['Voluntary movement','Planning','Working memory','Speech','Inhibitory control','Emotion'],
-      es:['Movimiento voluntario','Planificación','Memoria de trabajo','Habla','Control inhibitorio','Emoción'],
-      fr:['Mouvement volontaire','Planification','Mémoire de travail','Langage','Contrôle inhibiteur','Émotion'],
-      ja:['随意運動','計画','作業記憶','言語','抑制制御','情動']
-    },
-    stats: { ru:{'Толщина коры':'2.5–3.0 мм','Нейронов':'≈ 3.5 млрд','Доля коры':'≈ 30 %'},
-             en:{'Cortical thickness':'2.5–3.0 mm','Neurons':'≈ 3.5 bn','Cortex share':'≈ 30 %'},
-             es:{'Espesor cortical':'2.5–3.0 mm','Neuronas':'≈ 3.5 mil M','Proporción':'≈ 30 %'},
-             fr:{'Épaisseur corticale':'2,5–3,0 mm','Neurones':'≈ 3,5 Md','Part du cortex':'≈ 30 %'},
-             ja:{'皮質厚':'2.5–3.0 mm','ニューロン':'約35億','皮質占有率':'約30%'} }
-  },
-  parietal: {
-    key:'parietal',
-    name: { ru:'Теменная доля', en:'Parietal lobe', es:'Lóbulo parietal', fr:'Lobe pariétal', ja:'頭頂葉' },
-    latin: 'Lobus parietalis',
-    color: 0x2FB79B, letter: 'P',
-    short: {
-      ru:'Сенсорика · пространство · внимание', en:'Sensory · space · attention',
-      es:'Sensorial · espacio · atención', fr:'Sensoriel · espace · attention',
-      ja:'感覚 · 空間 · 注意'
-    },
-    desc: {
-      ru:'Расположена позади центральной борозды. Принимает и интегрирует соматосенсорную информацию, формирует пространственную карту мира и управляет направленным вниманием.',
-      en:'Located behind the central sulcus. It receives and integrates somatosensory information, forms a spatial map of the world, and controls directed attention.',
-      es:'Situada detrás del surco central. Recibe e integra información somatosensorial, forma un mapa espacial del mundo y controla la atención dirigida.',
-      fr:'Situé derrière le sillon central. Il reçoit et intègre les informations somatosensorielles, forme une carte spatiale du monde et contrôle l\'attention dirigée.',
-      ja:'中心溝の後方に位置します。体性感覚情報を受け取り統合し、空間的な世界地図を形成し、志向的注意を制御します。'
-    },
-    functions: {
-      ru:['Тактильная чувствительность','Проприоцепция','Пространственное мышление','Внимание','Схема тела','Счёт'],
-      en:['Tactile sensitivity','Proprioception','Spatial reasoning','Attention','Body schema','Calculation'],
-      es:['Sensibilidad táctil','Propiocepción','Razonamiento espacial','Atención','Esquema corporal','Cálculo'],
-      fr:['Sensibilité tactile','Proprioception','Raisonnement spatial','Attention','Schéma corporel','Calcul'],
-      ja:['触覚','固有受容感覚','空間推論','注意','身体図式','計算']
-    },
-    stats: { ru:{'Толщина коры':'2.0–2.5 мм','Нейронов':'≈ 2.0 млрд','Доля коры':'≈ 20 %'},
-             en:{'Cortical thickness':'2.0–2.5 mm','Neurons':'≈ 2.0 bn','Cortex share':'≈ 20 %'},
-             es:{'Espesor cortical':'2.0–2.5 mm','Neuronas':'≈ 2.0 mil M','Proporción':'≈ 20 %'},
-             fr:{'Épaisseur corticale':'2,0–2,5 mm','Neurones':'≈ 2,0 Md','Part du cortex':'≈ 20 %'},
-             ja:{'皮質厚':'2.0–2.5 mm','ニューロン':'約20億','皮質占有率':'約20%'} }
-  },
-  temporal: {
-    key:'temporal',
-    name: { ru:'Височная доля', en:'Temporal lobe', es:'Lóbulo temporal', fr:'Lobe temporal', ja:'側頭葉' },
-    latin: 'Lobus temporalis',
-    color: 0xF29B30, letter: 'T',
-    short: {
-      ru:'Слух · память · понимание речи', en:'Hearing · memory · speech comprehension',
-      es:'Audición · memoria · comprensión del habla', fr:'Audition · mémoire · compréhension du langage',
-      ja:'聴覚 · 記憶 · 言語理解'
-    },
-    desc: {
-      ru:'Расположена в нижне-боковой части полушария. Содержит первичную слуховую кору, зону Вернике, гиппокамп и миндалину.',
-      en:'Located in the lower-lateral part of each hemisphere. It contains the primary auditory cortex, Wernicke\'s area, the hippocampus and the amygdala.',
-      es:'Situada en la parte inferolateral de cada hemisferio. Contiene la corteza auditiva primaria, el área de Wernicke, el hipocampo y la amígdala.',
-      fr:'Situé dans la partie inféro-latérale de chaque hémisphère. Il contient le cortex auditif primaire, l\'aire de Wernicke, l\'hippocampe et l\'amygdale.',
-      ja:'各半球の下外側部に位置します。一次聴覚野、ウェルニッケ野、海馬、扁桃体を含みます。'
-    },
-    functions: {
-      ru:['Слух','Понимание речи','Память','Эмоции','Распознавание лиц','Музыка'],
-      en:['Hearing','Speech comprehension','Memory','Emotion','Face recognition','Music'],
-      es:['Audición','Comprensión del habla','Memoria','Emoción','Reconocimiento facial','Música'],
-      fr:['Audition','Compréhension du langage','Mémoire','Émotion','Reconnaissance des visages','Musique'],
-      ja:['聴覚','言語理解','記憶','情動','顔認識','音楽']
-    },
-    stats: { ru:{'Толщина коры':'2.5–3.0 мм','Нейронов':'≈ 2.2 млрд','Доля коры':'≈ 17 %'},
-             en:{'Cortical thickness':'2.5–3.0 mm','Neurons':'≈ 2.2 bn','Cortex share':'≈ 17 %'},
-             es:{'Espesor cortical':'2.5–3.0 mm','Neuronas':'≈ 2.2 mil M','Proporción':'≈ 17 %'},
-             fr:{'Épaisseur corticale':'2,5–3,0 mm','Neurones':'≈ 2,2 Md','Part du cortex':'≈ 17 %'},
-             ja:{'皮質厚':'2.5–3.0 mm','ニューロン':'約22億','皮質占有率':'約17%'} }
-  },
-  occipital: {
-    key:'occipital',
-    name: { ru:'Затылочная доля', en:'Occipital lobe', es:'Lóbulo occipital', fr:'Lobe occipital', ja:'後頭葉' },
-    latin: 'Lobus occipitalis',
-    color: 0xA96BF0, letter: 'O',
-    short: {
-      ru:'Зрение · зрительные потоки', en:'Vision · visual streams',
-      es:'Visión · vías visuales', fr:'Vision · voies visuelles',
-      ja:'視覚 · 視覚経路'
-    },
-    desc: {
-      ru:'Задний отдел коры, посвящённый обработке зрительной информации. Первичная зрительная кора (V1) получает сигналы от сетчатки.',
-      en:'The posterior cortex, dedicated to processing visual information. The primary visual cortex (V1) receives signals from the retina.',
-      es:'La corteza posterior, dedicada al procesamiento de la información visual. La corteza visual primaria (V1) recibe señales de la retina.',
-      fr:'Le cortex postérieur, dédié au traitement des informations visuelles. Le cortex visuel primaire (V1) reçoit les signaux de la rétine.',
-      ja:'視覚情報の処理を担う後部皮質。一次視覚野（V1）は網膜から信号を受け取ります。'
-    },
-    functions: {
-      ru:['Зрение','Цвет и форма','Движение','Ориентация','Зрительная память'],
-      en:['Vision','Color and shape','Motion','Orientation','Visual memory'],
-      es:['Visión','Color y forma','Movimiento','Orientación','Memoria visual'],
-      fr:['Vision','Couleur et forme','Mouvement','Orientation','Mémoire visuelle'],
-      ja:['視覚','色と形','運動','方位','視覚記憶']
-    },
-    stats: { ru:{'Толщина коры':'1.5–2.0 мм','Нейронов':'≈ 1.4 млрд','Доля коры':'≈ 12 %'},
-             en:{'Cortical thickness':'1.5–2.0 mm','Neurons':'≈ 1.4 bn','Cortex share':'≈ 12 %'},
-             es:{'Espesor cortical':'1.5–2.0 mm','Neuronas':'≈ 1.4 mil M','Proporción':'≈ 12 %'},
-             fr:{'Épaisseur corticale':'1,5–2,0 mm','Neurones':'≈ 1,4 Md','Part du cortex':'≈ 12 %'},
-             ja:{'皮質厚':'1.5–2.0 mm','ニューロン':'約14億','皮質占有率':'約12%'} }
-  }
-};
-
-const SUBAREAS = [
-  { id:'m1',  name:{ru:'Первичная моторная кора',en:'Primary motor cortex',es:'Corteza motora primaria',fr:'Cortex moteur primaire',ja:'一次運動野'}, region:'frontal',   dir:[-0.34, 0.86, 0.16], note:{ru:'Прецентральная извилина. Управляет произвольными движениями.',en:'Precentral gyrus. Controls voluntary movements.',es:'Giro precentral. Controla movimientos voluntarios.',fr:'Gyrus précentral. Contrôle les mouvements volontaires.',ja:'中心前回。随意運動を制御します。'} },
-  { id:'sma', name:{ru:'Дополнительная моторная',en:'Supplementary motor',es:'Motora suplementaria',fr:'Moteur supplémentaire',ja:'補足運動野'}, region:'frontal',   dir:[-0.14, 0.92, 0.40], note:{ru:'Планирование движений.',en:'Movement planning.',es:'Planificación de movimientos.',fr:'Planification des mouvements.',ja:'運動の計画。'} },
-  { id:'pfc', name:{ru:'Префронтальная кора',en:'Prefrontal cortex',es:'Corteza prefrontal',fr:'Cortex préfrontal',ja:'前頭前皮質'}, region:'frontal',   dir:[-0.30, 0.26, 0.92], note:{ru:'Исполнительные функции: рабочая память.',en:'Executive functions: working memory.',es:'Funciones ejecutivas: memoria de trabajo.',fr:'Fonctions exécutives : mémoire de travail.',ja:'実行機能：作業記憶。'} },
-  { id:'broca',name:{ru:'Зона Брока',en:'Broca\'s area',es:'Área de Broca',fr:'Aire de Broca',ja:'ブローカ野'}, region:'frontal',   dir:[-0.56, -0.12, 0.68], note:{ru:'Моторный центр речи.',en:'Motor speech center.',es:'Centro motor del habla.',fr:'Centre moteur du langage.',ja:'運動性言語中枢。'} },
-  { id:'s1',  name:{ru:'Соматосенсорная кора',en:'Somatosensory cortex',es:'Corteza somatosensorial',fr:'Cortex somatosensoriel',ja:'体性感覚野'}, region:'parietal',  dir:[-0.34, 0.86, -0.24], note:{ru:'Тактильные сигналы.',en:'Tactile signals.',es:'Señales táctiles.',fr:'Signaux tactiles.',ja:'触覚信号。'} },
-  { id:'ppc', name:{ru:'Задняя теменная кора',en:'Posterior parietal cortex',es:'Corteza parietal posterior',fr:'Cortex pariétal postérieur',ja:'後頭頂皮質'}, region:'parietal',  dir:[-0.58, 0.52, -0.46], note:{ru:'Пространственное внимание.',en:'Spatial attention.',es:'Atención espacial.',fr:'Attention spatiale.',ja:'空間的注意。'} },
-  { id:'ang', name:{ru:'Угловая извилина',en:'Angular gyrus',es:'Giro angular',fr:'Gyrus angulaire',ja:'角回'}, region:'parietal',  dir:[-0.60, 0.24, -0.62], note:{ru:'Связывает сенсорные сигналы.',en:'Links sensory signals.',es:'Conecta señales sensoriales.',fr:'Relie les signaux sensoriels.',ja:'感覚信号を統合します。'} },
-  { id:'a1',  name:{ru:'Первичная слуховая кора',en:'Primary auditory cortex',es:'Corteza auditiva primaria',fr:'Cortex auditif primaire',ja:'一次聴覚野'}, region:'temporal',  dir:[-0.78, -0.22, 0.08], note:{ru:'Поперечные извилины Гешля.',en:'Heschl\'s transverse gyri.',es:'Giros transversos de Heschl.',fr:'Gyrus transverses de Heschl.',ja:'ヘッシュル横回。'} },
-  { id:'wern',name:{ru:'Зона Вернике',en:'Wernicke\'s area',es:'Área de Wernicke',fr:'Aire de Wernicke',ja:'ウェルニッケ野'}, region:'temporal',  dir:[-0.68, -0.02, -0.40], note:{ru:'Центр понимания речи.',en:'Speech comprehension center.',es:'Centro de comprensión del habla.',fr:'Centre de compréhension du langage.',ja:'感覚性言語中枢。'} },
-  { id:'hip', name:{ru:'Гиппокамп',en:'Hippocampus',es:'Hipocampo',fr:'Hippocampe',ja:'海馬'}, region:'temporal',  dir:[-0.30, -0.62, -0.42], note:{ru:'Формирование памяти.',en:'Memory formation.',es:'Formación de memoria.',fr:'Formation de la mémoire.',ja:'記憶の形成。'} },
-  { id:'v1',  name:{ru:'Первичная зрительная кора',en:'Primary visual cortex',es:'Corteza visual primaria',fr:'Cortex visuel primaire',ja:'一次視覚野'}, region:'occipital', dir:[-0.12, -0.18, -1.0], note:{ru:'Стриарная кора.',en:'Striate cortex.',es:'Corteza estriada.',fr:'Cortex strié.',ja:'線条皮質。'} },
-  { id:'v5',  name:{ru:'Зрительная зона V5/MT',en:'Visual area V5/MT',es:'Área visual V5/MT',fr:'Aire visuelle V5/MT',ja:'視覚野V5/MT'}, region:'occipital', dir:[-0.52, 0.05, -0.86], note:{ru:'Анализ движения.',en:'Motion analysis.',es:'Análisis de movimiento.',fr:'Analyse du mouvement.',ja:'運動解析。'} }
-];
-
-const PATHWAYS = [
-  { a:'m1',  b:'s1',  name:'Central sulcus' },
-  { a:'broca',b:'wern',name:'Arcuate fasciculus' },
-  { a:'s1',  b:'ppc', name:'Posterior parietal' },
-  { a:'a1',  b:'wern',name:'Auditory association' },
-  { a:'v1',  b:'ppc', name:'Dorsal stream' },
-  { a:'v1',  b:'wern',name:'Ventral stream' },
-  { a:'pfc', b:'ppc', name:'Fronto-parietal' },
-  { a:'m1',  b:'sma', name:'Motor loop' }
-];
-
-/* ==========================================================================
-   3. ПАТОЛОГИИ
-   ========================================================================== */
-const DISEASES = [
-  {
-    id:'stroke_mca',
-    name:{ru:'Ишемический инсульт (СМА)',en:'Ischemic stroke (MCA)',es:'Ictus isquémico (ACM)',fr:'AVC ischémique (ACM)',ja:'虚血性脳卒中（MCA）'},
-    latin:'Infarctus cerebri',
-    regions:['frontal','parietal'],
-    mechanism:{
-      ru:'Окклюзия средней мозговой артерии → ишемия лобной и теменной долей.',
-      en:'Middle cerebral artery occlusion → ischemia of frontal and parietal lobes.',
-      es:'Oclusión de la arteria cerebral media → isquemia frontal y parietal.',
-      fr:'Occlusion de l\'artère cérébrale moyenne → ischémie frontale et pariétale.',
-      ja:'中大脳動脈閉塞 → 前頭葉と頭頂葉の虚血。'
-    },
-    symptoms:{
-      ru:['Контралатеральный гемипарез','Гемианестезия','Афазия (при левом полушарии)','Анозогнозия (правое)','Отклонение взора'],
-      en:['Contralateral hemiparesis','Hemianesthesia','Aphasia (left hemisphere)','Anosognosia (right)','Gaze deviation'],
-      es:['Hemiparesia contralateral','Hemi-anestesia','Afasia (hemisferio izq.)','Anosognosia (derecho)','Desviación de la mirada'],
-      fr:['Hémiparésie controlatérale','Hémianesthésie','Aphasie (hémisphère gauche)','Anosognosie (droite)','Déviation du regard'],
-      ja:['対側片麻痺','半身感覚麻痺','失語（左半球）','病態失認（右）','注視偏倚']
-    },
-    cognition:{memory:25,speech:80,attention:60,motor:85,perception:50}
-  },
-  {
-    id:'broca_aphasia',
-    name:{ru:'Афазия Брока',en:'Broca\'s aphasia',es:'Afasia de Broca',fr:'Aphasie de Broca',ja:'ブローカ失語'},
-    latin:'Aphasia motoria',
-    regions:['frontal'],
-    mechanism:{
-      ru:'Повреждение зоны Брока в задне-нижней лобной извилине.',
-      en:'Damage to Broca\'s area in the posterior-inferior frontal gyrus.',
-      es:'Daño al área de Broca en el giro frontal posteroinferior.',
-      fr:'Lésion de l\'aire de Broca dans le gyrus frontal postéro-inférieur.',
-      ja:'下前頭回後部のブローカ野の損傷。'
-    },
-    symptoms:{
-      ru:['Моторная афазия','Телеграфный стиль','Сохранное понимание','Аграмматизм','Затруднение повторения'],
-      en:['Motor aphasia','Telegraphic speech','Preserved comprehension','Agrammatism','Impaired repetition'],
-      es:['Afasia motora','Habla telegráfica','Comprensión preservada','Agramatismo','Repetición alterada'],
-      fr:['Aphasie motrice','Langage télégraphique','Compréhension préservée','Agrammatisme','Répétition altérée'],
-      ja:['運動性失語','電文体発話','理解は保たれる','文法障害','復唱障害']
-    },
-    cognition:{memory:15,speech:95,attention:30,motor:35,perception:10}
-  },
-  {
-    id:'wernicke_aphasia',
-    name:{ru:'Афазия Вернике',en:'Wernicke\'s aphasia',es:'Afasia de Wernicke',fr:'Aphasie de Wernicke',ja:'ウェルニッケ失語'},
-    latin:'Aphasia sensoria',
-    regions:['temporal'],
-    mechanism:{
-      ru:'Повреждение задней части верхней височной извилины (зона Вернике).',
-      en:'Damage to the posterior superior temporal gyrus (Wernicke\'s area).',
-      es:'Daño a la circunvolución temporal superior posterior (área de Wernicke).',
-      fr:'Lésion du gyrus temporal supérieur postérieur (aire de Wernicke).',
-      ja:'上側頭回後部（ウェルニッケ野）の損傷。'
-    },
-    symptoms:{
-      ru:['Сенсорная афазия','Беглая, но бессмысленная речь','Нарушение понимания','Словесный салат','Аносогнозия дефекта'],
-      en:['Sensory aphasia','Fluent but meaningless speech','Impaired comprehension','Word salad','Anosognosia of deficit'],
-      es:['Afasia sensorial','Habla fluida pero sin sentido','Comprensión alterada','Ensalada de palabras','Anosognosia del déficit'],
-      fr:['Aphasie sensorielle','Langage fluide mais vide','Compréhension altérée','Salade de mots','Anosognosie du déficit'],
-      ja:['感覚性失語','流暢だが無意味な発話','理解障害','言葉のサラダ','病態失認']
-    },
-    cognition:{memory:30,speech:90,attention:45,motor:15,perception:40}
-  },
-  {
-    id:'hemianopsia',
-    name:{ru:'Гемианопсия',en:'Hemianopsia',es:'Hemianopsia',fr:'Hémianopsie',ja:'半盲'},
-    latin:'Hemianopsia',
-    regions:['occipital'],
-    mechanism:{
-      ru:'Повреждение зрительной коры или зрительного пути после хиазмы.',
-      en:'Damage to visual cortex or post-chiasmatic visual pathway.',
-      es:'Daño a la corteza visual o vía visual post-quiasmática.',
-      fr:'Lésion du cortex visuel ou de la voie visuelle post-chiasmatique.',
-      ja:'視覚野または視交叉後の視路の損傷。'
-    },
-    symptoms:{
-      ru:['Выпадение половины поля зрения','Сохранное центральное зрение','Ориентационные трудности','Компенсаторные саккады'],
-      en:['Loss of half visual field','Preserved central vision','Orientation difficulty','Compensatory saccades'],
-      es:['Pérdida de medio campo visual','Visión central preservada','Dificultad de orientación','Sacadas compensatorias'],
-      fr:['Perte d\'un demi-champ visuel','Vision centrale préservée','Difficulté d\'orientation','Saccades compensatoires'],
-      ja:['半視野欠損','中心視は保たれる','見当識障害','代償性サッケード']
-    },
-    cognition:{memory:20,speech:10,attention:45,motor:20,perception:90}
-  },
-  {
-    id:'apraxia',
-    name:{ru:'Апраксия',en:'Apraxia',es:'Apraxia',fr:'Apraxie',ja:'失行'},
-    latin:'Apraxia',
-    regions:['parietal','frontal'],
-    mechanism:{
-      ru:'Повреждение теменной и премоторной коры, нарушение программы движений.',
-      en:'Damage to parietal and premotor cortex; disrupted motor programs.',
-      es:'Daño a la corteza parietal y premotora; programas motores alterados.',
-      fr:'Lésion du cortex pariétal et prémoteur ; programmes moteurs perturbés.',
-      ja:'頭頂皮質および前運動野の損傷、運動プログラムの障害。'
-    },
-    symptoms:{
-      ru:['Неспособность выполнять знакомые действия','Сохранная сила мышц','Трудности с инструментами','Ошибки последовательности'],
-      en:['Inability to perform familiar actions','Preserved muscle strength','Difficulty with tools','Sequence errors'],
-      es:['Incapacidad para acciones familiares','Fuerza preservada','Dificultad con herramientas','Errores de secuencia'],
-      fr:['Incapacité à réaliser des gestes appris','Force préservée','Difficultés avec des outils','Erreurs de séquence'],
-      ja:['習熟した動作の障害','筋力は保たれる','道具使用の困難','順序の誤り']
-    },
-    cognition:{memory:35,speech:25,attention:40,motor:80,perception:55}
-  },
-  {
-    id:'agnosia',
-    name:{ru:'Зрительная агнозия',en:'Visual agnosia',es:'Agnosia visual',fr:'Agnosie visuelle',ja:'視覚性失認'},
-    latin:'Agnosia visualis',
-    regions:['occipital','temporal'],
-    mechanism:{
-      ru:'Повреждение вторичной зрительной коры и височных ассоциативных зон.',
-      en:'Damage to secondary visual cortex and temporal association areas.',
-      es:'Daño a la corteza visual secundaria y áreas de asociación temporal.',
-      fr:'Lésion du cortex visuel secondaire et des aires associatives temporales.',
-      ja:'二次視覚野と側頭連合野の損傷。'
-    },
-    symptoms:{
-      ru:['Неузнавание предметов','Сохранное зрение','Использование на ощупь','Прозопагнозия'],
-      en:['Failure to recognize objects','Preserved vision','Tactile exploration','Prosopagnosia'],
-      es:['No reconocer objetos','Visión preservada','Exploración táctil','Prosopagnosia'],
-      fr:['Non-reconnaissance des objets','Vision préservée','Exploration tactile','Prosopagnosie'],
-      ja:['物体の認識障害','視力は保たれる','触覚による探索','相貌失認']
-    },
-    cognition:{memory:45,speech:20,attention:50,motor:15,perception:95}
-  },
-  {
-    id:'tle',
-    name:{ru:'Эпилепсия височной доли',en:'Temporal lobe epilepsy',es:'Epilepsia del lóbulo temporal',fr:'Épilepsie du lobe temporal',ja:'側頭葉てんかん'},
-    latin:'Epilepsia lobi temporalis',
-    regions:['temporal'],
-    mechanism:{
-      ru:'Гиперсинхронная активность нейронов гиппокампа и височной коры.',
-      en:'Hypersynchronous activity of hippocampal and temporal cortical neurons.',
-      es:'Actividad hipersincrónica de neuronas del hipocampo y corteza temporal.',
-      fr:'Activité hypersynchrone des neurones de l\'hippocampe et du cortex temporal.',
-      ja:'海馬および側頭皮質ニューロンの過同期活動。'
-    },
-    symptoms:{
-      ru:['Фокальные приступы с аурой','Дежавю','Автоматизмы','Постприступная спутанность','Нарушение памяти'],
-      en:['Focal seizures with aura','Déjà vu','Automatisms','Post-ictal confusion','Memory impairment'],
-      es:['Crisis focales con aura','Déjà vu','Automatismos','Confusión postictal','Deterioro de memoria'],
-      fr:['Crises focales avec aura','Déjà vu','Automatismes','Confusion post-critique','Troubles de mémoire'],
-      ja:['前兆を伴う焦点発作','既視感','自動症','発作後混迷','記憶障害']
-    },
-    cognition:{memory:75,speech:35,attention:55,motor:30,perception:45}
-  },
-  {
-    id:'alzheimer',
-    name:{ru:'Болезнь Альцгеймера',en:'Alzheimer\'s disease',es:'Enfermedad de Alzheimer',fr:'Maladie d\'Alzheimer',ja:'アルツハイマー病'},
-    latin:'Morbus Alzheimer',
-    regions:['temporal','parietal'],
-    mechanism:{
-      ru:'Амилоидные бляшки и тау-клубки → атрофия гиппокампа и теменной коры.',
-      en:'Amyloid plaques and tau tangles → hippocampal and parietal atrophy.',
-      es:'Placas amiloides y ovillos tau → atrofia del hipocampo y parietal.',
-      fr:'Plaques amyloïdes et enchevêtrements tau → atrophie hippocampique et pariétale.',
-      ja:'アミロイド斑とタウのもつれ → 海馬と頭頂皮質の萎縮。'
-    },
-    symptoms:{
-      ru:['Прогрессирующая амнезия','Дезориентация','Аномия','Апраксия','Изменения личности'],
-      en:['Progressive amnesia','Disorientation','Anomia','Apraxia','Personality changes'],
-      es:['Amnesia progresiva','Desorientación','Anomia','Apraxia','Cambios de personalidad'],
-      fr:['Amnésie progressive','Désorientation','Anomie','Apraxie','Changements de personnalité'],
-      ja:['進行性健忘','見当識障害','喚語困難','失行','人格変化']
-    },
-    cognition:{memory:95,speech:60,attention:65,motor:45,perception:50}
-  },
-  {
-    id:'parkinson',
-    name:{ru:'Болезнь Паркинсона',en:'Parkinson\'s disease',es:'Enfermedad de Parkinson',fr:'Maladie de Parkinson',ja:'パーキンソン病'},
-    latin:'Morbus Parkinson',
-    regions:['frontal'],
-    mechanism:{
-      ru:'Дегенерация дофаминергических нейронов чёрной субстанции → дисфункция лобной коры.',
-      en:'Degeneration of dopaminergic substantia nigra neurons → frontal cortical dysfunction.',
-      es:'Degeneración de neuronas dopaminérgicas de la sustancia negra → disfunción frontal.',
-      fr:'Dégénérescence des neurones dopaminergiques de la substance noire → dysfonction frontale.',
-      ja:'黒質ドーパミン作動性ニューロンの変性 → 前頭皮質機能障害。'
-    },
-    symptoms:{
-      ru:['Тремор покоя','Ригидность','Брадикинезия','Постуральная неустойчивость','Гипомимия'],
-      en:['Resting tremor','Rigidity','Bradykinesia','Postural instability','Hypomimia'],
-      es:['Temblor en reposo','Rigidez','Bradicinesia','Inestabilidad postural','Hipomimia'],
-      fr:['Tremblement de repos','Rigidité','Bradykinésie','Instabilité posturale','Hypomimie'],
-      ja:['安静時振戦','筋強剛','無動','姿勢反射障害','仮面様顔貌']
-    },
-    cognition:{memory:35,speech:40,attention:55,motor:95,perception:25}
-  },
-  {
-    id:'ftd',
-    name:{ru:'Лобно-височная деменция',en:'Frontotemporal dementia',es:'Demencia frontotemporal',fr:'Démence frontotemporale',ja:'前頭側頭型認知症'},
-    latin:'Dementia frontotemporalis',
-    regions:['frontal','temporal'],
-    mechanism:{
-      ru:'Атрофия лобной и передней височной коры, накопление TDP-43 или тау.',
-      en:'Atrophy of frontal and anterior temporal cortex; TDP-43 or tau accumulation.',
-      es:'Atrofia de la corteza frontal y temporal anterior; acumulación de TDP-43 o tau.',
-      fr:'Atrophie du cortex frontal et temporal antérieur ; accumulation de TDP-43 ou tau.',
-      ja:'前頭葉および前部側頭皮質の萎縮、TDP-43またはタウの蓄積。'
-    },
-    symptoms:{
-      ru:['Изменения личности','Расторможенность','Апатия','Нарушение речи','Потеря эмпатии'],
-      en:['Personality changes','Disinhibition','Apathy','Language impairment','Loss of empathy'],
-      es:['Cambios de personalidad','Desinhibición','Apatía','Trastorno del lenguaje','Pérdida de empatía'],
-      fr:['Changements de personnalité','Désinhibition','Apathie','Troubles du langage','Perte d\'empathie'],
-      ja:['人格変化','脱抑制','無関心','言語障害','共感の喪失']
-    },
-    cognition:{memory:50,speech:75,attention:60,motor:35,perception:30}
-  },
-  {
-    id:'balint',
-    name:{ru:'Синдром Балинта',en:'Balint\'s syndrome',es:'Síndrome de Balint',fr:'Syndrome de Balint',ja:'バリント症候群'},
-    latin:'Syndroma Balint',
-    regions:['parietal','occipital'],
-    mechanism:{
-      ru:'Двустороннее повреждение задней теменной и затылочной коры.',
-      en:'Bilateral damage to posterior parietal and occipital cortex.',
-      es:'Daño bilateral de la corteza parietal posterior y occipital.',
-      fr:'Lésion bilatérale du cortex pariétal postérieur et occipital.',
-      ja:'両側後頭頂皮質および後頭皮質の損傷。'
-    },
-    symptoms:{
-      ru:['Симультанная агнозия','Оптическая атаксия','Апраксия взора','Трудности чтения'],
-      en:['Simultanagnosia','Optic ataxia','Gaze apraxia','Reading difficulty'],
-      es:['Simultanagnosia','Ataxia óptica','Apraxia de la mirada','Dificultad de lectura'],
-      fr:['Simultanagnosie','Ataxie optique','Apraxie du regard','Difficulté de lecture'],
-      ja:['同時失認','視覚性運動失調','注視失行','読字障害']
-    },
-    cognition:{memory:30,speech:20,attention:90,motor:55,perception:95}
-  },
-  {
-    id:'anosognosia',
-    name:{ru:'Анозогнозия',en:'Anosognosia',es:'Anosognosia',fr:'Anosognosie',ja:'病態失認'},
-    latin:'Anosognosia',
-    regions:['parietal'],
-    mechanism:{
-      ru:'Повреждение правой теменной коры, чаще при инсульте.',
-      en:'Damage to right parietal cortex, most often after stroke.',
-      es:'Daño a la corteza parietal derecha, a menudo tras ictus.',
-      fr:'Lésion du cortex pariétal droit, souvent après AVC.',
-      ja:'右頭頂皮質の損傷、脳卒中後に多い。'
-    },
-    symptoms:{
-      ru:['Отрицание паралича','Игнорирование дефекта','Ложные убеждения','Несоблюдение терапии'],
-      en:['Denial of paralysis','Ignoring deficit','False beliefs','Non-adherence to therapy'],
-      es:['Negación de la parálisis','Ignorar el déficit','Creencias falsas','Incumplimiento terapéutico'],
-      fr:['Déni de la paralysie','Ignorance du déficit','Croyances erronées','Non-observance'],
-      ja:['麻痺の否認','欠損の無視','誤った信念','治療不遵守']
-    },
-    cognition:{memory:35,speech:25,attention:65,motor:50,perception:80}
-  },
-  {
-    id:'acalculia',
-    name:{ru:'Акалькулия',en:'Acalculia',es:'Acalculia',fr:'Acalculie',ja:'計算障害'},
-    latin:'Acalculia',
-    regions:['parietal'],
-    mechanism:{
-      ru:'Повреждение левой угловой извилины и внутритеменной борозды.',
-      en:'Damage to left angular gyrus and intraparietal sulcus.',
-      es:'Daño al giro angular izquierdo y surco intraparietal.',
-      fr:'Lésion du gyrus angulaire gauche et du sillon intrapariétal.',
-      ja:'左角回および頭頂間溝の損傷。'
-    },
-    symptoms:{
-      ru:['Нарушение счёта','Ошибки в операциях','Трудности с числами','Сохранная речь'],
-      en:['Impaired calculation','Operation errors','Difficulty with numbers','Preserved speech'],
-      es:['Cálculo alterado','Errores en operaciones','Dificultad con números','Habla preservada'],
-      fr:['Calcul altéré','Erreurs d\'opérations','Difficultés avec les nombres','Langage préservé'],
-      ja:['計算障害','演算の誤り','数の処理困難','言語は保たれる']
-    },
-    cognition:{memory:30,speech:20,attention:55,motor:15,perception:40}
-  },
-  {
-    id:'alexia',
-    name:{ru:'Алексия без аграфии',en:'Alexia without agraphia',es:'Alexia sin agrafia',fr:'Alexie sans agraphie',ja:'失読（失書を伴わない）'},
-    latin:'Alexia sine agraphia',
-    regions:['occipital','temporal'],
-    mechanism:{
-      ru:'Повреждение левой затылочной коры + мозолистого тела (задняя часть).',
-      en:'Damage to left occipital cortex + splenium of corpus callosum.',
-      es:'Daño a la corteza occipital izquierda + esplenio del cuerpo calloso.',
-      fr:'Lésion du cortex occipital gauche + splénium du corps calleux.',
-      ja:'左後頭皮質および脳梁膨大部の損傷。'
-    },
-    symptoms:{
-      ru:['Неспособность читать','Сохранное письмо','Сохранная устная речь','Покомпонентное узнавание букв'],
-      en:['Inability to read','Preserved writing','Preserved oral speech','Letter-by-letter reading'],
-      es:['Incapacidad para leer','Escritura preservada','Habla preservada','Lectura letra a letra'],
-      fr:['Incapacité à lire','Écriture préservée','Langage oral préservé','Lecture lettre à lettre'],
-      ja:['読字不能','書字は保たれる','発話は保たれる','一字ずつの読字']
-    },
-    cognition:{memory:30,speech:40,attention:50,motor:15,perception:85}
-  }
-];
-
-/* ==========================================================================
-   4. ТЕКУЩИЙ ЯЗЫК
-   ========================================================================== */
-let LANG = 'ru';
-function t(key) {
-  const path = key.split('.');
-  let v = I18N[LANG];
-  for (const p of path) { if (v == null) return key; v = v[p]; }
-  return v != null ? v : key;
-}
-function pick(obj) {
-  if (obj == null) return '';
-  if (typeof obj === 'string') return obj;
-  return obj[LANG] || obj.ru || Object.values(obj)[0];
-}
-
-function applyI18n() {
-  document.documentElement.lang = LANG;
-  document.getElementById('brandSub').textContent = t('brandSub');
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
-  });
-  document.getElementById('hintText').textContent = t('hint');
-  document.querySelectorAll('#langSwitch button').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === LANG);
-  });
-}
-
-/* ==========================================================================
-   5. СЦЕНА
-   ========================================================================== */
-const canvas = document.getElementById('scene');
-const viewport = document.getElementById('viewport');
-
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const isLowPower = isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-
-const renderer = new THREE.WebGLRenderer({
-  canvas, antialias: !isMobile, alpha: true,
-  powerPreference: 'high-performance', stencil: false, depth: true
-});
-renderer.setPixelRatio(isLowPower ? 1.5 : Math.min(devicePixelRatio, 2));
-renderer.setClearColor(0x000000, 0);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x1a1525, 6, 16);
-
-const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-camera.position.set(2.5, 1.5, 3.0);
-
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.rotateSpeed = 0.9;
-controls.zoomSpeed = 1.0;
-controls.minDistance = 1.2;
-controls.maxDistance = 8;
-controls.enablePan = false;
-
-scene.add(new THREE.AmbientLight(0xb8a6e0, 0.35));
-scene.add(new THREE.HemisphereLight(0xd4c5ff, 0x2a1f45, 0.75));
-const keyLight = new THREE.DirectionalLight(0xfff2e6, 2.2); keyLight.position.set(5, 6, 5); scene.add(keyLight);
-const fillLight = new THREE.DirectionalLight(0x9db4ff, 0.9); fillLight.position.set(-5, 0, -3); scene.add(fillLight);
-const rimLight = new THREE.DirectionalLight(0xff9edb, 1.1); rimLight.position.set(-2, 4, -7); scene.add(rimLight);
-const bottomLight = new THREE.PointLight(0x7c5cff, 1.2, 5, 2); bottomLight.position.set(0, -1.5, 0); scene.add(bottomLight);
-
-/* ==========================================================================
-   6. ЗАГРУЗКА МОДЕЛИ + СЕГМЕНТАЦИЯ ПО КООРДИНАТАМ
-   ========================================================================== */
-const brainGroup = new THREE.Group();
-scene.add(brainGroup);
-
-const MODEL_URL = 'https://raw.githubusercontent.com/F3NIKS1337/N-E-U-R-O---C-O-R-T-E-X-/main/full_human_brain_model_-_basic.glb';
-
-let brainMesh = null;
-let vertexRegion = null;      // Uint8Array с индексами долей
-let baseColors = null;        // Float32Array
-const REGION_INDEX = { frontal:0, parietal:1, temporal:2, occipital:3 };
-
-function regionAtNormalized(p) {
-  // p — точка в нормализованных координатах [-1..1] по каждой оси
-  // Эвристика: y — верх/низ, z — перед/зад (перед = +Z), x — лево/право
-  if (p.y < -0.30 && Math.abs(p.x) > 0.30 && p.z > -0.65) return 'temporal';
-  if (p.z < -0.55) return 'occipital';
-  if (p.z > 0.12)  return 'frontal';
-  return 'parietal';
-}
-
-function segmentAndColor(mesh) {
-  const geo = mesh.geometry;
-  const pos = geo.attributes.position;
-  const count = pos.count;
-
-  geo.computeBoundingBox();
-  const bb = geo.boundingBox;
-  const size = new THREE.Vector3(); bb.getSize(size);
-  const center = new THREE.Vector3(); bb.getCenter(center);
-
-  // масштабируем так, чтобы модель вписалась в ~2.2 единицы
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const targetSize = 2.2;
-  const scale = targetSize / maxDim;
-
-  // Центрируем и масштабируем саму геометрию (у меша остаётся identity-трансформ)
-  geo.translate(-center.x, -center.y, -center.z);
-  geo.scale(scale, scale, scale);
-  geo.computeBoundingBox();
-  const bb2 = geo.boundingBox;
-
-  // массив для цвета
-  if (!geo.attributes.color) {
-    geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
-  }
-  const colors = geo.attributes.color.array;
-  vertexRegion = new Uint8Array(count);
-  baseColors = new Float32Array(count * 3);
-
-  const v = new THREE.Vector3();
-  const col = new THREE.Color();
-  const regColors = {
-    frontal: new THREE.Color(REGIONS.frontal.color),
-    parietal: new THREE.Color(REGIONS.parietal.color),
-    temporal: new THREE.Color(REGIONS.temporal.color),
-    occipital: new THREE.Color(REGIONS.occipital.color)
-  };
-
-  for (let i = 0; i < count; i++) {
-    v.fromBufferAttribute(pos, i);
-    // нормализуем в [-1..1]
-    const nx = (v.x - (bb2.min.x + bb2.max.x) / 2) / ((bb2.max.x - bb2.min.x) / 2 || 1);
-    const ny = (v.y - (bb2.min.y + bb2.max.y) / 2) / ((bb2.max.y - bb2.min.y) / 2 || 1);
-    const nz = (v.z - (bb2.min.z + bb2.max.z) / 2) / ((bb2.max.z - bb2.min.z) / 2 || 1);
-
-    const rid = regionAtNormalized({ x:nx, y:ny, z:nz });
-    vertexRegion[i] = REGION_INDEX[rid];
-    col.copy(regColors[rid]);
-    baseColors[i*3]   = col.r;
-    baseColors[i*3+1] = col.g;
-    baseColors[i*3+2] = col.b;
-    colors[i*3]   = col.r;
-    colors[i*3+1] = col.g;
-    colors[i*3+2] = col.b;
-  }
-  geo.attributes.color.needsUpdate = true;
-  geo.computeVertexNormals();
-
-  return { scale, size: bb2 };
-}
-
-const loader = new GLTFLoader();
-const loaderEl = document.getElementById('loader');
-const fallbackGroup = new THREE.Group();
-fallbackGroup.visible = false;
-brainGroup.add(fallbackGroup);
-
-function buildFallback() {
-  // Простая сфера с шумом — используется, если модель не загрузилась
-  const SEG_W = isLowPower ? 96 : 140;
-  const SEG_H = isLowPower ? 72 : 110;
-  const g = new THREE.SphereGeometry(1, SEG_W, SEG_H);
-  const pos = g.attributes.position;
-  const v = new THREE.Vector3();
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    const n = Math.sin(v.x*5)*Math.cos(v.y*4)*Math.sin(v.z*5)*0.5
-            + Math.sin(v.x*10)*Math.cos(v.z*8)*0.2;
-    v.multiplyScalar(1 + n * 0.08);
-    v.x *= 0.78; v.y *= 0.92; v.z *= 1.12;
-    pos.setXYZ(i, v.x, v.y, v.z);
-  }
-  g.computeVertexNormals();
-  const m = new THREE.MeshStandardMaterial({
-    vertexColors:true, roughness:0.48, metalness:0.08,
-    emissive:new THREE.Color(0x7c5cff), emissiveIntensity:0
-  });
-  const mesh = new THREE.Mesh(g, m);
-  mesh.userData.isFallback = true;
-  fallbackGroup.add(mesh);
-  segmentAndColor(mesh);
-  brainMesh = mesh;
-  setupMarkerSystems();
-  brainMat = m;
-  loaderEl.classList.add('hide');
-}
-
-let brainMat = null;
-let markersGroup = null;
-let pathwaysGroup = null;
-let endingsGroup = null;
-let endingsMat = null;
-let endings = null;
-let MAX_ENDINGS = isLowPower ? 480 : 720;
-let markerMeshes = [];
-let pathCurves = [];
-let pulses = [];
-let subareaPos = {};
-
-function setupMarkerSystems() {
-  if (!brainMesh) return;
-  const geo = brainMesh.geometry;
-
-  // маркеры
-  markersGroup = new THREE.Group(); brainGroup.add(markersGroup);
-  const markerGeo = new THREE.SphereGeometry(0.030, 16, 16);
-
-  SUBAREAS.forEach(sa => {
-    const dir = new THREE.Vector3(...sa.dir).normalize();
-    // позиция на поверхности: пересечение луча с bounding box + чуть наружу
-    const p = dir.clone().multiplyScalar(1.05);
-    subareaPos[sa.id] = p.clone();
-
-    const col = new THREE.Color(REGIONS[sa.region].color);
-    const mat = new THREE.MeshStandardMaterial({
-      color: col, emissive: col, emissiveIntensity: 1.2,
-      roughness: 0.25, metalness: 0.15, transparent:true
-    });
-    const mesh = new THREE.Mesh(markerGeo, mat);
-    mesh.position.copy(p);
-    mesh.userData = { type:'subarea', id: sa.id };
-    markersGroup.add(mesh);
-    markerMeshes.push(mesh);
-
-    const haloGeo = new THREE.SphereGeometry(0.065, 14, 14);
-    const haloMat = new THREE.MeshBasicMaterial({
-      color: col, transparent:true, opacity:0.18, depthWrite:false
-    });
-    const halo = new THREE.Mesh(haloGeo, haloMat);
-    halo.position.copy(p);
-    halo.userData = { type:'subarea', id: sa.id, halo:true };
-    markersGroup.add(halo);
-    mesh.userData.halo = halo;
-  });
-
-  // пути
-  pathwaysGroup = new THREE.Group();
-  pathwaysGroup.visible = false;
-  brainGroup.add(pathwaysGroup);
-  const pathColor = new THREE.Color(0x9b7cff);
-  const pulseColor = new THREE.Color(0xffc23d);
-
-  PATHWAYS.forEach(pw => {
-    const a = subareaPos[pw.a]; const b = subareaPos[pw.b];
-    if (!a || !b) return;
-    const mid = a.clone().add(b).multiplyScalar(0.5).multiplyScalar(0.68);
-    const curve = new THREE.CatmullRomCurve3([a.clone(), mid, b.clone()]);
-    const tubeGeo = new THREE.TubeGeometry(curve, 60, 0.011, 6, false);
-    const tubeMat = new THREE.MeshBasicMaterial({
-      color: pathColor, transparent:true, opacity:0.5, depthWrite:false
-    });
-    pathwaysGroup.add(new THREE.Mesh(tubeGeo, tubeMat));
-    pathCurves.push({ curve });
-  });
-
-  const pulseGeo = new THREE.SphereGeometry(0.024, 10, 10);
-  pathCurves.forEach((pc, idx) => {
-    for (let i = 0; i < 2; i++) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: pulseColor, transparent:true, opacity:0.95, depthWrite:false
-      });
-      const mesh = new THREE.Mesh(pulseGeo, mat);
-      pathwaysGroup.add(mesh);
-      pulses.push({ curve: pc.curve, t: (i / 2 + idx * 0.13) % 1, mesh, speed: 0.11 });
-    }
-  });
-
-  // окончания
-  endingsGroup = new THREE.Group(); brainGroup.add(endingsGroup);
-  const endingsGeo = new THREE.SphereGeometry(0.011, 6, 6);
-  endingsMat = new THREE.MeshBasicMaterial({
-    color: 0xffd166, transparent:true, opacity:0.85, depthWrite:false
-  });
-  endings = new THREE.InstancedMesh(endingsGeo, endingsMat, MAX_ENDINGS);
-  const dummy = new THREE.Object3D();
-  const dir = new THREE.Vector3();
-  let seed = 1337;
-  const rnd = () => { seed = (seed*1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
-  for (let i = 0; i < MAX_ENDINGS; i++) {
-    const u = rnd()*2 - 1; const th = rnd()*Math.PI*2;
-    const s = Math.sqrt(1 - u*u);
-    dir.set(s*Math.cos(th), u, s*Math.sin(th));
-    const p = dir.clone().multiplyScalar(1.02);
-    dummy.position.copy(p);
-    dummy.scale.setScalar(0.7 + rnd()*0.9);
-    dummy.updateMatrix();
-    endings.setMatrixAt(i, dummy.matrix);
-  }
-  endings.instanceMatrix.needsUpdate = true;
-  endingsGroup.add(endings);
-
-  // начальные состояния чипов
-  applyChipState('markers');
-  applyChipState('endings');
-  onParamChange('density');
-  onParamChange('excitability');
-  onParamChange('conduction');
-}
-
-loader.load(
-  MODEL_URL,
-  (gltf) => {
-    const model = gltf.scene;
-    // собираем все меши
-    const meshes = [];
-    model.traverse(o => { if (o.isMesh) meshes.push(o); });
-
-    if (!meshes.length) { buildFallback(); return; }
-
-    // Берём самый крупный меш — это и есть мозг
-    meshes.sort((a, b) => {
-      a.geometry.computeBoundingBox(); b.geometry.computeBoundingBox();
-      const sa = a.geometry.boundingBox.getSize(new THREE.Vector3()).length();
-      const sb = b.geometry.boundingBox.getSize(new THREE.Vector3()).length();
-      return sb - sa;
-    });
-    const main = meshes[0];
-
-    // На всякий случай применяем world-матрицу
-    main.updateWorldMatrix(true, false);
-    main.geometry.applyMatrix4(main.matrixWorld);
-
-    // Ориентир: предполагаем, что модель уже стоит «правильно».
-    // Если у тебя она лежит — раскомментируй поворот:
-    // main.geometry.rotateX(-Math.PI/2);
-
-    brainMat = new THREE.MeshStandardMaterial({
-      vertexColors:true, roughness:0.48, metalness:0.08,
-      emissive:new THREE.Color(0x7c5cff), emissiveIntensity:0.05
-    });
-    main.material = brainMat;
-    brainMesh = main;
-    brainGroup.add(main);
-
-    segmentAndColor(main);
-    setupMarkerSystems();
-
-    // камера под размер
-    camera.position.set(2.6, 1.8, 3.2);
-    controls.minDistance = 1.5;
-    controls.maxDistance = 9;
-
-    loaderEl.classList.add('hide');
-  },
-  undefined,
-  (err) => {
-    console.warn('Model load failed, using fallback:', err);
-    buildFallback();
-  }
-);
-
-/* ==========================================================================
-   7. ВЗАИМОДЕЙСТВИЕ
-   ========================================================================== */
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-const tooltipEl = document.getElementById('tooltip');
-let selectedRegion = null;
-let selectedDisease = null;
-let hoveredRegion = null;
-let camTween = null;
-let pathologyOverlay = null;
-
-function setPointerFromEvent(e) {
-  const r = canvas.getBoundingClientRect();
-  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-}
-
-function intersectAll() {
-  raycaster.setFromCamera(pointer, camera);
-  const objs = [];
-  if (markersGroup && markersGroup.visible) objs.push(...markersGroup.children);
-  if (brainMesh) objs.push(brainMesh);
-  return raycaster.intersectObjects(objs, false);
-}
-
-function pickRegionFromMesh(hit) {
-  if (!brainMesh) return null;
-  const local = brainMesh.worldToLocal(hit.point.clone());
-  // нормализуем
-  const bb = brainMesh.geometry.boundingBox;
-  const cx = (bb.min.x + bb.max.x) / 2, sx = (bb.max.x - bb.min.x) / 2;
-  const cy = (bb.min.y + bb.max.y) / 2, sy = (bb.max.y - bb.min.y) / 2;
-  const cz = (bb.min.z + bb.max.z) / 2, sz = (bb.max.z - bb.min.z) / 2;
-  return regionAtNormalized({
-    x: (local.x - cx) / (sx || 1),
-    y: (local.y - cy) / (sy || 1),
-    z: (local.z - cz) / (sz || 1)
-  });
-}
-
-canvas.addEventListener('pointermove', (e) => {
-  if (e.pointerType === 'touch') return;
-  setPointerFromEvent(e);
-  const hits = intersectAll();
-  let label = null, regionId = null;
-
-  if (hits.length) {
-    const h = hits[0];
-    if (h.object.userData.type === 'subarea') {
-      const sa = SUBAREAS.find(s => s.id === h.object.userData.id);
-      if (sa) { label = pick(sa.name); regionId = sa.region; }
-    } else if (h.object === brainMesh) {
-      regionId = pickRegionFromMesh(h);
-      if (regionId) label = pick(REGIONS[regionId].name);
-    }
-  }
-
-  if (regionId !== hoveredRegion) {
-    hoveredRegion = regionId;
-    if (!pathologyOverlay) applyHighlight();
-    canvas.style.cursor = regionId ? 'pointer' : 'grab';
-  }
-
-  if (label && regionId) {
-    const r = canvas.getBoundingClientRect();
-    tooltipEl.textContent = label;
-    tooltipEl.style.left = (e.clientX - r.left) + 'px';
-    tooltipEl.style.top  = (e.clientY - r.top) + 'px';
-    tooltipEl.classList.add('show');
-  } else tooltipEl.classList.remove('show');
-});
-
-canvas.addEventListener('pointerleave', () => {
-  tooltipEl.classList.remove('show');
-  hoveredRegion = null;
-  if (!pathologyOverlay) applyHighlight();
-});
-
-let downPos = null;
-canvas.addEventListener('pointerdown', (e) => { downPos = { x:e.clientX, y:e.clientY }; });
-canvas.addEventListener('pointerup', (e) => {
-  if (!downPos) return;
-  const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
-  downPos = null;
-  if (moved > 8) return;
-
-  setPointerFromEvent(e);
-  const hits = intersectAll();
-  if (!hits.length) {
-    if (selectedRegion) {
-      selectedRegion = null;
-      applyHighlight();
-      renderEmptyInfo();
-      closePanelMobile();
-    }
-    return;
-  }
-  const h = hits[0];
-  if (h.object.userData.type === 'subarea') {
-    const sa = SUBAREAS.find(s => s.id === h.object.userData.id);
-    if (sa) { selectRegion(sa.region, true); focusOn(subareaPos[sa.id]); }
-  } else if (h.object === brainMesh) {
-    const rid = pickRegionFromMesh(h);
-    if (rid) { selectRegion(rid, false); focusOn(h.point.clone().multiplyScalar(0.85)); }
-  }
-});
-
-function applyHighlight() {
-  if (!brainMesh || !vertexRegion || !baseColors) return;
-  const arr = brainMesh.geometry.attributes.color.array;
-  const active = selectedRegion || hoveredRegion;
-  if (!active) {
-    arr.set(baseColors);
-  } else {
-    const hi = new THREE.Color(REGIONS[active].color).multiplyScalar(1.45);
-    const dim = 0.42;
-    const activeIdx = REGION_INDEX[active];
-    for (let i = 0; i < vertexRegion.length; i++) {
-      if (vertexRegion[i] === activeIdx) {
-        arr[i*3] = hi.r; arr[i*3+1] = hi.g; arr[i*3+2] = hi.b;
-      } else {
-        arr[i*3]   = baseColors[i*3]   * dim;
-        arr[i*3+1] = baseColors[i*3+1] * dim;
-        arr[i*3+2] = baseColors[i*3+2] * dim;
-      }
-    }
-  }
-  brainMesh.geometry.attributes.color.needsUpdate = true;
-
-  markerMeshes.forEach(m => {
-    const sa = SUBAREAS.find(s => s.id === m.userData.id);
-    const on = !active || sa.region === active;
-    m.material.opacity = on ? 1 : 0.3;
-    m.material.transparent = true;
-    if (m.userData.halo) m.userData.halo.material.opacity = on ? 0.18 : 0.04;
-  });
-
-  if (brainMat) {
-    if (active) brainMat.emissive.setHex(REGIONS[active].color);
-    else brainMat.emissive.setHex(0x7c5cff);
-  }
-}
-
-function applyPathology(regions) {
-  if (!brainMesh || !vertexRegion || !baseColors) return;
-  const arr = brainMesh.geometry.attributes.color.array;
-  const danger = new THREE.Color(0xE5484D);
-  const dangerBright = new THREE.Color(0xFF6B70);
-  const dim = 0.35;
-  const idxs = regions.map(r => REGION_INDEX[r]);
-
-  for (let i = 0; i < vertexRegion.length; i++) {
-    if (idxs.includes(vertexRegion[i])) {
-      arr[i*3] = dangerBright.r; arr[i*3+1] = dangerBright.g; arr[i*3+2] = dangerBright.b;
-    } else {
-      arr[i*3]   = baseColors[i*3]   * dim;
-      arr[i*3+1] = baseColors[i*3+1] * dim;
-      arr[i*3+2] = baseColors[i*3+2] * dim;
-    }
-  }
-  brainMesh.geometry.attributes.color.needsUpdate = true;
-  if (brainMat) {
-    brainMat.emissive.setHex(0xE5484D);
-    brainMat.emissiveIntensity = 0.35;
-  }
-  // приглушаем маркеры и окончания
-  if (markersGroup) markersGroup.visible = false;
-  if (endingsGroup) endingsGroup.visible = false;
-}
-
-function clearPathology() {
-  pathologyOverlay = null;
-  if (markersGroup) markersGroup.visible = chipState.markers;
-  if (endingsGroup) endingsGroup.visible = chipState.endings;
-  applyHighlight();
-}
-
-function focusOn(point) {
-  const dir = point.clone().normalize();
-  const dist = 2.6;
-  const toPos = dir.multiplyScalar(dist).add(new THREE.Vector3(0, 0.15, 0));
-  camTween = {
-    from: camera.position.clone(), to: toPos,
-    fromT: controls.target.clone(), toT: point.clone().multiplyScalar(0.35),
-    t: 0
-  };
-}
-
-/* ==========================================================================
-   8. ПАРАМЕТРЫ
-   ========================================================================== */
-const params = { conduction:65, myelin:70, density:65, excitability:50, dopamine:55, serotonin:60 };
-
-const PARAM_DEFS = [
-  { key:'conduction',   label:{ru:'Скорость проведения',en:'Conduction speed',es:'Velocidad de conducción',fr:'Vitesse de conduction',ja:'伝導速度'}, min:1, max:120, unit:' м/с', unitEn:' m/s', sub:{ru:'Скорость распространения потенциала действия по аксону.',en:'Propagation speed of the action potential along the axon.',es:'Velocidad de propagación del potencial de acción por el axón.',fr:'Vitesse de propagation du potentiel d\'action le long de l\'axone.',ja:'軸索に沿った活動電位の伝播速度。'} },
-  { key:'myelin',       label:{ru:'Миелинизация',en:'Myelination',es:'Mielinización',fr:'Myélinisation',ja:'髄鞘化'}, min:0, max:100, unit:' %', sub:{ru:'Степень покрытия аксонов миелином.',en:'Degree of axonal myelin coverage.',es:'Grado de cobertura de mielina axonal.',fr:'Degré de couverture myélinique des axones.',ja:'軸索の髄鞘被覆の程度。'} },
-  { key:'density',      label:{ru:'Плотность нейронов',en:'Neuron density',es:'Densidad neuronal',fr:'Densité neuronale',ja:'ニューロン密度'}, min:5, max:100, unit:' %', sub:{ru:'Количество нервных окончаний на поверхности.',en:'Number of nerve endings on the surface.',es:'Número de terminaciones nerviosas en la superficie.',fr:'Nombre de terminaisons nerveuses en surface.',ja:'表面の神経終末の数。'} },
-  { key:'excitability', label:{ru:'Возбудимость коры',en:'Cortical excitability',es:'Excitabilidad cortical',fr:'Excitabilité corticale',ja:'皮質興奮性'}, min:0, max:100, unit:' %', sub:{ru:'Уровень кортикальной активации.',en:'Level of cortical activation.',es:'Nivel de activación cortical.',fr:'Niveau d\'activation corticale.',ja:'皮質活性化のレベル。'} },
-  { key:'dopamine',     label:{ru:'Уровень дофамина',en:'Dopamine level',es:'Nivel de dopamina',fr:'Niveau de dopamine',ja:'ドーパミン量'}, min:0, max:100, unit:' %', sub:{ru:'Мотивация, подкрепление, моторный контроль.',en:'Motivation, reinforcement, motor control.',es:'Motivación, refuerzo, control motor.',fr:'Motivation, renforcement, contrôle moteur.',ja:'動機、強化、運動制御。'} },
-  { key:'serotonin',    label:{ru:'Уровень серотонина',en:'Serotonin level',es:'Nivel de serotonina',fr:'Niveau de sérotonine',ja:'セロトニン量'}, min:0, max:100, unit:' %', sub:{ru:'Настроение, сон, аппетит.',en:'Mood, sleep, appetite.',es:'Estado de ánimo, sueño, apetito.',fr:'Humeur, sommeil, appétit.',ja:'気分、睡眠、食欲。'} }
-];
-
-function renderParams() {
-  const pane = document.getElementById('pane-params');
-  pane.innerHTML = `
-    <p class="section-h">
-      <span>${t('paramsTitle')}</span>
-      <button class="info-btn" data-term="param">i</button>
-    </p>
-    ${PARAM_DEFS.map(d => `
-      <div class="param">
-        <div class="param-head">
-          <label for="p_${d.key}">${pick(d.label)}</label>
-          <span class="val" id="v_${d.key}">${params[d.key]}${d.unit}</span>
-        </div>
-        <input type="range" id="p_${d.key}" min="${d.min}" max="${d.max}" value="${params[d.key]}">
-        <p class="sub">${pick(d.sub)}</p>
-      </div>
-    `).join('')}
-    <p class="section-h" style="margin-top:28px">${t('paramsBalance')}</p>
-    <div class="meter" id="meters"></div>
-    <div class="note">${t('paramsNote')}</div>
-  `;
-  PARAM_DEFS.forEach(d => {
-    const input = pane.querySelector(`#p_${d.key}`);
-    const out   = pane.querySelector(`#v_${d.key}`);
-    const sync  = () => {
-      const pct = ((input.value - d.min) / (d.max - d.min)) * 100;
-      input.style.setProperty('--p', pct + '%');
-    };
-    sync();
-    input.addEventListener('input', () => {
-      params[d.key] = +input.value;
-      out.textContent = input.value + d.unit;
-      sync();
-      onParamChange(d.key);
-    });
-  });
-  updateMeters();
-  bindInfoButtons(pane);
-}
-
-function updateMeters() {
-  const el = document.getElementById('meters');
-  if (!el) return;
-  const rows = [
-    [LANG==='ru'?'Дофамин':LANG==='es'?'Dopamina':LANG==='fr'?'Dopamine':LANG==='ja'?'ドーパミン':'Dopamine', params.dopamine],
-    [LANG==='ru'?'Серотонин':LANG==='es'?'Serotonina':LANG==='fr'?'Sérotonine':LANG==='ja'?'セロトニン':'Serotonin', params.serotonin],
-    [LANG==='ru'?'Возбудимость':LANG==='es'?'Excitabilidad':LANG==='fr'?'Excitabilité':LANG==='ja'?'興奮性':'Excitability', params.excitability]
-  ];
-  el.innerHTML = rows.map(([n, v]) => `
-    <div class="meter-row">
-      <span class="name">${n}</span>
-      <span class="meter-bar"><i style="width:${v}%"></i></span>
-      <b>${v}%</b>
-    </div>
-  `).join('');
-}
-
-function onParamChange(key) {
-  if (key === 'density' && endings) {
-    endings.count = Math.round(MAX_ENDINGS * (params.density / 100));
-    endings.instanceMatrix.needsUpdate = true;
-  }
-  if (key === 'excitability' && brainMat && !pathologyOverlay) {
-    brainMat.emissiveIntensity = (params.excitability / 100) * 0.35;
-  }
-  if (key === 'dopamine' || key === 'serotonin' || key === 'excitability') updateMeters();
-  if (key === 'myelin' || key === 'conduction') {
-    const f = (params.conduction / 65) * (0.45 + params.myelin / 100 * 0.9);
-    pulses.forEach(p => p.speed = 0.10 * f);
-  }
-}
-
-/* ==========================================================================
-   9. UI
-   ========================================================================== */
-const regionListEl = document.getElementById('regionList');
-function renderRegionList() {
-  regionListEl.innerHTML = '';
-  Object.entries(REGIONS).forEach(([id, r]) => {
-    const btn = document.createElement('button');
-    btn.className = 'region-item' + (selectedRegion === id ? ' selected' : '');
-    btn.dataset.region = id;
-    btn.innerHTML = `
-      <span class="region-dot" style="background:#${r.color.toString(16).padStart(6,'0')}"></span>
-      <span class="txt"><b>${pick(r.name)}</b><span>${pick(r.short)}</span></span>
-    `;
-    btn.addEventListener('click', () => {
-      selectRegion(id, false);
-      const p = new THREE.Vector3(
-        id==='frontal' ? -0.2 : id==='parietal' ? -0.2 : id==='temporal' ? -0.7 : -0.1,
-        id==='frontal' ? 0.3  : id==='parietal' ? 0.6  : id==='temporal' ? -0.35 : 0,
-        id==='frontal' ? 0.8  : id==='parietal' ? -0.3 : id==='temporal' ? 0.1  : -1.0
-      );
-      focusOn(p);
-      closeDrawerMobile();
-    });
-    regionListEl.appendChild(btn);
-  });
-}
-
-const paneInfo = document.getElementById('pane-info');
-function renderEmptyInfo() {
-  paneInfo.innerHTML = `
-    <div class="empty">
-      <div class="ico">
-        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zm-1 19h2v1h-2v-1z"/></svg>
-      </div>
-      <p>${t('emptyInfo')}</p>
-    </div>
-  `;
-}
-
-function selectRegion(id, fromSubarea) {
-  selectedRegion = id;
-  selectedDisease = null;
-  clearPathology();
-  renderRegionList();
-
-  const r = REGIONS[id];
-  const hex = '#' + r.color.toString(16).padStart(6,'0');
-  const subs = SUBAREAS.filter(s => s.region === id);
-  const statsObj = pick(r.stats);
-  const functionsArr = pick(r.functions);
-
-  paneInfo.innerHTML = `
-    <div class="region-head">
-      <div class="big-dot" style="background:${hex}">${r.letter}</div>
-      <div>
-        <h2>${pick(r.name)}</h2>
-        <p class="latin">${r.latin}</p>
-      </div>
-    </div>
-    <p class="desc">${pick(r.desc)}</p>
-
-    <p class="section-h">${t('sectionStats')}</p>
-    <div class="stat-grid">
-      ${Object.entries(statsObj).map(([k,v]) => `
-        <div class="stat-card"><span>${k}</span><b>${v}</b></div>
-      `).join('')}
-    </div>
-
-    <p class="section-h">${t('sectionFunctions')}</p>
-    <ul class="fn-list">
-      ${functionsArr.map(f => `<li>${f}</li>`).join('')}
-    </ul>
-
-    <p class="section-h">
-      <span>${t('sectionSubareas')}</span>
-      <button class="info-btn" data-term="subarea">i</button>
-    </p>
-    <div class="sub-list" id="subList">
-      ${subs.map(s => `
-        <button class="sub-item" data-sub="${s.id}">
-          <span class="pin"></span>
-          <span>${pick(s.name)}</span>
-          <span class="go">→</span>
-        </button>
-      `).join('')}
-    </div>
-
-    <div class="note" id="subNote" style="display:none"></div>
-  `;
-
-  paneInfo.querySelectorAll('.sub-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const sa = SUBAREAS.find(s => s.id === btn.dataset.sub);
-      if (!sa) return;
-      focusOn(subareaPos[sa.id]);
-      const note = document.getElementById('subNote');
-      note.style.display = 'block';
-      note.innerHTML = `<b>${pick(sa.name)}</b><br>${pick(sa.note)}`;
-    });
-  });
-
-  bindInfoButtons(paneInfo);
-  applyHighlight();
-  openPanelMobile();
-}
-
-/* ==========================================================================
-   10. ПАТОЛОГИИ UI
-   ========================================================================== */
-const panePath = document.getElementById('pane-pathology');
-
-function renderPathologyList() {
-  panePath.innerHTML = `
-    <p class="section-h">
-      <span>${t('tabPathology')}</span>
-      <button class="info-btn" data-term="pathology">i</button>
-    </p>
-    <p class="desc" style="margin-bottom:14px">${t('selectHint')}</p>
-    <div id="diseaseList"></div>
-  `;
-  const list = panePath.querySelector('#diseaseList');
-  DISEASES.forEach(d => {
-    const card = document.createElement('div');
-    card.className = 'disease-card' + (selectedDisease === d.id ? ' active' : '');
-    card.dataset.id = d.id;
-    card.innerHTML = `
-      <h4>
-        <span>${pick(d.name)}</span>
-        <span class="badge">${d.regions.map(r => pick(REGIONS[r].name)).join(' · ')}</span>
-      </h4>
-      <p class="latin-sub">${d.latin}</p>
-      <div class="disease-body">
-        <div class="row"><b>${t('sectionMechanism')}</b><span>${pick(d.mechanism)}</span></div>
-        <div class="row"><b>${t('sectionRegionsAffected')}</b><span>${d.regions.map(r => pick(REGIONS[r].name)).join(', ')}</span></div>
-        <div style="margin-top:12px">
-          <p class="section-h" style="margin-bottom:6px">${t('sectionSymptoms')}</p>
-          <ul class="symptom-list">${pick(d.symptoms).map(s => `<li>${s}</li>`).join('')}</ul>
-        </div>
-        <div style="margin-top:12px">
-          <p class="section-h" style="margin-bottom:6px">${t('sectionCognition')}</p>
-          ${renderCogBars(d.cognition)}
-        </div>
-      </div>
-    `;
-    card.addEventListener('click', () => toggleDisease(d.id));
-    list.appendChild(card);
-  });
-  bindInfoButtons(panePath);
-}
-
-function renderCogBars(cog) {
-  const rows = [
-    ['memory', t('cogMemory')],
-    ['speech', t('cogSpeech')],
-    ['attention', t('cogAttention')],
-    ['motor', t('cogMotor')],
-    ['perception', t('cogPerception')]
-  ];
-  return rows.map(([k, lbl]) => `
-    <div class="cog-bar">
-      <span class="lbl">${lbl}</span>
-      <span class="track"><i style="width:${cog[k]}%"></i></span>
-      <span class="pct">${cog[k]}%</span>
-    </div>
-  `).join('');
-}
-
-function toggleDisease(id) {
-  if (selectedDisease === id) {
-    selectedDisease = null;
-    clearPathology();
-    renderPathologyList();
-    return;
-  }
-  selectedDisease = id;
-  selectedRegion = null;
-  const d = DISEASES.find(x => x.id === id);
-  pathologyOverlay = d;
-  applyPathology(d.regions);
-  renderPathologyList();
-
-  // скроллим карточку в видимую область
-  const card = panePath.querySelector(`[data-id="${id}"]`);
-  if (card) card.scrollIntoView({ behavior:'smooth', block:'nearest' });
-
-  // фокус на первую поражённую область
-  if (d.regions.length) {
-    const r = d.regions[0];
-    const p = new THREE.Vector3(
-      r==='frontal' ? -0.2 : r==='parietal' ? -0.2 : r==='temporal' ? -0.7 : -0.1,
-      r==='frontal' ? 0.3  : r==='parietal' ? 0.6  : r==='temporal' ? -0.35 : 0,
-      r==='frontal' ? 0.8  : r==='parietal' ? -0.3 : r==='temporal' ? 0.1  : -1.0
-    );
-    focusOn(p);
-  }
-}
-
-/* ==========================================================================
-   11. ПОДСКАЗКИ-ПОПОВЕРЫ
-   ========================================================================== */
-const popover = document.getElementById('popover');
-let popoverFor = null;
-
-function bindInfoButtons(scope) {
-  scope.querySelectorAll('.info-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const term = btn.dataset.term;
-      const data = I18N[LANG].terms[term];
-      if (!data) return;
-      if (popoverFor === btn && popover.classList.contains('show')) {
-        popover.classList.remove('show');
-        popoverFor = null;
-        return;
-      }
-      popover.innerHTML = `<h4>${data.t}</h4><p>${data.d}</p>`;
-      const r = btn.getBoundingClientRect();
-      popover.style.left = Math.min(r.left, window.innerWidth - 320) + 'px';
-      popover.style.top  = (r.bottom + 8) + 'px';
-      popover.classList.add('show');
-      popoverFor = btn;
-    });
-  });
-}
-
-document.addEventListener('click', (e) => {
-  if (!popover.classList.contains('show')) return;
-  if (popoverFor && popoverFor.contains(e.target)) return;
-  if (popover.contains(e.target)) return;
-  popover.classList.remove('show');
-  popoverFor = null;
-});
-
-/* ==========================================================================
-   12. ТАБЫ
-   ========================================================================== */
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('pane-' + tab.dataset.pane).classList.add('active');
-  });
-});
-
-/* ==========================================================================
-   13. ЧИПЫ
-   ========================================================================== */
-const chipState = { markers:true, pathways:false, endings:true, rotate:false, pathology:false };
-
-document.querySelectorAll('.chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    const key = chip.dataset.toggle;
-    chipState[key] = !chipState[key];
-    chip.classList.toggle('on', chipState[key]);
-    if (key === 'pathology') {
-      chip.classList.toggle('danger-on', chipState[key]);
-      if (chipState[key]) {
-        // включаем режим — открываем вкладку патологий
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-        document.querySelector('.tab[data-pane="pathology"]').classList.add('active');
-        panePath.classList.add('active');
-        openPanelMobile();
-      } else {
-        selectedDisease = null;
-        clearPathology();
-        renderPathologyList();
-      }
-    }
-    applyChipState(key);
-  });
-});
-
-function applyChipState(key) {
-  if (key === 'markers' && markersGroup) markersGroup.visible = chipState.markers && !pathologyOverlay;
-  if (key === 'endings' && endingsGroup) {
-    endingsGroup.visible = chipState.endings && !pathologyOverlay;
-    if (endings && chipState.endings) endings.count = Math.round(MAX_ENDINGS * (params.density / 100));
-  }
-  if (key === 'pathways' && pathwaysGroup) {
-    pathwaysGroup.visible = chipState.pathways;
-    if (brainMat) {
-      if (chipState.pathways) {
-        brainMat.opacity = 0.32;
-        brainMat.depthWrite = false;
-        if (brainMesh) brainMesh.renderOrder = 3;
-      } else {
-        brainMat.opacity = 1;
-        brainMat.depthWrite = true;
-        if (brainMesh) brainMesh.renderOrder = 2;
-      }
-    }
-  }
-  if (key === 'rotate') {
-    controls.autoRotate = chipState.rotate;
-    controls.autoRotateSpeed = 0.9;
-  }
-}
-
-/* ==========================================================================
-   14. ЯЗЫК — ПЕРЕКЛЮЧАТЕЛЬ
-   ========================================================================== */
-const langSwitch = document.getElementById('langSwitch');
-langSwitch.addEventListener('click', (e) => {
-  const btn = e.target.closest('button[data-lang]');
-  if (!btn) return;
-  LANG = btn.dataset.lang;
-  try { localStorage.setItem('nc-lang', LANG); } catch(_) {}
-  applyI18n();
-  renderRegionList();
-  if (selectedRegion) selectRegion(selectedRegion, false);
-  else renderEmptyInfo();
-  renderPathologyList();
-  renderParams();
-  if (selectedDisease) renderPathologyList();
-});
-
-function initLang() {
-  let saved = null;
-  try { saved = localStorage.getItem('nc-lang'); } catch(_) {}
-  if (saved && I18N[saved]) LANG = saved;
-  else {
-    const b = (navigator.language || 'ru').slice(0,2).toLowerCase();
-    LANG = I18N[b] ? b : 'ru';
-  }
-}
-
-/* ==========================================================================
-   15. ТЕМА
-   ========================================================================== */
-const themeBtn = document.getElementById('themeBtn');
-const themeIcon = document.getElementById('themeIcon');
-const SUN  = '<path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5 2 3h-4l2-3zm0 20-2-3h4l-2 3zM2 12l3-2v4l-3-2zm20 0-3 2v-4l3 2zM5.6 5.6l3.2.8-2.4 2.4-.8-3.2zm12.8 12.8-3.2-.8 2.4-2.4.8 3.2zM5.6 18.4l.8-3.2 2.4 2.4-3.2.8zm12.8-12.8-.8 3.2-2.4-2.4 3.2-.8z"/>';
-const MOON = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A6.5 6.5 0 0 1 12 3z"/>';
-function setTheme(t) {
-  document.documentElement.dataset.theme = t;
-  themeIcon.innerHTML = t === 'dark' ? SUN : MOON;
-  try { localStorage.setItem('nc-theme', t); } catch(_) {}
-}
-themeBtn.addEventListener('click', () => {
-  setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
-});
-try {
-  const saved = localStorage.getItem('nc-theme');
-  if (saved) setTheme(saved);
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
-} catch(_) {}
-
-/* ==========================================================================
-   16. ПАНЕЛИ / МОБИЛЬНОЕ
-   ========================================================================== */
-const drawer = document.getElementById('drawer');
-const panel  = document.getElementById('panel');
-const scrim  = document.getElementById('scrim');
-
-function openDrawerMobile(){ drawer.classList.add('open'); panel.classList.remove('open'); scrim.classList.add('show'); }
-function closeDrawerMobile(){ drawer.classList.remove('open'); if (!panel.classList.contains('open')) scrim.classList.remove('show'); }
-function openPanelMobile(){ if (innerWidth <= 880) { panel.classList.add('open'); drawer.classList.remove('open'); scrim.classList.add('show'); } }
-function closePanelMobile(){ panel.classList.remove('open'); if (!drawer.classList.contains('open')) scrim.classList.remove('show'); }
-
-document.getElementById('menuBtn').addEventListener('click', () => {
-  drawer.classList.contains('open') ? closeDrawerMobile() : openDrawerMobile();
-});
-document.getElementById('panelBtn').addEventListener('click', () => {
-  panel.classList.contains('open') ? closePanelMobile() : openPanelMobile();
-});
-document.getElementById('closeDrawer').addEventListener('click', closeDrawerMobile);
-document.getElementById('closePanel').addEventListener('click', closePanelMobile);
-scrim.addEventListener('click', () => { closeDrawerMobile(); closePanelMobile(); });
-
-function addSwipeClose(el, direction, onClose) {
-  let startX = 0, startY = 0, tracking = false;
-  el.addEventListener('touchstart', e => {
-    const t = e.touches[0]; startX = t.clientX; startY = t.clientY; tracking = true;
-  }, { passive: true });
-  el.addEventListener('touchmove', e => {
-    if (!tracking) return;
-    const t = e.touches[0];
-    const dx = t.clientX - startX, dy = t.clientY - startY;
-    if (direction === 'right' && dx > 50 && Math.abs(dy) < 80) { tracking = false; onClose(); }
-    if (direction === 'left'  && dx < -50 && Math.abs(dy) < 80) { tracking = false; onClose(); }
-  }, { passive: true });
-  el.addEventListener('touchend', () => { tracking = false; }, { passive: true });
-}
-addSwipeClose(drawer, 'right', closeDrawerMobile);
-addSwipeClose(panel, 'left', closePanelMobile);
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeDrawerMobile(); closePanelMobile();
-    if (popover.classList.contains('show')) { popover.classList.remove('show'); popoverFor = null; }
-    if (selectedRegion) { selectedRegion = null; applyHighlight(); renderEmptyInfo(); }
-  }
-});
-
-/* ==========================================================================
-   17. РАЗМЕР + АНИМАЦИЯ
-   ========================================================================== */
-function resize() {
-  const w = viewport.clientWidth, h = viewport.clientHeight;
-  if (!w || !h) return;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-}
-new ResizeObserver(resize).observe(viewport);
-resize();
-
-const clock = new THREE.Clock();
-let pulsePhase = 0;
-
-function animate() {
-  requestAnimationFrame(animate);
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const time = clock.elapsedTime;
-
-  if (camTween) {
-    camTween.t = Math.min(1, camTween.t + dt * 1.9);
-    const e = 1 - Math.pow(1 - camTween.t, 3);
-    camera.position.lerpVectors(camTween.from, camTween.to, e);
-    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
-    if (camTween.t >= 1) camTween = null;
-  }
-
-  if (pathwaysGroup && pathwaysGroup.visible) {
-    pulses.forEach(p => {
-      p.t = (p.t + dt * p.speed) % 1;
-      p.mesh.position.copy(p.curve.getPointAt(p.t));
-      p.mesh.scale.setScalar(0.8 + Math.sin(p.t * Math.PI) * 0.9);
-      p.mesh.material.opacity = 0.35 + Math.sin(p.t * Math.PI) * 0.6;
-    });
-  }
-
-  if (markersGroup && markersGroup.visible) {
-    const s = 1 + Math.sin(time * 2.1) * 0.10;
-    markerMeshes.forEach(m => {
-      m.scale.setScalar(s);
-      const sa = SUBAREAS.find(x => x.id === m.userData.id);
-      const on = !selectedRegion || sa.region === selectedRegion;
-      m.material.emissiveIntensity = on ? (0.9 + Math.sin(time * 2.1) * 0.4) : 0.05;
-    });
-  }
-
-  if (endingsGroup && endingsGroup.visible && endingsMat) {
-    endingsMat.opacity = 0.62 + Math.sin(time * 1.6) * 0.22;
-  }
-
-  if (pathologyOverlay && brainMat) {
-    pulsePhase += dt * 2.6;
-    brainMat.emissiveIntensity = 0.35 + Math.sin(pulsePhase) * 0.22;
-  } else if (brainMat && !brainMat.userData?.locked) {
-    brainMat.emissiveIntensity = (params.excitability / 100) * 0.30 + Math.sin(time * 1.3) * 0.04 * (params.excitability / 100);
-  }
-
-  bottomLight.intensity = 1.0 + Math.sin(time * 0.8) * 0.3;
-
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-/* ==========================================================================
-   18. ИНИЦИАЛИЗАЦИЯ
-   ========================================================================== */
-initLang();
-applyI18n();
-renderRegionList();
-renderEmptyInfo();
-renderPathologyList();
-renderParams();
-applyHighlight();
-animate();
-</script>
-</body>
-</html>
+<div class="
