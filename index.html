@@ -6,7 +6,7 @@
 <title>NeuroCortex — интерактивный атлас коры</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --primary:#6750A4; --on-primary:#fff;
@@ -21,6 +21,7 @@
   --shadow-lg:0 4px 12px rgba(0,0,0,.15),0 8px 32px rgba(0,0,0,.10);
   --accent-frontal:#5B7CFA; --accent-parietal:#2FB79B;
   --accent-temporal:#F29B30; --accent-occipital:#A96BF0;
+  --danger:#E5484D; --danger-container:#FFE0E2;
 }
 [data-theme="dark"]{
   --primary:#D0BCFF; --on-primary:#381E72;
@@ -35,18 +36,19 @@
   --shadow-lg:0 4px 12px rgba(0,0,0,.6),0 8px 32px rgba(0,0,0,.5);
   --accent-frontal:#8FA6FF; --accent-parietal:#5FD9C0;
   --accent-temporal:#FFBB66; --accent-occipital:#C79BFF;
+  --danger:#FF6B70; --danger-container:#4A1F22;
 }
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
 body{
-  font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:'Roboto','Noto Sans JP',system-ui,-apple-system,'Segoe UI',sans-serif;
   background:var(--bg); color:var(--on-surface);
   -webkit-font-smoothing:antialiased;
   transition:background .25s ease,color .25s ease;
   user-select:none;-webkit-user-select:none;
 }
 svg{width:24px;height:24px;fill:currentColor;display:block}
-button{font-family:inherit;border:none;background:none;cursor:pointer}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
 
 .app{display:grid;grid-template-rows:64px 1fr;height:100dvh}
 
@@ -74,6 +76,24 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 }
 .icon-btn:active{background:color-mix(in srgb,var(--on-surface) 14%,transparent)}
 
+/* Language switcher */
+.lang-switch{
+  display:flex;align-items:center;gap:2px;
+  background:var(--surface-container-high);
+  border-radius:12px;padding:3px;margin-right:4px;
+}
+.lang-switch button{
+  font-size:11px;font-weight:700;letter-spacing:.5px;
+  padding:6px 8px;border-radius:9px;color:var(--on-surface-variant);
+  transition:all .18s ease;
+}
+.lang-switch button.active{
+  background:var(--primary);color:var(--on-primary);
+}
+@media (max-width:640px){
+  .lang-switch button{padding:6px 6px;font-size:10px}
+}
+
 .body{display:grid;grid-template-columns:296px 1fr 372px;overflow:hidden;position:relative}
 
 /* ==== DRAWER ==== */
@@ -88,6 +108,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 .drawer-head .title{
   font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
   color:var(--on-surface-variant);
+  display:flex;align-items:center;gap:6px;
 }
 .close-btn{
   width:36px;height:36px;border-radius:50%;
@@ -95,6 +116,16 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 }
 .close-btn:active{background:color-mix(in srgb,var(--on-surface) 12%,transparent)}
 @media (min-width:1241px){ .close-btn{display:none} }
+
+/* Info icon (tooltip for terms) */
+.info-btn{
+  width:18px;height:18px;border-radius:50%;flex:none;
+  display:inline-grid;place-items:center;font-size:11px;font-weight:700;
+  background:var(--surface-container-high);color:var(--on-surface-variant);
+  border:1px solid var(--outline-variant);line-height:1;
+  transition:all .18s ease;
+}
+.info-btn:hover{background:var(--secondary-container);color:var(--on-secondary-container)}
 
 .region-item{
   display:flex;align-items:center;gap:12px;width:100%;
@@ -143,6 +174,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
   transition:all .18s ease;white-space:nowrap;
 }
 .chip.on{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
+.chip.danger-on{background:var(--danger-container);color:var(--danger);border-color:transparent}
 .chip i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
 .chip.on i{opacity:1}
 
@@ -165,6 +197,20 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 }
 .tooltip.show{opacity:1}
 
+/* Floating popover for term descriptions */
+.popover{
+  position:fixed;z-index:80;max-width:300px;
+  padding:14px 16px;border-radius:14px;
+  background:var(--surface-container-high);color:var(--on-surface);
+  border:1px solid var(--outline-variant);box-shadow:var(--shadow-lg);
+  font-size:12.5px;line-height:1.55;
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .16s ease,transform .16s ease;
+}
+.popover.show{opacity:1;transform:none;pointer-events:auto}
+.popover h4{margin:0 0 6px;font-size:13px;color:var(--primary)}
+.popover p{margin:0;color:var(--on-surface-variant)}
+
 /* ==== PANEL ==== */
 .panel{
   background:var(--surface-container-low);border-left:1px solid var(--outline-variant);
@@ -173,10 +219,10 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 .tabs{display:flex;padding:8px 8px 0;gap:4px;
   border-bottom:1px solid var(--outline-variant);flex:none;align-items:center}
 .tab{
-  flex:1;padding:14px 8px 12px;font-size:13px;font-weight:500;
+  flex:1;padding:14px 6px 12px;font-size:12.5px;font-weight:500;
   color:var(--on-surface-variant);border-bottom:3px solid transparent;
   transition:color .18s,border-color .18s;margin-bottom:-1px;
-  border-radius:12px 12px 0 0;
+  border-radius:12px 12px 0 0;white-space:nowrap;
 }
 .tab.active{color:var(--primary);border-bottom-color:var(--primary)}
 .panel-close{
@@ -215,6 +261,7 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 .section-h{
   font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
   color:var(--on-surface-variant);margin:0 0 10px;
+  display:flex;align-items:center;gap:8px;
 }
 .fn-list{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 22px;padding:0;list-style:none}
 .fn-list li{font-size:12px;padding:6px 12px;border-radius:8px;
@@ -232,6 +279,55 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 .sub-item .pin{width:9px;height:9px;border-radius:50%;flex:none;background:var(--primary)}
 .sub-item .go{margin-left:auto;opacity:.4;font-size:11px}
 
+/* ==== DISEASE CARDS ==== */
+.disease-card{
+  background:var(--surface-container);
+  border:1px solid var(--outline-variant);
+  border-radius:14px;padding:14px;margin-bottom:10px;
+  border-left:4px solid var(--danger);
+  transition:all .18s ease;
+}
+.disease-card:active{background:var(--surface-container-high)}
+.disease-card h4{
+  margin:0 0 4px;font-size:14px;font-weight:500;
+  color:var(--on-surface);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.disease-card .latin-sub{
+  font-size:11px;font-style:italic;color:var(--on-surface-variant);
+  margin:0 0 10px;
+}
+.disease-card .badge{
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px;background:var(--danger-container);color:var(--danger);
+  flex:none;
+}
+.disease-card .row{
+  display:flex;gap:10px;font-size:12px;margin-top:6px;line-height:1.5;
+}
+.disease-card .row b{
+  flex:none;width:96px;color:var(--on-surface-variant);font-weight:500;
+}
+.disease-card .row span{color:var(--on-surface)}
+
+.symptom-list{margin:0;padding:0 0 0 16px;font-size:12.5px;line-height:1.7;
+  color:var(--on-surface-variant)}
+.symptom-list li{margin-bottom:4px}
+
+.cog-impact{
+  display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 0;
+}
+.cog-bar{
+  display:flex;align-items:center;gap:10px;font-size:12px;
+}
+.cog-bar .lbl{width:130px;flex:none;color:var(--on-surface-variant)}
+.cog-bar .track{flex:1;height:6px;border-radius:3px;
+  background:var(--surface-container-high);overflow:hidden}
+.cog-bar .track i{display:block;height:100%;background:var(--danger);
+  border-radius:3px;transition:width .35s ease}
+.cog-bar .pct{width:42px;text-align:right;font-weight:700;font-size:11px;
+  color:var(--danger)}
+
 .empty{text-align:center;padding:56px 20px;color:var(--on-surface-variant)}
 .empty .ico{
   width:64px;height:64px;margin:0 auto 18px;border-radius:20px;
@@ -243,7 +339,8 @@ button{font-family:inherit;border:none;background:none;cursor:pointer}
 .param{margin-bottom:24px}
 .param-head{display:flex;justify-content:space-between;align-items:baseline;
   margin-bottom:9px;gap:10px}
-.param-head label{font-size:13.5px;font-weight:500}
+.param-head label{font-size:13.5px;font-weight:500;
+  display:flex;align-items:center;gap:6px}
 .param-head .val{
   font-size:12.5px;font-weight:700;color:var(--primary);
   background:var(--secondary-container);padding:2px 9px;border-radius:7px;
@@ -330,6 +427,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   .panel-scroll{padding:16px}
   .scrim{inset:56px 0 0 0}
   .drawer,.panel{top:56px}
+  .tab{font-size:11.5px;padding:12px 4px 10px}
+  .lang-switch button{padding:5px 5px;font-size:9.5px}
 }
 </style>
 </head>
@@ -337,21 +436,30 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
 
 <div class="app">
   <header class="app-bar">
-    <button class="icon-btn" id="menuBtn" aria-label="Открыть меню">
+    <button class="icon-btn" id="menuBtn" aria-label="Menu">
       <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
     </button>
     <div class="brand">
       <div class="brand-logo">NC</div>
       <div>
         <h1>NeuroCortex</h1>
-        <small>Интерактивный атлас коры</small>
+        <small id="brandSub">Интерактивный атлас коры</small>
       </div>
     </div>
     <div class="spacer"></div>
-    <button class="icon-btn" id="themeBtn" aria-label="Сменить тему">
+
+    <div class="lang-switch" id="langSwitch" role="tablist" aria-label="Language">
+      <button data-lang="ru" class="active">RU</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="es">ES</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="ja">JA</button>
+    </div>
+
+    <button class="icon-btn" id="themeBtn" aria-label="Theme">
       <svg viewBox="0 0 24 24" id="themeIcon"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A6.5 6.5 0 0 1 12 3z"/></svg>
     </button>
-    <button class="icon-btn" id="panelBtn" aria-label="Открыть панель">
+    <button class="icon-btn" id="panelBtn" aria-label="Panel">
       <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2V7zm0 4h2v6h-2v-6zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
     </button>
   </header>
@@ -359,45 +467,51 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
   <div class="body">
     <nav class="drawer" id="drawer">
       <div class="drawer-head">
-        <span class="title">Доли коры</span>
-        <button class="close-btn" id="closeDrawer" aria-label="Закрыть меню">
+        <span class="title">
+          <span data-i18n="lobesTitle"></span>
+          <button class="info-btn" data-term="lobes">i</button>
+        </span>
+        <button class="close-btn" id="closeDrawer" aria-label="Close">
           <svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </div>
       <div id="regionList"></div>
       <div class="legend">
         <div class="drawer-head" style="padding:0 4px 8px 12px">
-          <span class="title">Легенда</span>
+          <span class="title" data-i18n="legendTitle"></span>
         </div>
-        <div class="legend-row"><i style="background:var(--accent-frontal)"></i>Лобная</div>
-        <div class="legend-row"><i style="background:var(--accent-parietal)"></i>Теменная</div>
-        <div class="legend-row"><i style="background:var(--accent-temporal)"></i>Височная</div>
-        <div class="legend-row"><i style="background:var(--accent-occipital)"></i>Затылочная</div>
+        <div class="legend-row"><i style="background:var(--accent-frontal)"></i><span data-i18n="regionFrontal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-parietal)"></i><span data-i18n="regionParietal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-temporal)"></i><span data-i18n="regionTemporal"></span></div>
+        <div class="legend-row"><i style="background:var(--accent-occipital)"></i><span data-i18n="regionOccipital"></span></div>
       </div>
     </nav>
 
     <main class="viewport" id="viewport">
       <canvas id="scene"></canvas>
       <div class="overlay-top">
-        <button class="chip on" data-toggle="markers"><i></i>Зоны коры</button>
-        <button class="chip" data-toggle="pathways"><i></i>Проводящие пути</button>
-        <button class="chip on" data-toggle="endings"><i></i>Окончания</button>
-        <button class="chip" data-toggle="rotate"><i></i>Автоповорот</button>
+        <button class="chip on" data-toggle="markers"><i></i><span data-i18n="chipZones"></span></button>
+        <button class="chip" data-toggle="pathways"><i></i><span data-i18n="chipPathways"></span></button>
+        <button class="chip on" data-toggle="endings"><i></i><span data-i18n="chipEndings"></span></button>
+        <button class="chip" data-toggle="rotate"><i></i><span data-i18n="chipRotate"></span></button>
+        <button class="chip" data-toggle="pathology"><i></i><span data-i18n="chipPathology"></span></button>
       </div>
       <div class="tooltip" id="tooltip"></div>
-      <div class="hint">Вращение — перетаскивание · Масштаб — щипок · Выбор — клик</div>
+      <div class="hint" id="hintText"></div>
     </main>
 
     <aside class="panel" id="panel">
       <div class="tabs">
-        <button class="tab active" data-pane="info">Область</button>
-        <button class="tab" data-pane="params">Параметры</button>
-        <button class="panel-close" id="closePanel" aria-label="Закрыть панель">
+        <button class="tab active" data-pane="info" data-i18n="tabRegion"></button>
+        <button class="tab" data-pane="pathology" data-i18n="tabPathology"></button>
+        <button class="tab" data-pane="params" data-i18n="tabParams"></button>
+        <button class="panel-close" id="closePanel" aria-label="Close">
           <svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </div>
       <div class="panel-scroll">
         <div class="pane active" id="pane-info"></div>
+        <div class="pane" id="pane-pathology"></div>
         <div class="pane" id="pane-params"></div>
       </div>
     </aside>
@@ -405,6 +519,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
 </div>
 
 <div class="scrim" id="scrim"></div>
+<div class="popover" id="popover"></div>
 
 <script type="importmap">
 {
@@ -417,1055 +532,27 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
 
 <script type="module">
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; /* ==========================================================================
-   1. ДАННЫЕ О КОРЕ
-   ========================================================================== */
-const REGIONS = {
-  frontal: {
-    name: 'Лобная доля', latin: 'Lobus frontalis',
-    color: 0x5B7CFA, letter: 'F',
-    short: 'Планирование · моторика · речь',
-    desc: 'Самая крупная доля коры, занимающая переднюю треть полушарий. Обеспечивает высшие когнитивные функции: планирование, рабочую память, произвольное внимание, тормозный контроль и социальное поведение.',
-    functions: ['Произвольные движения','Планирование','Рабочая память','Речь','Тормозный контроль','Эмоции'],
-    stats: { 'Толщина коры':'2.5–3.0 мм', 'Нейронов':'≈ 3.5 млрд', 'Доля коры':'≈ 30 %' }
-  },
-  parietal: {
-    name: 'Теменная доля', latin: 'Lobus parietalis',
-    color: 0x2FB79B, letter: 'P',
-    short: 'Сенсорика · пространство · внимание',
-    desc: 'Расположена позади центральной борозды. Принимает и интегрирует соматосенсорную информацию, формирует пространственную карту мира и управляет направленным вниманием.',
-    functions: ['Тактильная чувствительность','Проприоцепция','Пространственное мышление','Внимание','Схема тела','Счёт'],
-    stats: { 'Толщина коры':'2.0–2.5 мм', 'Нейронов':'≈ 2.0 млрд', 'Доля коры':'≈ 20 %' }
-  },
-  temporal: {
-    name: 'Височная доля', latin: 'Lobus temporalis',
-    color: 0xF29B30, letter: 'T',
-    short: 'Слух · память · понимание речи',
-    desc: 'Расположена в нижне-боковой части полушария. Содержит первичную слуховую кору, зону Вернике, гиппокамп и миндалину.',
-    functions: ['Слух','Понимание речи','Память','Эмоции','Распознавание лиц','Музыка'],
-    stats: { 'Толщина коры':'2.5–3.0 мм', 'Нейронов':'≈ 2.2 млрд', 'Доля коры':'≈ 17 %' }
-  },
-  occipital: {
-    name: 'Затылочная доля', latin: 'Lobus occipitalis',
-    color: 0xA96BF0, letter: 'O',
-    short: 'Зрение · зрительные потоки',
-    desc: 'Задний отдел коры, посвящённый обработке зрительной информации. Первичная зрительная кора (V1) получает сигналы от сетчатки.',
-    functions: ['Зрение','Цвет и форма','Движение','Ориентация','Зрительная память'],
-    stats: { 'Толщина коры':'1.5–2.0 мм', 'Нейронов':'≈ 1.4 млрд', 'Доля коры':'≈ 12 %' }
-  }
-};
-
-const SUBAREAS = [
-  { id:'m1',  name:'Первичная моторная кора',  region:'frontal',   dir:[-0.34, 0.86, 0.16], note:'Прецентральная извилина. Управляет произвольными движениями.' },
-  { id:'sma', name:'Дополнительная моторная',  region:'frontal',   dir:[-0.14, 0.92, 0.40], note:'Планирование движений.' },
-  { id:'pfc', name:'Префронтальная кора',      region:'frontal',   dir:[-0.30, 0.26, 0.92], note:'Исполнительные функции: рабочая память.' },
-  { id:'broca',name:'Зона Брока',              region:'frontal',   dir:[-0.56, -0.12, 0.68], note:'Моторный центр речи.' },
-  { id:'s1',  name:'Соматосенсорная кора',     region:'parietal',  dir:[-0.34, 0.86, -0.24], note:'Тактильные сигналы.' },
-  { id:'ppc', name:'Задняя теменная кора',     region:'parietal',  dir:[-0.58, 0.52, -0.46], note:'Пространственное внимание.' },
-  { id:'ang', name:'Угловая извилина',         region:'parietal',  dir:[-0.60, 0.24, -0.62], note:'Связывает сенсорные сигналы.' },
-  { id:'a1',  name:'Первичная слуховая кора',  region:'temporal',  dir:[-0.78, -0.22, 0.08], note:'Поперечные извилины Гешля.' },
-  { id:'wern',name:'Зона Вернике',             region:'temporal',  dir:[-0.68, -0.02, -0.40], note:'Центр понимания речи.' },
-  { id:'hip', name:'Гиппокамп',                region:'temporal',  dir:[-0.30, -0.62, -0.42], note:'Формирование памяти.' },
-  { id:'v1',  name:'Первичная зрительная кора',region:'occipital', dir:[-0.12, -0.18, -1.0], note:'Стриарная кора.' },
-  { id:'v5',  name:'Зрительная зона V5/MT',    region:'occipital', dir:[-0.52, 0.05, -0.86], note:'Анализ движения.' }
-];
-
-const PATHWAYS = [
-  { a:'m1',  b:'s1',  name:'Центральная борозда' },
-  { a:'broca',b:'wern',name:'Дугообразный пучок' },
-  { a:'s1',  b:'ppc', name:'Заднетеменной путь' },
-  { a:'a1',  b:'wern',name:'Слуховая ассоциация' },
-  { a:'v1',  b:'ppc', name:'Дорсальный поток' },
-  { a:'v1',  b:'wern',name:'Вентральный поток' },
-  { a:'pfc', b:'ppc', name:'Фронто-париетальная сеть' },
-  { a:'m1',  b:'sma', name:'Моторная петля' }
-];
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /* ==========================================================================
-   2. СЦЕНА И ОПТИМИЗИРОВАННЫЙ РЕНДЕР
+   1. ЛОКАЛИЗАЦИЯ
    ========================================================================== */
-const canvas   = document.getElementById('scene');
-const viewport = document.getElementById('viewport');
-
-// Определяем уровень устройства для оптимизации
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const isLowPower = isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-  antialias: !isMobile,          // на мобилке выключаем MSAA — экономим GPU
-  alpha: true,
-  powerPreference: 'high-performance',
-  stencil: false,
-  depth: true
-});
-
-// Ключевая оптимизация: ограничиваем pixelRatio
-// На Retina iPhone devicePixelRatio = 3, это 9x пикселей!
-// Ставим максимум 2 для мобильных, 1.5 для слабых устройств
-const maxPixelRatio = isLowPower ? 1.5 : Math.min(devicePixelRatio, 2);
-renderer.setPixelRatio(maxPixelRatio);
-renderer.setClearColor(0x000000, 0);
-
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-const scene = new THREE.Scene();
-
-// Туман для глубины (как в UE5)
-scene.fog = new THREE.Fog(0x1a1525, 6, 16);
-
-const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-camera.position.set(2.5, 1.5, 3.0);
-
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.rotateSpeed = 0.9;
-controls.zoomSpeed = 1.0;
-controls.minDistance = 2.0;
-controls.maxDistance = 8;
-controls.enablePan = false;
-
-/* ==========================================================================
-   3. ОСВЕЩЕНИЕ — «киношный» стиль UE5
-   ========================================================================== */
-// Ambient — общий фон
-scene.add(new THREE.AmbientLight(0xb8a6e0, 0.35));
-
-// HemisphereLight — имитация неба/земли (мягкий свет)
-scene.add(new THREE.HemisphereLight(0xd4c5ff, 0x2a1f45, 0.75));
-
-// Key light — главный источник (тёплый)
-const keyLight = new THREE.DirectionalLight(0xfff2e6, 2.2);
-keyLight.position.set(5, 6, 5);
-scene.add(keyLight);
-
-// Fill light — заполняющий (холодный, мягкий)
-const fillLight = new THREE.DirectionalLight(0x9db4ff, 0.9);
-fillLight.position.set(-5, 0, -3);
-scene.add(fillLight);
-
-// Rim light — контурный (сзади, создаёт «обводку»)
-const rimLight = new THREE.DirectionalLight(0xff9edb, 1.1);
-rimLight.position.set(-2, 4, -7);
-scene.add(rimLight);
-
-// Bottom light — подсветка снизу (фиолетовый)
-const bottomLight = new THREE.PointLight(0x7c5cff, 1.2, 5, 2);
-bottomLight.position.set(0, -1.5, 0);
-scene.add(bottomLight);
-
-/* ==========================================================================
-   4. ГЕНЕРАЦИЯ МОЗГА — улучшенная анатомия
-   ========================================================================== */
-const brainGroup = new THREE.Group();
-scene.add(brainGroup);
-
-// Полуоси эллипсоида мозга (реальные пропорции)
-const AX = { x: 0.78, y: 0.92, z: 1.12 };
-
-// Многослойный шум — имитирует и крупные извилины, и мелкие борозды
-function cortexNoise(x, y, z) {
-  // Крупные извилины (низкая частота)
-  const n1 = Math.sin(x * 5.4 + 1.3) * Math.cos(y * 4.6 + 0.7) * Math.sin(z * 5.1 + 2.1) * 0.55;
-  // Средние борозды
-  const n2 = Math.sin(x * 10.2 + y * 3.1) * Math.cos(z * 8.7 + x * 2.4) * 0.28;
-  // Мелкие складки
-  const n3 = Math.sin(y * 14.6 + z * 5.8) * Math.cos(x * 12.3 + 1.1) * 0.13;
-  // Микрорельеф
-  const n4 = Math.sin(z * 22.0 + y * 8.0) * Math.cos(x * 19.0 + z * 4.0) * 0.06;
-
-  // Дополнительный шум для «мозгового» вида
-  const n5 = Math.sin(x * 7.5 + z * 6.2) * Math.cos(y * 8.4) * 0.15;
-
-  return n1 + n2 + n3 + n4 + n5;
-}
-
-// Точка на поверхности мозга с учётом шума
-function brainSurfacePoint(dir, offset = 0) {
-  const v = dir.clone().normalize();
-  const n = cortexNoise(v.x, v.y, v.z);
-  v.multiplyScalar(1 + n * 0.08 + offset);
-  v.x *= AX.x; v.y *= AX.y; v.z *= AX.z;
-  return v;
-}
-
-// Определение доли по локальной координате
-function regionAt(p) {
-  if (p.y < -0.32 && Math.abs(p.x) > 0.32 && p.z > -0.72) return 'temporal';
-  if (p.z < -0.58) return 'occipital';
-  if (p.z > 0.12)  return 'frontal';
-  return 'parietal';
-}
-
-/* --- Основная геометрия коры --- */
-// Оптимизация: на мобилке меньше сегментов, на десктопе больше
-const SEG_W = isLowPower ? 96 : 140;
-const SEG_H = isLowPower ? 72 : 110;
-
-const geo = new THREE.SphereGeometry(1, SEG_W, SEG_H);
-{
-  const pos = geo.attributes.position;
-  const v = new THREE.Vector3();
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    const n = cortexNoise(v.x, v.y, v.z);
-    v.multiplyScalar(1 + n * 0.08);
-    v.x *= AX.x; v.y *= AX.y; v.z *= AX.z;
-
-    // Продольная щель между полушариями — глубокая
-    const gap = 0.045 * Math.exp(-(v.x * v.x) / 0.005);
-    v.x += (v.x >= 0 ? 1 : -1) * gap;
-
-    // Слегка приплюснуть снизу (для естественности)
-    if (v.y < -0.7) v.y *= 0.92;
-
-    pos.setXYZ(i, v.x, v.y, v.z);
-  }
-  geo.computeVertexNormals();
-  geo.setAttribute('color', new THREE.BufferAttribute(
-    new Float32Array(pos.count * 3), 3
-  ));
-}
-
-/* --- PBR-материал в стиле UE5 --- */
-const brainMat = new THREE.MeshStandardMaterial({
-  vertexColors: true,
-  roughness: 0.48,        // умеренно-глянцевый
-  metalness: 0.08,        // лёгкая металличность
-  flatShading: false,
-  transparent: true,
-  opacity: 1,
-  depthWrite: true,
-  emissive: new THREE.Color(0x7c5cff),
-  emissiveIntensity: 0.0,
-  // Лёгкое «свечение» по краям (Fresnel-подобный эффект)
-  envMapIntensity: 0.6
-});
-
-const brainMesh = new THREE.Mesh(geo, brainMat);
-brainMesh.renderOrder = 2;
-brainGroup.add(brainMesh);
-
-/* --- Раскраска вершин по долям --- */
-const baseColors = new Float32Array(geo.attributes.position.count * 3);
-const vertexRegion = new Array(geo.attributes.position.count);
-{
-  const pos = geo.attributes.position;
-  const p = new THREE.Vector3();
-  const c = new THREE.Color();
-  const regColors = {};
-  for (const k in REGIONS) regColors[k] = new THREE.Color(REGIONS[k].color);
-
-  for (let i = 0; i < pos.count; i++) {
-    p.fromBufferAttribute(pos, i);
-    const r = regionAt(p);
-    vertexRegion[i] = r;
-    c.copy(regColors[r]);
-    baseColors[i*3]   = c.r;
-    baseColors[i*3+1] = c.g;
-    baseColors[i*3+2] = c.b;
-  }
-  geo.attributes.color.array.set(baseColors);
-  geo.attributes.color.needsUpdate = true;
-}
-
-/* --- Мозжечок с бороздами --- */
-{
-  const cgSeg = isLowPower ? 48 : 72;
-  const cg = new THREE.SphereGeometry(1, cgSeg, cgSeg * 0.7);
-  const pos = cg.attributes.position;
-  const v = new THREE.Vector3();
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    // Ритмичные борозды (как у мозжечка)
-    const n = Math.sin(v.x * 20) * Math.cos(v.z * 18) * 0.05
-            + Math.sin(v.y * 8 + v.x * 6) * 0.025;
-    v.multiplyScalar(1 + n);
-    v.x *= 0.36; v.y *= 0.26; v.z *= 0.32;
-    pos.setXYZ(i, v.x, v.y, v.z);
-  }
-  cg.computeVertexNormals();
-  const cm = new THREE.MeshStandardMaterial({
-    color: 0x9aa7c7, roughness: 0.75, metalness: 0.05,
-    transparent: true, opacity: 0.95
-  });
-  const cerebellum = new THREE.Mesh(cg, cm);
-  cerebellum.position.set(0, -0.52, -0.74);
-  cerebellum.renderOrder = 2;
-  brainGroup.add(cerebellum);
-}
-
-/* --- Ствол мозга --- */
-{
-  const bg = new THREE.CylinderGeometry(0.11, 0.14, 0.75, 20, 8, false);
-  const pos = bg.attributes.position;
-  const v = new THREE.Vector3();
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    const bulge = 1 + 0.18 * Math.exp(-Math.pow((v.y + 0.10) * 3.2, 2));
-    pos.setXYZ(i, v.x * bulge, v.y, v.z * bulge);
-  }
-  bg.computeVertexNormals();
-  const bm = new THREE.MeshStandardMaterial({
-    color: 0x8f9bbb, roughness: 0.75, metalness: 0.05,
-    transparent: true, opacity: 0.95
-  });
-  const stem = new THREE.Mesh(bg, bm);
-  stem.position.set(0, -0.62, -0.30);
-  stem.rotation.x = -0.22;
-  stem.renderOrder = 2;
-  brainGroup.add(stem);
-}
-
-/* ==========================================================================
-   5. МАРКЕРЫ ЗОН КОРЫ
-   ========================================================================== */
-const markersGroup = new THREE.Group();
-brainGroup.add(markersGroup);
-
-const markerGeo = new THREE.SphereGeometry(0.042, 16, 16);
-const markerMeshes = [];
-const subareaPos = {};
-
-SUBAREAS.forEach(sa => {
-  const dir = new THREE.Vector3(...sa.dir);
-  const p = brainSurfacePoint(dir, 0.035);
-  subareaPos[sa.id] = p.clone();
-
-  const col = new THREE.Color(REGIONS[sa.region].color);
-
-  // Основной маркер
-  const mat = new THREE.MeshStandardMaterial({
-    color: col, emissive: col, emissiveIntensity: 1.2,
-    roughness: 0.25, metalness: 0.15
-  });
-  const mesh = new THREE.Mesh(markerGeo, mat);
-  mesh.position.copy(p);
-  mesh.userData = { type: 'subarea', id: sa.id };
-  markersGroup.add(mesh);
-  markerMeshes.push(mesh);
-
-  // Ореол (свечение вокруг)
-  const haloGeo = new THREE.SphereGeometry(0.09, 14, 14);
-  const haloMat = new THREE.MeshBasicMaterial({
-    color: col, transparent: true, opacity: 0.18, depthWrite: false
-  });
-  const halo = new THREE.Mesh(haloGeo, haloMat);
-  halo.position.copy(p);
-  halo.userData = { type: 'subarea', id: sa.id, halo: true };
-  markersGroup.add(halo);
-  mesh.userData.halo = halo;
-});
-
-/* ==========================================================================
-   6. ПРОВОДЯЩИЕ ПУТИ
-   ========================================================================== */
-const pathwaysGroup = new THREE.Group();
-pathwaysGroup.visible = false;
-pathwaysGroup.renderOrder = 1;
-brainGroup.add(pathwaysGroup);
-
-const pathCurves = [];
-const pathColor = new THREE.Color(0x9b7cff);
-const pulseColor = new THREE.Color(0xffc23d);
-
-PATHWAYS.forEach(pw => {
-  const a = subareaPos[pw.a];
-  const b = subareaPos[pw.b];
-  if (!a || !b) return;
-  const mid = a.clone().add(b).multiplyScalar(0.5).multiplyScalar(0.68);
-  const curve = new THREE.CatmullRomCurve3([a.clone(), mid, b.clone()]);
-
-  const tubeGeo = new THREE.TubeGeometry(curve, 60, 0.011, 6, false);
-  const tubeMat = new THREE.MeshBasicMaterial({
-    color: pathColor, transparent: true, opacity: 0.5, depthWrite: false
-  });
-  const tube = new THREE.Mesh(tubeGeo, tubeMat);
-  tube.renderOrder = 1;
-  pathwaysGroup.add(tube);
-  pathCurves.push({ curve, a: pw.a, b: pw.b, name: pw.name });
-});
-
-const pulseGeo = new THREE.SphereGeometry(0.028, 10, 10);
-const pulses = [];
-pathCurves.forEach((pc, idx) => {
-  const n = 2;
-  for (let i = 0; i < n; i++) {
-    const mat = new THREE.MeshBasicMaterial({
-      color: pulseColor, transparent: true, opacity: 0.95, depthWrite: false
-    });
-    const mesh = new THREE.Mesh(pulseGeo, mat);
-    mesh.renderOrder = 1;
-    pathwaysGroup.add(mesh);
-    pulses.push({ curve: pc.curve, t: (i / n + idx * 0.13) % 1, mesh, speed: 0.11 });
-  }
-});
-
-/* ==========================================================================
-   7. НЕРВНЫЕ ОКОНЧАНИЯ
-   ========================================================================== */
-const endingsGroup = new THREE.Group();
-brainGroup.add(endingsGroup);
-
-// Оптимизация: на мобилке меньше окончаний
-const MAX_ENDINGS = isLowPower ? 480 : 720;
-const endingsGeo = new THREE.SphereGeometry(0.013, 6, 6);
-const endingsMat = new THREE.MeshBasicMaterial({
-  color: 0xffd166, transparent: true, opacity: 0.85, depthWrite: false
-});
-const endings = new THREE.InstancedMesh(endingsGeo, endingsMat, MAX_ENDINGS);
-endings.renderOrder = 3;
-{
-  const dummy = new THREE.Object3D();
-  const dir = new THREE.Vector3();
-  let seed = 1337;
-  const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
-
-  for (let i = 0; i < MAX_ENDINGS; i++) {
-    const u = rnd() * 2 - 1;
-    const th = rnd() * Math.PI * 2;
-    const s = Math.sqrt(1 - u * u);
-    dir.set(s * Math.cos(th), u, s * Math.sin(th));
-    const p = brainSurfacePoint(dir, 0.012);
-    dummy.position.copy(p);
-    dummy.scale.setScalar(0.7 + rnd() * 0.9);
-    dummy.updateMatrix();
-    endings.setMatrixAt(i, dummy.matrix);
-  }
-  endings.instanceMatrix.needsUpdate = true;
-}
-endingsGroup.add(endings); /* ==========================================================================
-   8. ВЗАИМОДЕЙСТВИЕ
-   ========================================================================== */
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-const tooltipEl = document.getElementById('tooltip');
-
-let selectedRegion = null;
-let selectedSubarea = null;
-let hoveredRegion = null;
-let camTween = null;
-
-function setPointerFromEvent(e) {
-  const r = canvas.getBoundingClientRect();
-  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-}
-
-function intersectAll() {
-  raycaster.setFromCamera(pointer, camera);
-  const objs = [];
-  if (markersGroup.visible) objs.push(...markersGroup.children);
-  objs.push(brainMesh);
-  return raycaster.intersectObjects(objs, false);
-}
-
-function pickRegionFromMesh(hit) {
-  const local = brainMesh.worldToLocal(hit.point.clone());
-  return regionAt(local);
-}
-
-/* Hover (только на десктопе) */
-canvas.addEventListener('pointermove', (e) => {
-  if (e.pointerType === 'touch') return;
-  setPointerFromEvent(e);
-  const hits = intersectAll();
-  let label = null, regionId = null;
-
-  if (hits.length) {
-    const h = hits[0];
-    if (h.object.userData.type === 'subarea') {
-      const sa = SUBAREAS.find(s => s.id === h.object.userData.id);
-      if (sa) { label = sa.name; regionId = sa.region; }
-    } else if (h.object === brainMesh) {
-      regionId = pickRegionFromMesh(h);
-      label = REGIONS[regionId].name;
-    }
-  }
-
-  if (regionId !== hoveredRegion) {
-    hoveredRegion = regionId;
-    applyHighlight();
-    canvas.style.cursor = regionId ? 'pointer' : 'grab';
-  }
-
-  if (label && regionId) {
-    const r = canvas.getBoundingClientRect();
-    tooltipEl.textContent = label;
-    tooltipEl.style.left = (e.clientX - r.left) + 'px';
-    tooltipEl.style.top  = (e.clientY - r.top) + 'px';
-    tooltipEl.classList.add('show');
-  } else {
-    tooltipEl.classList.remove('show');
-  }
-});
-
-canvas.addEventListener('pointerleave', () => {
-  tooltipEl.classList.remove('show');
-  hoveredRegion = null;
-  applyHighlight();
-});
-
-/* Click / tap */
-let downPos = null;
-canvas.addEventListener('pointerdown', (e) => {
-  downPos = { x: e.clientX, y: e.clientY };
-});
-
-canvas.addEventListener('pointerup', (e) => {
-  if (!downPos) return;
-  const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
-  downPos = null;
-  if (moved > 8) return;
-
-  setPointerFromEvent(e);
-  const hits = intersectAll();
-  if (!hits.length) {
-    // клик мимо модели — снимаем выделение
-    if (selectedRegion) {
-      selectedRegion = null;
-      applyHighlight();
-      renderEmptyInfo();
-      closePanelMobile();
-    }
-    return;
-  }
-
-  const h = hits[0];
-  if (h.object.userData.type === 'subarea') {
-    const sa = SUBAREAS.find(s => s.id === h.object.userData.id);
-    if (sa) {
-      selectRegion(sa.region, true);
-      focusOn(subareaPos[sa.id]);
-      highlightSubareaInList(sa.id);
-    }
-  } else if (h.object === brainMesh) {
-    const rid = pickRegionFromMesh(h);
-    selectRegion(rid, false);
-    focusOn(h.point.clone().multiplyScalar(0.9));
-  }
-});
-
-/* --- Подсветка активной доли --- */
-function applyHighlight() {
-  const arr = geo.attributes.color.array;
-  const active = selectedRegion || hoveredRegion;
-
-  if (!active) {
-    arr.set(baseColors);
-  } else {
-    const hi = new THREE.Color(REGIONS[active].color).multiplyScalar(1.45);
-    const dim = 0.42;
-    for (let i = 0; i < vertexRegion.length; i++) {
-      if (vertexRegion[i] === active) {
-        arr[i*3]   = hi.r;
-        arr[i*3+1] = hi.g;
-        arr[i*3+2] = hi.b;
-      } else {
-        arr[i*3]   = baseColors[i*3]   * dim;
-        arr[i*3+1] = baseColors[i*3+1] * dim;
-        arr[i*3+2] = baseColors[i*3+2] * dim;
-      }
-    }
-  }
-  geo.attributes.color.needsUpdate = true;
-
-  markerMeshes.forEach(m => {
-    const sa = SUBAREAS.find(s => s.id === m.userData.id);
-    const on = !active || sa.region === active;
-    m.material.opacity = on ? 1 : 0.3;
-    m.material.transparent = true;
-    m.userData.halo.material.opacity = on ? 0.18 : 0.04;
-  });
-
-  // Цвет свечения под активную долю
-  if (active) {
-    brainMat.emissive.setHex(REGIONS[active].color);
-  } else {
-    brainMat.emissive.setHex(0x7c5cff);
-  }
-}
-
-/* --- Фокусировка камеры --- */
-function focusOn(point) {
-  const dir = point.clone().normalize();
-  const dist = 2.6;
-  const toPos = dir.multiplyScalar(dist).add(new THREE.Vector3(0, 0.15, 0));
-  camTween = {
-    from: camera.position.clone(),
-    to: toPos,
-    fromT: controls.target.clone(),
-    toT: point.clone().multiplyScalar(0.35),
-    t: 0
-  };
-}
-
-/* ==========================================================================
-   9. ПАРАМЕТРЫ
-   ========================================================================== */
-const params = {
-  conduction: 65,
-  myelin: 70,
-  density: 65,
-  excitability: 50,
-  dopamine: 55,
-  serotonin: 60
-};
-
-const PARAM_DEFS = [
-  { key:'conduction',   label:'Скорость проведения', min:1,  max:120, unit:' м/с', sub:'Скорость распространения потенциала действия по аксону.' },
-  { key:'myelin',       label:'Миелинизация',        min:0,  max:100, unit:' %',   sub:'Степень покрытия аксонов миелином.' },
-  { key:'density',      label:'Плотность нейронов',  min:5,  max:100, unit:' %',   sub:'Количество нервных окончаний на поверхности.' },
-  { key:'excitability', label:'Возбудимость коры',   min:0,  max:100, unit:' %',   sub:'Уровень кортикальной активации.' },
-  { key:'dopamine',     label:'Уровень дофамина',    min:0,  max:100, unit:' %',   sub:'Мотивация, подкрепление, моторный контроль.' },
-  { key:'serotonin',    label:'Уровень серотонина',  min:0,  max:100, unit:' %',   sub:'Настроение, сон, аппетит.' }
-];
-
-function renderParams() {
-  const pane = document.getElementById('pane-params');
-  pane.innerHTML = `
-    <p class="section-h">Нейрофизиологические параметры</p>
-    ${PARAM_DEFS.map(d => `
-      <div class="param">
-        <div class="param-head">
-          <label for="p_${d.key}">${d.label}</label>
-          <span class="val" id="v_${d.key}">${params[d.key]}${d.unit}</span>
-        </div>
-        <input type="range" id="p_${d.key}" min="${d.min}" max="${d.max}" value="${params[d.key]}">
-        <p class="sub">${d.sub}</p>
-      </div>
-    `).join('')}
-    <p class="section-h" style="margin-top:28px">Нейромедиаторный баланс</p>
-    <div class="meter" id="meters"></div>
-    <div class="note">
-      Параметры влияют на визуализацию: скорость импульсов,
-      плотность окончаний и свечение коры.
-    </div>
-  `;
-
-  PARAM_DEFS.forEach(d => {
-    const input = pane.querySelector(`#p_${d.key}`);
-    const out   = pane.querySelector(`#v_${d.key}`);
-    const sync  = () => {
-      const pct = ((input.value - d.min) / (d.max - d.min)) * 100;
-      input.style.setProperty('--p', pct + '%');
-    };
-    sync();
-    input.addEventListener('input', () => {
-      params[d.key] = +input.value;
-      out.textContent = input.value + d.unit;
-      sync();
-      onParamChange(d.key);
-    });
-  });
-
-  updateMeters();
-}
-
-function updateMeters() {
-  const el = document.getElementById('meters');
-  if (!el) return;
-  const rows = [
-    ['Дофамин', params.dopamine],
-    ['Серотонин', params.serotonin],
-    ['Возбудимость', params.excitability]
-  ];
-  el.innerHTML = rows.map(([n, v]) => `
-    <div class="meter-row">
-      <span class="name">${n}</span>
-      <span class="meter-bar"><i style="width:${v}%"></i></span>
-      <b>${v}%</b>
-    </div>
-  `).join('');
-}
-
-function onParamChange(key) {
-  if (key === 'density') {
-    endings.count = Math.round(MAX_ENDINGS * (params.density / 100));
-    endings.instanceMatrix.needsUpdate = true;
-  }
-  if (key === 'excitability') {
-    brainMat.emissiveIntensity = (params.excitability / 100) * 0.35;
-  }
-  if (key === 'dopamine' || key === 'serotonin' || key === 'excitability') {
-    updateMeters();
-  }
-  if (key === 'myelin' || key === 'conduction') {
-    const f = (params.conduction / 65) * (0.45 + params.myelin / 100 * 0.9);
-    pulses.forEach(p => p.speed = 0.10 * f);
-  }
-}
-
-/* ==========================================================================
-   10. UI — список долей, панель информации
-   ========================================================================== */
-const regionListEl = document.getElementById('regionList');
-Object.entries(REGIONS).forEach(([id, r]) => {
-  const btn = document.createElement('button');
-  btn.className = 'region-item';
-  btn.dataset.region = id;
-  btn.innerHTML = `
-    <span class="region-dot" style="background:#${r.color.toString(16).padStart(6,'0')}"></span>
-    <span class="txt"><b>${r.name}</b><span>${r.short}</span></span>
-  `;
-  btn.addEventListener('click', () => {
-    selectRegion(id, false);
-    const p = brainSurfacePoint(
-      id === 'frontal'  ? new THREE.Vector3(-0.2, 0.3, 0.8) :
-      id === 'parietal' ? new THREE.Vector3(-0.2, 0.6, -0.3) :
-      id === 'temporal' ? new THREE.Vector3(-0.7, -0.35, 0.1) :
-                          new THREE.Vector3(-0.1, 0, -1.0)
-    );
-    focusOn(p);
-    closeDrawerMobile();
-  });
-  regionListEl.appendChild(btn);
-});
-
-const paneInfo = document.getElementById('pane-info');
-
-function renderEmptyInfo() {
-  paneInfo.innerHTML = `
-    <div class="empty">
-      <div class="ico">
-        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zm-1 19h2v1h-2v-1z"/></svg>
-      </div>
-      <p>Выберите область на 3D-модели<br>или в списке слева,<br>чтобы изучить её строение.</p>
-    </div>
-  `;
-}
-renderEmptyInfo();
-
-function selectRegion(id, fromSubarea) {
-  selectedRegion = id;
-  selectedSubarea = null;
-
-  document.querySelectorAll('.region-item').forEach(el => {
-    el.classList.toggle('selected', el.dataset.region === id);
-  });
-
-  const r = REGIONS[id];
-  const hex = '#' + r.color.toString(16).padStart(6,'0');
-  const subs = SUBAREAS.filter(s => s.region === id);
-
-  paneInfo.innerHTML = `
-    <div class="region-head">
-      <div class="big-dot" style="background:${hex}">${r.letter}</div>
-      <div>
-        <h2>${r.name}</h2>
-        <p class="latin">${r.latin}</p>
-      </div>
-    </div>
-    <p class="desc">${r.desc}</p>
-
-    <p class="section-h">Характеристики</p>
-    <div class="stat-grid">
-      ${Object.entries(r.stats).map(([k,v]) => `
-        <div class="stat-card"><span>${k}</span><b>${v}</b></div>
-      `).join('')}
-    </div>
-
-    <p class="section-h">Ключевые функции</p>
-    <ul class="fn-list">
-      ${r.functions.map(f => `<li>${f}</li>`).join('')}
-    </ul>
-
-    <p class="section-h">Зоны внутри доли</p>
-    <div class="sub-list" id="subList">
-      ${subs.map(s => `
-        <button class="sub-item" data-sub="${s.id}">
-          <span class="pin"></span>
-          <span>${s.name}</span>
-          <span class="go">→</span>
-        </button>
-      `).join('')}
-    </div>
-
-    <div class="note" id="subNote" style="display:none"></div>
-  `;
-
-  paneInfo.querySelectorAll('.sub-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const sid = btn.dataset.sub;
-      const sa = SUBAREAS.find(s => s.id === sid);
-      if (!sa) return;
-      selectedSubarea = sid;
-      focusOn(subareaPos[sid]);
-      highlightSubareaInList(sid);
-      const note = document.getElementById('subNote');
-      note.style.display = 'block';
-      note.innerHTML = `<b>${sa.name}</b><br>${sa.note}`;
-    });
-  });
-
-  if (!fromSubarea) {
-    const note = document.getElementById('subNote');
-    if (note) note.style.display = 'none';
-  }
-
-  applyHighlight();
-  openPanelMobile();
-}
-
-function highlightSubareaInList(sid) {
-  paneInfo.querySelectorAll('.sub-item').forEach(el => {
-    const on = el.dataset.sub === sid;
-    el.style.borderColor = on ? 'var(--primary)' : '';
-    el.style.background = on ? 'color-mix(in srgb,var(--primary) 12%,transparent)' : '';
-  });
-}
-
-/* --- Табы --- */
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('pane-' + tab.dataset.pane).classList.add('active');
-  });
-});
-
-/* --- Чипы-переключатели --- */
-const chipState = { markers:true, pathways:false, endings:true, rotate:false };
-
-document.querySelectorAll('.chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    const key = chip.dataset.toggle;
-    chipState[key] = !chipState[key];
-    chip.classList.toggle('on', chipState[key]);
-    applyChipState(key);
-  });
-});
-
-function applyChipState(key) {
-  if (key === 'markers') markersGroup.visible = chipState.markers;
-  if (key === 'endings') {
-    endingsGroup.visible = chipState.endings;
-    if (chipState.endings) endings.count = Math.round(MAX_ENDINGS * (params.density / 100));
-  }
-  if (key === 'pathways') {
-    pathwaysGroup.visible = chipState.pathways;
-    if (chipState.pathways) {
-      brainMat.opacity = 0.32;
-      brainMat.depthWrite = false;
-      brainMesh.renderOrder = 3;
-    } else {
-      brainMat.opacity = 1;
-      brainMat.depthWrite = true;
-      brainMesh.renderOrder = 2;
-    }
-  }
-  if (key === 'rotate') {
-    controls.autoRotate = chipState.rotate;
-    controls.autoRotateSpeed = 0.9;
-  }
-}
-
-/* ==========================================================================
-   11. ТЕМА
-   ========================================================================== */
-const themeBtn = document.getElementById('themeBtn');
-const themeIcon = document.getElementById('themeIcon');
-const SUN  = '<path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5 2 3h-4l2-3zm0 20-2-3h4l-2 3zM2 12l3-2v4l-3-2zm20 0-3 2v-4l3 2zM5.6 5.6l3.2.8-2.4 2.4-.8-3.2zm12.8 12.8-3.2-.8 2.4-2.4.8 3.2zM5.6 18.4l.8-3.2 2.4 2.4-3.2.8zm12.8-12.8-.8 3.2-2.4-2.4 3.2-.8z"/>';
-const MOON = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A6.5 6.5 0 0 1 12 3z"/>';
-
-function setTheme(t) {
-  document.documentElement.dataset.theme = t;
-  themeIcon.innerHTML = t === 'dark' ? SUN : MOON;
-  try { localStorage.setItem('nc-theme', t); } catch(e){}
-}
-themeBtn.addEventListener('click', () => {
-  setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
-});
-try {
-  const saved = localStorage.getItem('nc-theme');
-  if (saved) setTheme(saved);
-  else if (matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
-} catch(e){}
-
-/* ==========================================================================
-   12. БОКОВЫЕ ПАНЕЛИ + СВАЙПЫ + КНОПКИ ЗАКРЫТИЯ
-   ========================================================================== */
-const drawer = document.getElementById('drawer');
-const panel  = document.getElementById('panel');
-const scrim  = document.getElementById('scrim');
-
-function openDrawerMobile(){
-  drawer.classList.add('open');
-  panel.classList.remove('open');
-  scrim.classList.add('show');
-}
-function closeDrawerMobile(){
-  drawer.classList.remove('open');
-  if (!panel.classList.contains('open')) scrim.classList.remove('show');
-}
-function openPanelMobile(){
-  if (innerWidth <= 880) {
-    panel.classList.add('open');
-    drawer.classList.remove('open');
-    scrim.classList.add('show');
-  }
-}
-function closePanelMobile(){
-  panel.classList.remove('open');
-  if (!drawer.classList.contains('open')) scrim.classList.remove('show');
-}
-
-/* Открытие через app bar */
-document.getElementById('menuBtn').addEventListener('click', () => {
-  if (drawer.classList.contains('open')) closeDrawerMobile();
-  else openDrawerMobile();
-});
-document.getElementById('panelBtn').addEventListener('click', () => {
-  if (panel.classList.contains('open')) closePanelMobile();
-  else openPanelMobile();
-});
-
-/* Кнопки ✕ внутри панелей */
-document.getElementById('closeDrawer').addEventListener('click', closeDrawerMobile);
-document.getElementById('closePanel').addEventListener('click', closePanelMobile);
-
-/* Клик по затемнению — закрываем всё */
-scrim.addEventListener('click', () => {
-  closeDrawerMobile();
-  closePanelMobile();
-});
-
-/* --- Свайпы для закрытия панелей --- */
-function addSwipeClose(el, direction, onClose) {
-  let startX = 0, startY = 0, tracking = false;
-
-  el.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-    tracking = true;
-  }, { passive: true });
-
-  el.addEventListener('touchmove', (e) => {
-    if (!tracking) return;
-    const t = e.touches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
-
-    // Свайп вправо (для drawer) — dx > 50
-    if (direction === 'right' && dx > 50 && Math.abs(dy) < 80) {
-      tracking = false;
-      onClose();
-    }
-    // Свайп влево (для panel) — dx < -50
-    if (direction === 'left' && dx < -50 && Math.abs(dy) < 80) {
-      tracking = false;
-      onClose();
-    }
-  }, { passive: true });
-
-  el.addEventListener('touchend', () => { tracking = false; }, { passive: true });
-}
-
-addSwipeClose(drawer, 'right', closeDrawerMobile);
-addSwipeClose(panel, 'left', closePanelMobile);
-
-/* Escape для десктопа */
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeDrawerMobile();
-    closePanelMobile();
-    if (selectedRegion) {
-      selectedRegion = null;
-      applyHighlight();
-      renderEmptyInfo();
-    }
-  }
-});
-
-/* ==========================================================================
-   13. РАЗМЕР И АНИМАЦИЯ
-   ========================================================================== */
-function resize() {
-  const w = viewport.clientWidth;
-  const h = viewport.clientHeight;
-  if (w === 0 || h === 0) return;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-}
-new ResizeObserver(resize).observe(viewport);
-resize();
-
-const clock = new THREE.Clock();
-
-function animate() {
-  requestAnimationFrame(animate);
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const t = clock.elapsedTime;
-
-  // Плавная камера
-  if (camTween) {
-    camTween.t = Math.min(1, camTween.t + dt * 1.9);
-    const e = 1 - Math.pow(1 - camTween.t, 3);
-    camera.position.lerpVectors(camTween.from, camTween.to, e);
-    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
-    if (camTween.t >= 1) camTween = null;
-  }
-
-  // Импульсы по путям
-  if (pathwaysGroup.visible) {
-    pulses.forEach(p => {
-      p.t = (p.t + dt * p.speed) % 1;
-      const pt = p.curve.getPointAt(p.t);
-      p.mesh.position.copy(pt);
-      const s = 0.8 + Math.sin(p.t * Math.PI) * 0.9;
-      p.mesh.scale.setScalar(s);
-      p.mesh.material.opacity = 0.35 + Math.sin(p.t * Math.PI) * 0.6;
-    });
-  }
-
-  // Пульсация маркеров
-  if (markersGroup.visible) {
-    const s = 1 + Math.sin(t * 2.1) * 0.10;
-    markerMeshes.forEach(m => {
-      m.scale.setScalar(s);
-      const on = !selectedRegion || SUBAREAS.find(x => x.id === m.userData.id).region === selectedRegion;
-      m.material.emissiveIntensity = on ? (0.9 + Math.sin(t * 2.1) * 0.4) : 0.05;
-    });
-  }
-
-  // Мерцание окончаний
-  if (endingsGroup.visible) {
-    endingsMat.opacity = 0.62 + Math.sin(t * 1.6) * 0.22;
-  }
-
-  // Свечение коры от возбудимости
-  const baseGlow = (params.excitability / 100) * 0.30;
-  const pulseAmt = Math.sin(t * 1.3) * 0.04 * (params.excitability / 100);
-  brainMat.emissiveIntensity = baseGlow + pulseAmt;
-
-  // Лёгкое «дыхание» bottomLight
-  bottomLight.intensity = 1.0 + Math.sin(t * 0.8) * 0.3;
-
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-/* ==========================================================================
-   14. ИНИЦИАЛИЗАЦИЯ
-   ========================================================================== */
-renderParams();
-onParamChange('density');
-onParamChange('excitability');
-onParamChange('conduction');
-applyChipState('markers');
-applyChipState('endings');
-applyHighlight();
-
-camera.position.set(3.6, 2.4, 4.4);
-focusOn(new THREE.Vector3(0, 0.15, 0));
-
-animate();
-</script>
-</body>
-</html>
+const I18N = {
+  ru: {
+    brandSub: 'Интерактивный атлас коры',
+    lobesTitle: 'Доли коры', legendTitle: 'Легенда',
+    regionFrontal: 'Лобная', regionParietal: 'Теменная',
+    regionTemporal: 'Височная', regionOccipital: 'Затылочная',
+    chipZones: 'Зоны коры', chipPathways: 'Проводящие пути',
+    chipEndings: 'Окончания', chipRotate: 'Автоповорот',
+    chipPathology: 'Патологии',
+    hint: 'Вращение — перетаскивание · Масштаб — щипок · Выбор — клик',
+    tabRegion: 'Область', tabPathology: 'Патологии', tabParams: 'Параметры',
+    sectionStats: 'Характеристики', sectionFunctions: 'Ключевые функции',
+    sectionSubareas: 'Зоны внутри доли',
+    sectionSymptoms: 'Симптомы', sectionCognition: 'Влияние на когнитивные функции',
+    sectionMechanism: 'Механизм', sectionRegionsAffected: 'Поражённые области',
+    emptyInfo: 'Выберите область на 3D-модели или в списке слева, чтобы изучить её строение.',
+    emptyPathology: 'Выберите патологию, чтобы увидеть поражённые области, симптомы и влияние на когнитивные функции.',
+    paramsTitle: 'Нейрофизиологические параметры',
+    paramsBalance: 'Нейром
