@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>NeuralMap — 3D Brain Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--bg-1:#0a0a0a;--bg-2:#111;--bg-3:#1a1a1a;
+  --border:rgba(255,255,255,.08);--border-hi:rgba(255,255,255,.18);
+  --text:#fff;--text-2:rgba(255,255,255,.55);--text-3:rgba(255,255,255,.32);
+  --danger:#ef4444;--warn:#f59e0b;--success:#10b981;
+  --font:'Inter',-apple-system,system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+}
+[data-theme="light"]{
+  --bg:#fff;--bg-1:#fafafa;--bg-2:#f5f5f5;--bg-3:#eee;
+  --border:rgba(0,0,0,.08);--border-hi:rgba(0,0,0,.18);
+  --text:#000;--text-2:rgba(0,0,0,.55);--text-3:rgba(0,0,0,.32);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0:;padding:0}
+html,body{height:100%;overflow:hidden;oversc13roll-behavior:none;-webkit-touch-callout:none}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  user-select:none;-webkit-user-select:none;
+  transition:background .2s ease,color .2s ease;
+}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;font-size:inherit}
+svg{display:block}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(128,128,128,.25);border-radius:2px}
+
+.app{
+  display:grid;
+  grid-template-rows:calc(48px + var(--safe-top)) 1fr;
+  height:100dvh;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+.topbar{
+  display:flex;align-items:center;gap:6px;
+  padding:var(--safe-top) calc(8px + var(--safe-right)) 0 calc(8px + var(--safe-left));
+  height:calc(48px + var(--safe-top));
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  z-index:100;
+  overflow:hidden;
+}
+.brand{display:flex;align-items:center;gap:6px;flex:none;min-width:0}
+.brand-icon{
+  width:24px;height:24px;
+  display:grid;place-items:center;flex:none;
+  background:var(--text);color:var(--bg);
+  border-radius:6px;
+}
+.brand-icon svg{widthpx;height:13px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.brand-text strong{font-size:12px;font-weight:600;letter-spacing:-.2px;white-space:nowrap}
+.brand-text span{font-size:9px;color:var(--text-3);font-family:var(--mono)}
+.topbar-sep{width:1px;height:16px;background:var(--border);flex:none}
+.topbar-nav{display:flex;gap:1px;flex:1;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.topbar-nav::-webkit-scrollbar{display:none}
+.nav-tab{
+  padding:4px 8px;border-radius:5px;
+  font-size:11px;font-weight:500;
+  color:var(--text-3);
+  transition:background .15s ease,color .15s ease;
+  white-space:nowrap;flex:none;
+}
+.nav-tab.active{color:var(--bg);background:var(--text)}
+.topbar-actions{display:flex;align-items:center;gap:3px;flex:none}
+.lang-switch{
+  display:flex;background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:5px;padding:2px;gap:1px;
+}
+.lang-btn{
+  padding:2px 6px;
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:.4px;border-radius:3px;
+  color:var(--text-3);
+  transition:background .15s ease,color .15s ease;
+}
+.lang-btn.active{background:var(--text);color:var(--bg)}
+.icon-btn{
+  width:32px;height:32px;min-width:32px;
+  display:grid;place-items:center;
+  border-radius:5px;
+  color:var(--text-2);
+  border:1px solid transparent;
+  transition:background .15s ease;
+}
+.icon-btn:active{background:var(--bg-2)}
+.icon-btn svg{width:15px;height:15px}
+.mobile-only{display:grid}
+@media (min-width:1025px){.mobile-only{display:none}}
+
+.body{
+  display:grid;
+  grid-template-columns:1fr;
+  overflow:hidden;
+  min-height:0;
+  position:relative;
+}
+
+/* ═══ DESKTOP: 3 columns ═══ */
+@media (min-width:1025px){
+  .body{grid-template-columns:260px 1fr 320px}
+}
+
+/* ═══ TABLET: 2 columns ═══ */
+@media (min-width:641px) and (max-width:1024px){
+  .body{grid-template-columns:1fr 300px}
+}
+
+.panel{
+  overflow-y:auto;overflow-x:hidden;
+  padding:14px 12px;min-height:0;
+  background:var(--bg-1);
+  -webkit-overflow-scrolling:touch;
+}
+.panel-left{border-right:1px solid var(--border)}
+.panel-right{border-left:1px solid var(--border)}
+
+/* ═══ MOBILE + TABLET: side drawers ═══ */
+@media (max-width:1024px){
+  .panel-left,.panel-right{
+    position:fixed;
+    top:calc(48px + var(--safe-top));
+    bottom:0;
+    width:min(310px,84vw);
+    z-index:200;
+    background:var(--bg-1);
+    transition:transform .25s cubic-bezier(.4,0,.2,1);
+    padding-bottom:calc(14px + var(--safe-bottom));
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .panel-left{
+    left:0;
+    transform:translateX(-100%);
+    box-shadow:20px 0 50px rgba(0,0,0,.5);
+  }
+  .panel-right{
+    right:0;
+    transform:translateX(100%);
+    box-shadow:-20px 0 50px rgba(0,0,0,.5);
+  }
+  .panel-left.open{transform:translateX(0)}
+  .panel-right.open{transform:translateX(0)}
+}
+
+/* ═══ SMALL MOBILE: full-width drawers ═══ */
+@media (max-width:400px){
+  .panel-left,.panel-right{width:min(300px,90vw)}
+}
+
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:10px;margin-bottom:12px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:-14px;background:var(--bg-1);
+  padding-top:14px;margin-top:-14px;z-index:2;
+}
+.panel-head h2{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;color:var(--text-3);
+}
+.panel-close{
+  width:30px;height:30px;display:grid;place-items:center;
+  border-radius:5px;color:var(--text-3);
+}
+.panel-close:active{background:var(--bg-2)}
+.panel-close svg{width:14px;height:14px}
+@media (min-width:1025px){.panel-close{display:none}}
+
+.section{margin-bottom:18px}
+.section-title{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:8px;
+}
+
+/* ═══ REGION ITEMS ═══ */
+.region-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:10px;border-radius:6px;text-align:left;
+  transition:background .15s ease;margin-bottom:2px;
+  border:1px solid transparent;background:transparent;
+  min-height:42px;
+}
+.region-item:active{background:var(--bg-2)}
+.region-item.active{background:var(--bg-3);border-color:var(--border-hi)}
+.region-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.region-item.active .region-dot{
+  box-shadow:0 0 0 3px color-mix(in srgb,currentColor 25%,transparent);
+}
+.region-name{flex:1;font-size:12.5px;font-weight:500;color:var(--text-2)}
+.region-item.active .region-name{color:var(--text)}
+
+/* ═══ DISEASE ITEMS ═══ */
+.disease-item{
+  display:flex;align-items:flex-start;gap:9px;width:100%;
+  padding:10px;border-radius:6px;text-align:left;
+  transition:background .15s ease;margin-bottom:3px;
+  border:1px solid var(--border);background:transparent;
+  position:relative;overflow:hidden;min-height:46px;
+}
+.disease-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:var(--d-color,#666);
+  opacity:.5;transition:opacity .15s ease;
+}
+.disease-item:active{background:var(--bg-2)}
+.disease-item.active{background:var(--bg-3);border-color:var(--border-hi)}
+.disease-item.active::before{opacity:1}
+.disease-icon{
+  width:24px;height:24px;border-radius:5px;
+  display:grid;place-items:center;
+  background:var(--d-color,#666);color:#fff;
+  font-family:var(--mono);font-size:10px;font-weight:700;flex:none;
+}
+.disease-body{flex:1;min-width:0}
+.disease-name{
+  font-size:12px;font-weight:500;color:var(--text-2);
+  margin-bottom:2px;display:block;
+}
+.disease-item.active .disease-name{color:var(--text)}
+.disease-desc{font-size:10px;color:var(--text-3);line-height:1.3}
+
+/* ═══ SEVERITY ═══ */
+.severity-box{
+  margin-top:10px;padding:12px;
+  background:var(--bg-2);border:1px solid var(--border);
+  border-radius:8px;animation:slideDown .25s ease;
+}
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:none}
+}
+.severity-head{
+  display:flex;justify-content:space-between;
+  align-items:baseline;margin-bottom:8px;
+}
+.severity-label{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;color:var(--text-3);
+}
+.severity-value{
+  font-family:var(--mono);font-size:18px;font-weight:600;
+  color:var(--text);font-variant-numeric:tabular-nums;
+}
+.severity-slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:30px;background:transparent;
+  cursor:pointer;display:block;
+}
+.severity-slider::-webkit-slider-runnable-track{
+  height:3px;border-radius:2px;
+  background:linear-gradient(to right,var(--text) var(--p,50%),var(--border) var(--p,50%));
+}
+.severity-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;
+  border-radius:50%;background:var(--text);
+  margin-top:-8.5px;border:none;
+}
+.severity-stages{
+  display:flex;justify-content:space-between;
+  margin-top:6px;font-family:var(--mono);font-size:9px;color:var(--text-3);
+}
+.severity-stages span.active{color:var(--text);font-weight:600}
+
+/* ═══ VIEWPORT ═══ */
+.viewport{
+  position:relative;background:var(--bg);
+  overflow:hidden;min-height:0;min-width:0;
+  display:flex;align-items:center;justify-content:center;
+}
+#canvas3d{
+  display:block;width:100%;height:100%;
+  touch-action:none;cursor:grab;
+}
+#canvas3d:active{cursor:grabbing}
+
+/* ═══ HTML LABELS ═══ */
+.labels-layer{
+  position:absolute;inset:0;
+  pointer-events:none;z-index:5;overflow:hidden;
+}
+.zone-label{
+  position:absolute;pointer-events:auto;
+  display:flex;align-items:center;gap:5px;
+  padding:4px 9px 4px 6px;border-radius:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14);
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:.3px;color:#fff;white-space:nowrap;
+  transform:translate(-50%,-50%);
+  transition:opacity .2s ease,transform .15s ease,background .2s ease;
+  cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+}
+[data-theme="light"] .zone-label{
+  background:rgba(255,255,255,.9);
+  border-color:rgba(0,0,0,.14);color:#000;
+}
+.zone-label.hidden{opacity:0;pointer-events:none}
+.zone-label:active{transform:translate(-50%,-50%) scale(.94)}
+.zone-label.active{
+  background:rgba(124,92,255,.92);
+  border-color:rgba(255,255,255,.35);color:#fff;
+}
+.zone-label .ldot{
+  width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--ldot-color,#7c5cff);
+  box-shadow:0 0 8px var(--ldot-color,#7c5cff);
+} .zone-label .ldot{
+  width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--ldot-color,#7c5cff);
+  box-shadow:0 0 8px var(--ldot-color,#7c5cff);
+}
+/* ═══ VIEWPORT CHIPS ═══ */
+.viewport-chips{
+  position:absolute;top:10px;left:10px;right:10px;
+  display:flex;gap:5px;z-index:10;
+  pointer-events:none;flex-wrap:wrap;
+  max-width:calc(100% - 20px);
+}
+.chip{
+  pointer-events:auto;
+  display:inline-flex;align-items:center;gap:5px;
+  height:30px;padding:0 10px;border-radius:8px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:var(--text-2);
+  font-family:var(--mono);font-size:9.5px;font-weight:500;
+  letter-spacing:.3px;white-space:nowrap;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+[data-theme="light"] .chip{background:rgba(255,255,255,.75)}
+.chip.on{background:var(--text);border-color:var(--text);color:var(--bg)}
+.chip-dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.6}
+.chip.on .chip-dot{opacity:1}
+
+/* ═══ FOCUS LABEL ═══ */
+.focus-label{
+  position:absolute;top:10px;right:10px;
+  pointer-events:none;z-index:10;
+  max-width:170px;text-align:right;
+}
+.focus-label .tag{
+  display:block;font-family:var(--mono);font-size:9px;
+  letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:2px;
+}
+.focus-label .val{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--text);line-height:1.25;display:block;
+}
+
+/* ═══ VIEWPORT HINT ═══ */
+.viewport-hint{
+  position:absolute;bottom:10px;left:50%;
+  transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;
+  color:var(--text-3);letter-spacing:.4px;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:5px 11px;border-radius:6px;
+  border:1px solid var(--border);
+  pointer-events:none;white-space:nowrap;z-index:10;
+  max-width:calc(100% - 120px);
+  overflow:hidden;text-overflow:ellipsis;
+}
+[data-theme="light"] .viewport-hint{background:rgba(255,255,255,.75)}
+.viewport-hint .sep{opacity:.4;margin:0 5px}
+
+/* ═══ STATUS INDICATOR ═══ */
+.status-indicator{
+  position:absolute;bottom:10px;right:10px;
+  display:flex;align-items:center;gap:5px;
+  padding:5px 9px;background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--border);border-radius:6px;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.7px;text-transform:uppercase;
+  color:var(--text-3);z-index:10;
+}
+[data-theme="light"] .status-indicator{background:rgba(255,255,255,.75)}
+.status-indicator::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--success);
+  animation:pulse 2s ease-in-out infinite;
+}
+.status-indicator.warn::before{background:var(--warn)}
+.status-indicator.danger::before{background:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ═══ MODEL LOADER ═══ */
+.model-loader{
+  position:absolute;inset:0;
+  display:grid;place-items:center;
+  background:var(--bg);z-index:20;
+  transition:opacity .4s ease;
+}
+.model-loader.hidden{opacity:0;pointer-events:none}
+.model-loader-spinner{
+  width:32px;height:32px;margin:0 auto 12px;
+  border:2px solid var(--border);
+  border-top-color:var(--text);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.model-loader-text{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-3);text-align:center;
+}
+
+/* ═══ ANALYTICS PANEL ═══ */
+.analytics-header{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;gap:10px;margin-bottom:12px;
+}
+.analytics-header h2{
+  font-size:15px;font-weight:600;
+  letter-spacing:-.2px;margin-bottom:3px;line-height:1.2;
+}
+.analytics-header .subtitle{
+  font-family:var(--mono);font-size:10px;
+  color:var(--text-3);letter-spacing:.3px;
+}
+.card{
+  background:var(--bg-2);border:1px solid var(--border);
+  border-radius:8px;padding:12px;margin-bottom:9px;
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+.card-title{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:9px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title .badge{
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  padding:2px 6px;border-radius:4px;
+  letter-spacing:.4px;text-transform:uppercase;
+  background:var(--bg-3);color:var(--text-2);
+}
+.card p{font-size:12px;line-height:1.6;color:var(--text-2);margin:0}
+.card p strong{color:var(--text);font-weight:500}
+.metric-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 0;border-bottom:1px solid var(--border);font-size:11.5px;
+}
+.metric-row:last-child{border-bottom:none}
+.metric-label{color:var(--text-2)}
+.metric-value{
+  font-family:var(--mono);font-size:11.5px;font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+.metric-value.good{color:var(--success)}
+.metric-value.warn{color:var(--warn)}
+.metric-value.bad{color:var(--danger)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{
+  font-family:var(--mono);font-size:9.5px;
+  padding:3px 7px;border-radius:4px;
+  background:var(--bg-3);border:1px solid var(--border);
+  color:var(--text-2);letter-spacing:.2px;
+}
+.tag.danger{
+  background:rgba(239,68,68,.1);
+  border-color:rgba(239,68,68,.25);color:#f87171;
+}
+.tag.warn{
+  background:rgba(245,158,11,.1);
+  border-color:rgba(245,158,11,.25);color:#fbbf24;
+}
+.empty{text-align:center;padding:40px 16px;color:var(--text-3)}
+.empty svg{width:28px;height:28px;margin:0 auto 12px;opacity:.3}
+.empty p{font-size:11.5px;line-height:1.6;max-width:200px;margin:0 auto}
+.sub-item{
+  display:flex;align-items:center;gap:9px;width:100%;
+  padding:10px;border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--bg-3);color:var(--text-2);
+  font-size:12px;text-align:left;
+  transition:background .15s ease;margin-bottom:3px;min-height:42px;
+}
+.sub-item:active{background:var(--bg-2)}
+.sub-item .pin{width:5px;height:5px;border-radius:50%;flex:none}
+.sub-item .go{
+  margin-left:auto;color:var(--text-3);
+  font-family:var(--mono);font-size:10px;
+}
+.progression-bar{
+  display:flex;height:3px;border-radius:2px;
+  overflow:hidden;background:var(--bg-3);
+  margin-bottom:10px;gap:2px;
+}
+.progression-step{
+  flex:1;background:var(--border);
+  transition:background .3s ease;
+}
+.progression-step.past{background:var(--warn)}
+.progression-step.current{background:var(--text)}
+.progression-labels{
+  display:flex;gap:2px;margin-bottom:12px;
+  font-family:var(--mono);font-size:8.5px;
+  text-align:center;color:var(--text-3);
+}
+.progression-labels span{flex:1}
+.progression-labels span.active{color:var(--text);font-weight:600}
+
+/* ═══ SCRIM ═══ */
+.scrim{
+  position:fixed;
+  inset:calc(48px + var(--safe-top)) 0 0 0;
+  background:rgba(0,0,0,.6);z-index:150;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+}
+.scrim.show{opacity:1;pointer-events:auto}
+
+/* ═══ iOS Landscape: hide hint, compact topbar ═══ */
+@media (max-height:500px) and (orientation:landscape){
+  .viewport-hint{display:none}
+  .status-indicator{font-size:8.5px;padding:4px 7px;bottom:8px;right:8px}
+  .viewport-chips{top:8px;left:8px;gap:4px}
+  .chip{height:26px;padding:0 8px;font-size:9px}
+  .focus-label{top:8px;right:8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button class="icon-btn mobile-only" id="menuBtn" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <strong>NeuralMap</strong>
+        <span>v7.0</span>
+      </div>
+    </div>
+    <div class="topbar-sep"></div>
+    <nav class="topbar-nav">
+      <button class="nav-tab active" data-view="atlas" id="tabAtlas">Atlas</button>
+      <button class="nav-tab" data-view="analytics" id="tabAnalytics">Analytics</button>
+      <button class="nav-tab" data-view="simulation" id="tabSimulation">Simulation</button>
+    </nav>
+    <div class="topbar-actions">
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="icon-btn mobile-only" id="panelBtn" aria-label="Analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="panel panel-left" id="panelLeft">
+      <div class="panel-head">
+        <h2 id="leftTitle">Brain Atlas</h2>
+        <button class="panel-close" id="closeLeft" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="section">
+        <div class="section-title" id="lobesTitle">Cortical Lobes</div>
+        <div id="regionList"></div>
+      </div>
+      <div class="section">
+        <div class="section-title" id="diseasesTitle">Pathologies</div>
+        <div id="diseaseList"></div>
+      </div>
+      <div id="severityContainer" style="display:none">
+        <div class="severity-box">
+          <div class="severity-head">
+            <span class="severity-label" id="severityLabel">Severity</span>
+            <span class="severity-value" id="severityValue">50%</span>
+          </div>
+          <input type="range" class="severity-slider" id="severitySlider" min="0" max="100" value="50">
+          <div class="severity-stages" id="severityStages">
+            <span>I</span><span>II</span><span>III</span><span>IV</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="viewport" id="viewport">
+      <canvas id="canvas3d"></canvas>
+      <div class="labels-layer" id="labelsLayer"></div>
+      <div class="model-loader" id="modelLoader">
+        <div>
+          <div class="model-loader-spinner"></div>
+          <div class="model-loader-text" id="loaderText">Loading model</div>
+        </div>
+      </div>
+      <div class="viewport-chips">
+        <button class="chip on" data-toggle="labels"><span class="chip-dot"></span><span id="chipLabels">Labels</span></button>
+        <button class="chip on" data-toggle="impulses"><span class="chip-dot"></span><span id="chipImpulses">Impulses</span></button>
+        <button class="chip" data-toggle="rotate"><span class="chip-dot"></span><span id="chipRotate">Auto-rotate</span></button>
+      </div>
+      <div class="focus-label">
+        <span class="tag" id="focusTag">Focus</span>
+        <span class="val" id="focusValue">Full brain</span>
+      </div>
+      <div class="viewport-hint">
+        <span id="hintDrag">Rotate</span>
+        <span class="sep">·</span>
+        <span id="hintZoom">Zoom</span>
+        <span class="sep">·</span>
+        <span id="hintClick">Tap label</span>
+      </div>
+      <div class="status-indicator" id="statusIndicator">Ready</div>
+    </main>
+
+    <aside class="panel panel-right" id="panelRight">
+      <div class="panel-head">
+        <h2 id="rightTitle">Analytics</h2>
+        <button class="panel-close" id="closeRight" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div id="analyticsContent"></div>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+/* ================================================================
+   i18n
+   ================================================================ */
+const I18N = {
+  en: {
+    atlas:'Atlas',analytics:'Analytics',simulation:'Simulation',
+    lobes:'Cortical Lobes',diseases:'Pathologies',
+    severity:'Severity',focus:'Focus',fullBrain:'Full brain',
+    drag:'Rotate',zoom:'Zoom',click:'Tap label',
+    labels:'Labels',impulses:'Impulses',rotate:'Auto-rotate',
+    ready:'Ready',warn:'Warning',alert:'Alert',
+    anatomy:'Anatomy',functions:'Key Functions',subzones:'Sub-zones',
+    mechanism:'Mechanism',affected:'Affected Zones',
+    neuro:'Neurotransmitters',symptoms:'Clinical Symptoms',
+    progression:'Progression',metrics:'Functional Metrics',
+    healthy:'Healthy Brain',healthyDesc:'No pathologies',
+    emptyTitle:'Select a zone',
+    emptyText:'Tap a lobe on the left or any label on the 3D brain.',
+    loadingModel:'Loading model',
+    loadError:'Model failed to load',
+    metricCognitive:'Cognitive',metricMotor:'Motor',metricLanguage:'Language',
+    metricSensory:'Sensory',metricMemory:'Memory',metricConnectivity:'Connectivity'
+  },
+  ru: {
+    atlas:'Атлас',analytics:'Анализ',simulation:'Симуляция',
+    lobes:'Доли коры',diseases:'Патологии',
+    severity:'Тяжесть',focus:'Фокус',fullBrain:'Весь мозг',
+    drag:'Вращение',zoom:'Масштаб',click:'Тап по метке',
+    labels:'Метки',impulses:'Импульсы',rotate:'Автоповорот',
+    ready:'Готово',warn:'Внимание',alert:'Опасно',
+    anatomy:'Анатомия',functions:'Ключевые функции',subzones:'Подзоны',
+    mechanism:'Механизм',affected:'Поражённые зоны',
+    neuro:'Нейромедиаторы',symptoms:'Симптомы',
+    progression:'Прогрессия',metrics:'Метрики',
+    healthy:'Здоровый мозг',healthyDesc:'Без патологий',
+    emptyTitle:'Выберите зону',
+    emptyText:'Нажмите долю слева или метку на 3D-модели.',
+    loadingModel:'Загрузка модели',
+    loadError:'Ошибка загрузки',
+    metricCognitive:'Когнитив',metricMotor:'Мотор',metricLanguage:'Речь',
+    metricSensory:'Сенсор',metricMemory:'Память',metricConnectivity:'Связность'
+  }
+};
+let LANG = 'en';
+const T = function(k) { return I18N[LANG][k] || k; };
+
+/* ================================================================
+   REGIONS
+   ================================================================ */
+const REGIONS = {
+  frontal:{
+    id:'frontal',color:'#7c5cff',hex:0x7c5cff,dir:[-0.15,0.15,0.85],
+    en:{name:'Frontal Lobe',latin:'Lobus frontalis',short:'Planning / Motor / Speech',
+      desc:'The largest lobe. Supports executive functions, working memory, voluntary movement and speech.',
+      functions:['Planning','Working memory','Motor control','Speech','Self-control']},
+    ru:{name:'Лобная доля',latin:'Lobus frontalis',short:'Планирование / Моторика / Речь',
+      desc:'Крупнейшая доля. Обеспечивает исполнительные функции, рабочую память, движения и речь.',
+      functions:['Планирование','Рабочая память','Моторика','Речь','Самоконтроль']}
+  },
+  parietal:{
+    id:'parietal',color:'#10b981',hex:0x10b981,dir:[-0.15,0.6,-0.25],
+    en:{name:'Parietal Lobe',latin:'Lobus parietalis',short:'Sensory / Space / Attention',
+      desc:'Integrates somatosensory information and manages spatial attention.',
+      functions:['Touch','Proprioception','Spatial reasoning','Attention','Numeracy']},
+    ru:{name:'Теменная доля',latin:'Lobus parietalis',short:'Сенсорика / Пространство / Внимание',
+      desc:'Интегрирует соматосенсорную информацию и управляет вниманием.',
+      functions:['Тактильность','Проприоцепция','Пространство','Внимание','Счёт']}
+  },
+  temporal:{
+    id:'temporal',color:'#f59e0b',hex:0xf59e0b,dir:[-0.7,-0.3,0.05],
+    en:{name:'Temporal Lobe',latin:'Lobus temporalis',short:'Hearing / Memory / Language',
+      desc:'Contains auditory cortex, Wernicke area, hippocampus and amygdala.',
+      functions:['Hearing','Memory','Language','Emotion','Face recognition']},
+    ru:{name:'Височная доля',latin:'Lobus temporalis',short:'Слух / Память / Речь',
+      desc:'Содержит слуховую кору, зону Вернике, гиппокамп и миндалину.',
+      functions:['Слух','Память','Речь','Эмоции','Лица']}
+  },
+  occipital:{
+    id:'occipital',color:'#ec4899',hex:0xec4899,dir:[-0.1,0.05,-0.95],
+    en:{name:'Occipital Lobe',latin:'Lobus occipitalis',short:'Vision / Visual streams',
+      desc:'Posterior cortex dedicated to processing visual information.',
+      functions:['Vision','Color','Motion','Orientation','Visual memory']},
+    ru:{name:'Затылочная доля',latin:'Lobus occipitalis',short:'Зрение / Потоки',
+      desc:'Задний отдел коры, посвящённый обработке зрительной информации.',
+      functions:['Зрение','Цвет','Движение','Ориентация','Зрит. память']}
+  },
+  cerebellum:{
+    id:'cerebellum',color:'#64748b',hex:0x64748b,dir:[0,-0.7,-0.65],
+    en:{name:'Cerebellum',latin:'Cerebellum',short:'Coordination / Balance',
+      desc:'Contains over half of all brain neurons. Critical for balance and motor learning.',
+      functions:['Balance','Coordination','Fine motor','Motor learning','Posture']},
+    ru:{name:'Мозжечок',latin:'Cerebellum',short:'Координация / Баланс',
+      desc:'Содержит более половины нейронов мозга. Критичен для баланса и моторики.',
+      functions:['Баланс','Координация','Мелкая моторика','Моторное обучение','Осанка']}
+  }
+};
+
+/* ================================================================
+   SUBZONES
+   ================================================================ */
+const SUBZONES = [
+  {id:'m1',region:'frontal',dir:[-0.25,0.75,0.45],color:'#7c5cff',
+    en:{name:'M1',full:'Primary Motor Cortex',note:'Precentral gyrus. Controls voluntary movement.'},
+    ru:{name:'M1',full:'Первичная моторная кора',note:'Прецентральная извилина.'}},
+  {id:'pfc',region:'frontal',dir:[-0.15,0.1,0.95],color:'#a78bfa',
+    en:{name:'PFC',full:'Prefrontal Cortex',note:'Executive functions: working memory, decisions.'},
+    ru:{name:'ПФК',full:'Префронтальная кора',note:'Рабочая память, решения.'}},
+  {id:'broca',region:'frontal',dir:[-0.55,-0.15,0.65],color:'#6d28d9',
+    en:{name:'Broca',full:'Broca Area',note:'Motor speech center.'},
+    ru:{name:'Брока',full:'Зона Брока',note:'Моторный центр речи.'}},
+  {id:'s1',region:'parietal',dir:[-0.25,0.75,-0.35],color:'#10b981',
+    en:{name:'S1',full:'Somatosensory Cortex',note:'Postcentral gyrus. Tactile signals.'},
+    ru:{name:'S1',full:'Соматосенсорная кора',note:'Тактильные сигналы.'}},
+  {id:'ppc',region:'parietal',dir:[-0.55,0.55,-0.5],color:'#34d399',
+    en:{name:'PPC',full:'Posterior Parietal',note:'Spatial attention, integration.'},
+    ru:{name:'ЗТК',full:'Задняя теменная кора',note:'Пространственное внимание.'}},
+  {id:'ang',region:'parietal',dir:[-0.6,0.2,-0.65],color:'#059669',
+    en:{name:'AG',full:'Angular Gyrus',note:'Reading, cross-modal integration.'},
+    ru:{name:'УИ',full:'Угловая извилина',note:'Чтение, интеграция.'}},
+  {id:'a1',region:'temporal',dir:[-0.85,-0.2,0.1],color:'#f59e0b',
+    en:{name:'A1',full:'Primary Auditory',note:'Heschl gyri. Tonotopic organization.'},
+    ru:{name:'A1',full:'Первичная слуховая кора',note:'Извилины Гешля.'}},
+  {id:'wern',region:'temporal',dir:[-0.75,-0.05,-0.4],color:'#fbbf24',
+    en:{name:'Wernicke',full:'Wernicke Area',note:'Language comprehension.'},
+    ru:{name:'Вернике',full:'Зона Вернике',note:'Понимание речи.'}},
+  {id:'hip',region:'temporal',dir:[-0.35,-0.65,-0.45],color:'#d97706',
+    en:{name:'Hippo',full:'Hippocampus',note:'Long-term memory formation.'},
+    ru:{name:'Гиппо',full:'Гиппокамп',note:'Долговременная память.'}},
+  {id:'amyg',region:'temporal',dir:[-0.45,-0.6,-0.2],color:'#b45309',
+    en:{name:'Amyg',full:'Amygdala',note:'Emotions, fear, aggression.'},
+    ru:{name:'Минд',full:'Миндалина',note:'Эмоции, страх.'}},
+  {id:'v1',region:'occipital',dir:[-0.15,-0.15,-1.0],color:'#ec4899',
+    en:{name:'V1',full:'Primary Visual Cortex',note:'Striate cortex. Contours, orientation.'},
+    ru:{name:'V1',full:'Первичная зрительная кора',note:'Контуры, ориентация.'}},
+  {id:'v5',region:'occipital',dir:[-0.55,0.05,-0.85],color:'#f472b6',
+    en:{name:'V5',full:'Visual Area V5/MT',note:'Motion analysis.'},
+    ru:{name:'V5',full:'Зона V5/MT',note:'Анализ движения.'}}
+];
+
+/* ================================================================
+   PATHWAYS
+   ================================================================ */
+const PATHWAYS = [
+  ['m1','s1'],['broca','wern'],['s1','ppc'],['a1','wern'],
+  ['v1','ppc'],['v1','wern'],['pfc','ppc'],['m1','pfc'],
+  ['hip','pfc'],['amyg','pfc'],['hip','amyg'],['ang','wern']
+];
+
+/* ================================================================
+   DISEASES
+   ================================================================ */
+const DISEASES = [
+  {id:'stroke',icon:'S',color:'#ef4444',hex:0xef4444,
+    affected:['m1','s1','broca'],regions:['frontal','parietal'],
+    en:{name:'Ischemic Stroke',short:'Acute hypoperfusion',
+      desc:'Sudden loss of blood supply to brain region.',
+      mechanism:'Hypoxia - pump failure - excitotoxicity - necrosis',
+      neuro:['Glutamate +','GABA -','ACh -'],
+      symptoms:['Hemiparesis','Aphasia','Hemianesthesia','Tongue deviation'],
+      stages:['Pre-stroke','Hyperacute','Acute','Chronic'],
+      metrics:{cognitive:0.3,motor:0.2,language:0.25,sensory:0.3,memory:0.5,connectivity:0.3}},
+    ru:{name:'Ишемический инсульт',short:'Острая гипоперфузия',
+      desc:'Внезапная потеря кровоснабжения участка мозга.',
+      mechanism:'Гипоксия - отказ насоса - эксайтотоксичность - некроз',
+      neuro:['Глутамат +','ГАМК -','АХ -'],
+      symptoms:['Гемипарез','Афазия','Гемианестезия','Девиация языка'],
+      stages:['Продром','Гиперострый','Острый','Хронический'],
+      metrics:{cognitive:0.3,motor:0.2,language:0.25,sensory:0.3,memory:0.5,connectivity:0.3}}},
+  {id:'ms',icon:'M',color:'#f59e0b',hex:0xf59e0b,
+    affected:['m1','s1','v1'],regions:['frontal','parietal','occipital'],
+    en:{name:'Multiple Sclerosis',short:'Demyelination of CNS',
+      desc:'Autoimmune attack on myelin sheaths.',
+      mechanism:'T-cells attack myelin - demyelination - conduction block',
+      neuro:['ACh -','Glutamate +','BDNF -'],
+      symptoms:['Limb weakness','Optic neuritis','Ataxia','Paresthesia'],
+      stages:['CIS','RRMS','SPMS','PPMS'],
+      metrics:{cognitive:0.55,motor:0.4,language:0.65,sensory:0.35,memory:0.45,connectivity:0.25}},
+    ru:{name:'Рассеянный склероз',short:'Демиелинизация ЦНС',
+      desc:'Аутоиммунная атака на миелин.',
+      mechanism:'Т-клетки - демиелинизация - блокада',
+      neuro:['АХ -','Глутамат +','BDNF -'],
+      symptoms:['Слабость','Оптический неврит','Атаксия','Парестезии'],
+      stages:['КИС','РРРС','ВПРС','ППРС'],
+      metrics:{cognitive:0.55,motor:0.4,language:0.65,sensory:0.35,memory:0.45,connectivity:0.25}}},
+  {id:'parkinson',icon:'P',color:'#3b82f6',hex:0x3b82f6,
+    affected:['m1','pfc'],regions:['frontal'],
+    en:{name:'Parkinson Disease',short:'Dopaminergic degeneration',
+      desc:'Death of dopaminergic neurons in substantia nigra.',
+      mechanism:'Loss of DA neurons - basal ganglia imbalance',
+      neuro:['Dopamine --','GABA +','ACh +'],
+      symptoms:['Resting tremor','Rigidity','Bradykinesia','Postural instability'],
+      stages:['Stage 1','Stage 2','Stage 3','Stage 4-5'],
+      metrics:{cognitive:0.6,motor:0.2,language:0.75,sensory:0.7,memory:0.55,connectivity:0.45}},
+    ru:{name:'Болезнь Паркинсона',short:'Дегенерация дофамина',
+      desc:'Гибель дофаминовых нейронов.',
+      mechanism:'Гибель DA-нейронов - дисбаланс ганглиев',
+      neuro:['Дофамин --','ГАМК +','АХ +'],
+      symptoms:['Тремор','Ригидность','Брадикинезия','Неустойчивость'],
+      stages:['Стадия 1','Стадия 2','Стадия 3','Стадия 4-5'],
+      metrics:{cognitive:0.6,motor:0.2,language:0.75,sensory:0.7,memory:0.55,connectivity:0.45}}},
+  {id:'alzheimer',icon:'A',color:'#a855f7',hex:0xa855f7,
+    affected:['hip','pfc','wern'],regions:['temporal','frontal','parietal'],
+    en:{name:'Alzheimer Disease',short:'Neurodegenerative dementia',
+      desc:'Amyloid-beta plaques and tau tangles.',
+      mechanism:'A-beta plaques + tau - synaptic loss - atrophy',
+      neuro:['ACh ---','Glutamate +','Serotonin -'],
+      symptoms:['Memory loss','Disorientation','Word-finding','Apathy'],
+      stages:['Preclinical','MCI','Mild AD','Moderate-Severe AD'],
+      metrics:{cognitive:0.15,motor:0.75,language:0.25,sensory:0.85,memory:0.1,connectivity:0.2}},
+    ru:{name:'Болезнь Альцгеймера',short:'Нейродегенеративная деменция',
+      desc:'Амилоидные бляшки и тау-клубки.',
+      mechanism:'А-бета + тау - потеря синапсов - атрофия',
+      neuro:['АХ ---','Глутамат +','Серотонин -'],
+      symptoms:['Потеря памяти','Дезориентация','Подбор слов','Апатия'],
+      stages:['Доклиническая','УКН','Мягкая БА','Умеренная-тяжёлая'],
+      metrics:{cognitive:0.15,motor:0.75,language:0.25,sensory:0.85,memory:0.1,connectivity:0.2}}},
+  {id:'epilepsy',icon:'E',color:'#f97316',hex:0xf97316,
+    affected:['m1','s1','hip'],regions:['frontal','parietal','temporal'],
+    en:{name:'Epilepsy',short:'Hypersynchronous activity',
+      desc:'Recurrent unprovoked seizures.',
+      mechanism:'E/I imbalance - hypersynchronous discharge',
+      neuro:['GABA -','Glutamate +'],
+      symptoms:['Convulsions','Loss of awareness','Aura','Postictal confusion'],
+      stages:['Focal aware','Focal impaired','Bilateral','Status epilepticus'],
+      metrics:{cognitive:0.6,motor:0.45,language:0.55,sensory:0.5,memory:0.4,connectivity:0.55}},
+    ru:{name:'Эпилепсия',short:'Гиперсинхронная активность',
+      desc:'Повторяющиеся приступы.',
+      mechanism:'Дисбаланс - гиперсинхронный разряд',
+      neuro:['ГАМК -','Глутамат +'],
+      symptoms:['Судороги','Потеря сознания','Аура','Спутанность'],
+      stages:['Фокальный осознанный','Фокальный нарушенный','Билатеральный','Статус'],
+      metrics:{cognitive:0.6,motor:0.45,language:0.55,sensory:0.5,memory:0.4,connectivity:0.55}}},
+  {id:'tbi',icon:'T',color:'#8b5cf6',hex:0x8b5cf6,
+    affected:['pfc','m1'],regions:['frontal'],
+    en:{name:'Traumatic Brain Injury',short:'Mechanical damage',
+      desc:'Damage from impact or sudden acceleration.',
+      mechanism:'Acceleration - axonal stretch - edema',
+      neuro:['Glutamate +','Dopamine +','ACh -'],
+      symptoms:['LOC','Amnesia','Headache','Confusion'],
+      stages:['Mild','Moderate','Severe','Chronic'],
+      metrics:{cognitive:0.35,motor:0.45,language:0.6,sensory:0.55,memory:0.5,connectivity:0.45}},
+    ru:{name:'Черепно-мозговая травма',short:'Механическое повреждение',
+      desc:'Повреждение от удара или ускорения.',
+      mechanism:'Ускорение - растяжение аксонов - отёк',
+      neuro:['Глутамат +','Дофамин +','АХ -'],
+      symptoms:['Потеря сознания','Амнезия','Головная боль','Спутанность'],
+      stages:['Лёгкая','Средняя','Тяжёлая','Хроническая'],
+      metrics:{cognitive:0.35,motor:0.45,language:0.6,sensory:0.55,memory:0.5,connectivity:0.45}}},
+  {id:'huntington',icon:'H',color:'#22c55e',hex:0x22c55e,
+    affected:['pfc','m1'],regions:['frontal'],
+    en:{name:'Huntington Disease',short:'Genetic neurodegeneration',
+      desc:'CAG repeat expansion in HTT gene.',
+      mechanism:'Mutant huntingtin - striatal degeneration',
+      neuro:['GABA --','Dopamine +'],
+      symptoms:['Chorea','Dystonia','Cognitive decline','Depression'],
+      stages:['Premanifest','Early','Middle','Late'],
+      metrics:{cognitive:0.4,motor:0.2,language:0.6,sensory:0.65,memory:0.45,connectivity:0.4}},
+    ru:{name:'Болезнь Хантингтона',short:'Генетическая нейродегенерация',
+      desc:'Экспансия CAG-повторов в гене HTT.',
+      mechanism:'Мутантный хантингтин - дегенерация стриатума',
+      neuro:['ГАМК --','Дофамин +'],
+      symptoms:['Хорея','Дистония','Когнитивное снижение','Депрессия'],
+      stages:['Преманифест','Ранняя','Средняя','Поздняя'],
+      metrics:{cognitive:0.4,motor:0.2,language:0.6,sensory:0.65,memory:0.45,connectivity:0.4}}},
+  {id:'als',icon:'L',color:'#eab308',hex:0xeab308,
+    affected:['m1','broca'],regions:['frontal'],
+    en:{name:'ALS',short:'Motor neuron disease',
+      desc:'Progressive degeneration of motor neurons.',
+      mechanism:'Motor neuron death - denervation - atrophy',
+      neuro:['Glutamate +','GABA -'],
+      symptoms:['Weakness','Fasciculations','Dysarthria','Dysphagia'],
+      stages:['Onset','Spread','Progressive','End-stage'],
+      metrics:{cognitive:0.85,motor:0.1,language:0.6,sensory:0.9,memory:0.85,connectivity:0.35}},
+    ru:{name:'БАС',short:'Болезнь мотонейронов',
+      desc:'Дегенерация мотонейронов.',
+      mechanism:'Гибель мотонейронов - денервация',
+      neuro:['Глутамат +','ГАМК -'],
+      symptoms:['Слабость','Фасцикуляции','Дизартрия','Дисфагия'],
+      stages:['Дебют','Распространение','Прогрессирование','Терминальная'],
+      metrics:{cognitive:0.85,motor:0.1,language:0.6,sensory:0.9,memory:0.85,connectivity:0.35}}},
+  {id:'migraine',icon:'G',color:'#06b6d4',hex:0x06b6d4,
+    affected:['v1','v5','ppc'],regions:['occipital','parietal'],
+    en:{name:'Migraine with Aura',short:'Cortical spreading depression',
+      desc:'Recurrent moderate-severe headaches.',
+      mechanism:'CSD - trigeminovascular activation',
+      neuro:['CGRP ++','Serotonin -','Glutamate +'],
+      symptoms:['Throbbing headache','Visual aura','Photophobia','Nausea'],
+      stages:['Prodrome','Aura','Headache','Postdrome'],
+      metrics:{cognitive:0.75,motor:0.8,language:0.7,sensory:0.4,memory:0.7,connectivity:0.6}},
+    ru:{name:'Мигрень с аурой',short:'Кортикальная депрессия',
+      desc:'Повторяющиеся головные боли.',
+      mechanism:'КСД - тригемино-васкулярная активация',
+      neuro:['CGRP ++','Серотонин -','Глутамат +'],
+      symptoms:['Пульсирующая боль','Аура','Фотофобия','Тошнота'],
+      stages:['Продром','Аура','Боль','Постдром'],
+      metrics:{cognitive:0.75,motor:0.8,language:0.7,sensory:0.4,memory:0.7,connectivity:0.6}}},
+  {id:'tumor',icon:'N',color:'#ef4444',hex:0xef4444,
+    affected:['pfc','m1','wern'],regions:['frontal','temporal'],
+    en:{name:'Brain Tumor',short:'Intracranial neoplasm',
+      desc:'Abnormal mass of tissue.',
+      mechanism:'Proliferation - mass effect - ICP up',
+      neuro:['Glutamate +','GABA -'],
+      symptoms:['Morning headache','Seizures','Focal deficit','Personality change'],
+      stages:['Grade I','Grade II','Grade III','Grade IV'],
+      metrics:{cognitive:0.4,motor:0.35,language:0.45,sensory:0.45,memory:0.5,connectivity:0.35}},
+    ru:{name:'Опухоль мозга',short:'Внутричерепное новообразование',
+      desc:'Аномальная масса ткани.',
+      mechanism:'Пролиферация - масс-эффект - ВЧД вверх',
+      neuro:['Глутамат +','ГАМК -'],
+      symptoms:['Утренняя боль','Судороги','Дефицит','Изменения личности'],
+      stages:['I степень','II степень','III степень','IV степень'],
+      metrics:{cognitive:0.4,motor:0.35,language:0.45,sensory:0.45,memory:0.5,connectivity:0.35}}}
+];
+/* ================================================================
+   THREE.JS SCENE
+   ================================================================ */
+const canvas = document.getElementById('canvas3d');
+const viewport = document.getElementById('viewport');
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: true,
+  alpha: true,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+camera.position.set(0, 0, 4);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.rotateSpeed = 0.9;
+controls.zoomSpeed = 1.1;
+controls.minDistance = 1.5;
+controls.maxDistance = 12;
+controls.enablePan = false;
+controls.target.set(0, 0, 0);
+
+scene.add(new THREE.AmbientLight(0x8899bb, 0.6));
+scene.add(new THREE.HemisphereLight(0xaabbff, 0x1a1a2a, 0.8));
+
+const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+keyLight.position.set(4, 6, 5);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0x7c5cff, 0.9);
+fillLight.position.set(-5, 0, -3);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xa78bfa, 1.2);
+rimLight.position.set(-2, 4, -7);
+scene.add(rimLight);
+
+const bottomLight = new THREE.PointLight(0x7c5cff, 0.7, 8, 2);
+bottomLight.position.set(0, -2, 0);
+scene.add(bottomLight);
+
+const brainGroup = new THREE.Group();
+brainGroup.position.set(0, 0, 0);
+scene.add(brainGroup);
+
+const brainState = {
+  loaded: false,
+  size: new THREE.Vector3(2, 2, 2),
+  radius: 1,
+  model: null,
+  surfaceMeshes: []
+};
+
+/* ================================================================
+   GLB LOAD
+   ================================================================ */
+const MODEL_URL = 'low-poly_human_brain_model.glb';
+const modelLoaderEl = document.getElementById('modelLoader');
+const loaderTextEl = document.getElementById('loaderText');
+loaderTextEl.textContent = T('loadingModel');
+
+const gltfLoader = new GLTFLoader();
+gltfLoader.load(
+  MODEL_URL,
+  function(gltf) {
+    const model = gltf.scene;
+
+    const bbox = new THREE.Box3().setFromObject(model);
+    const size = bbox.getSize(new THREE.Vector3());
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2.0 / maxDim;
+    model.scale.setScalar(scale);
+
+    model.position.set(0, 0, 0);
+    const bbox2 = new THREE.Box3().setFromObject(model);
+    const center2 = bbox2.getCenter(new THREE.Vector3());
+    model.position.set(-center2.x, -center2.y, -center2.z);
+
+    brainState.model = model;
+    const finalBox = new THREE.Box3().setFromObject(model);
+    brainState.size = finalBox.getSize(new THREE.Vector3());
+    brainState.radius = brainState.size.length() * 0.5;
+    brainState.loaded = true;
+
+    model.traverse(function(child) {
+      if (child.isMesh) {
+        brainState.surfaceMeshes.push(child);
+        const mat = child.material;
+        if (mat) {
+          if (mat.map) {
+            mat.roughness = 0.7;
+            mat.metalness = 0.12;
+          } else {
+            child.material = new THREE.MeshStandardMaterial({
+              color: 0xb8b8c0,
+              roughness: 0.7,
+              metalness: 0.12
+            });
+          }
+        }
+      }
+    });
+
+    brainGroup.add(model);
+
+    buildMarkers();
+    buildPathways();
+    buildHtmlLabels();
+
+    modelLoaderEl.classList.add('hidden');
+
+    setTimeout(function() {
+      resize();
+      resetCamera();
+    }, 100);
+
+    console.log('Model loaded. Size:', brainState.size.toArray());
+  },
+  function(progress) {
+    if (progress.total > 0) {
+      loaderTextEl.textContent = T('loadingModel') + ' · ' + Math.round((progress.loaded / progress.total) * 100) + '%';
+    }
+  },
+  function(error) {
+    console.error('Model load error:', error);
+    loaderTextEl.textContent = T('loadError');
+    loaderTextEl.style.color = '#ef4444';
+  }
+);
+
+/* ================================================================
+   SURFACE POINT
+   ================================================================ */
+const rayHelper = new THREE.Raycaster();
+
+function getSurfacePoint(dirArray, offset) {
+  if (offset === undefined) offset = 0.05;
+  if (!brainState.loaded || brainState.surfaceMeshes.length === 0) {
+    return new THREE.Vector3(0, 0, 0);
+  }
+
+  const dir = new THREE.Vector3(dirArray[0], dirArray[1], dirArray[2]).normalize();
+  rayHelper.set(new THREE.Vector3(0, 0, 0), dir);
+  rayHelper.far = brainState.radius * 4;
+
+  const hits = rayHelper.intersectObjects(brainState.surfaceMeshes, true);
+
+  if (hits.length > 0) {
+    const hit = hits[0];
+    const point = hit.point.clone();
+    const outward = point.clone().normalize();
+    return point.add(outward.multiplyScalar(offset * 0.1));
+  }
+
+  return dir.multiplyScalar(brainState.radius * 0.9);
+}
+
+/* ================================================================
+   MARKERS
+   ================================================================ */
+const subzoneGroup = new THREE.Group();
+brainGroup.add(subzoneGroup);
+const subzoneMeshes = {};
+const markerGeo = new THREE.IcosahedronGeometry(0.028, 1);
+
+function buildMarkers() {
+  SUBZONES.forEach(function(sz) {
+    const p = getSurfacePoint(sz.dir, 0.05);
+    const color = new THREE.Color(sz.color);
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: color,
+      emissive: color,
+      emissiveIntensity: 1.2,
+      roughness: 0.3,
+      metalness: 0.4
+    });
+    const mesh = new THREE.Mesh(markerGeo, mat);
+    mesh.position.copy(p);
+    mesh.userData = { type: 'subzone', id: sz.id };
+    subzoneGroup.add(mesh);
+    subzoneMeshes[sz.id] = mesh;
+  });
+}
+
+/* ================================================================
+   HTML LABELS
+   ================================================================ */
+const labelsLayer = document.getElementById('labelsLayer');
+const htmlLabels = {};
+
+function buildHtmlLabels() {
+  labelsLayer.innerHTML = '';
+  SUBZONES.forEach(function(sz) {
+    const el = document.createElement('button');
+    el.className = 'zone-label';
+    el.dataset.id = sz.id;
+    el.style.setProperty('--ldot-color', sz.color);
+    el.innerHTML = '<span class="ldot"></span><span>' + sz[LANG].name + '</span>';
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      onZoneClick(sz.id);
+    });
+    el.addEventListener('touchstart', function(e) {
+      e.stopPropagation();
+    }, { passive: true });
+    labelsLayer.appendChild(el);
+    htmlLabels[sz.id] = el;
+  });
+}
+
+/* ================================================================
+   PATHWAYS
+   ================================================================ */
+const pathwaysGroup = new THREE.Group();
+brainGroup.add(pathwaysGroup);
+const pathwayData = [];
+const impulses = [];
+
+function buildPathways() {
+  PATHWAYS.forEach(function(pair, idx) {
+    const aId = pair[0];
+    const bId = pair[1];
+    const szA = SUBZONES.find(function(s) { return s.id === aId; });
+    const szB = SUBZONES.find(function(s) { return s.id === bId; });
+    if (!szA || !szB) return;
+    if (!subzoneMeshes[aId] || !subzoneMeshes[bId]) return;
+
+    const a = subzoneMeshes[aId].position.clone();
+    const b = subzoneMeshes[bId].position.clone();
+    const mid = a.clone().add(b).multiplyScalar(0.5).multiplyScalar(0.55);
+
+    const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+
+    const tubeGeo = new THREE.TubeGeometry(curve, 24, 0.005, 5, false);
+    const tubeMat = new THREE.MeshBasicMaterial({
+      color: 0x7c5cff,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false
+    });
+    const tube = new THREE.Mesh(tubeGeo, tubeMat);
+    pathwaysGroup.add(tube);
+
+    pathwayData.push({ curve: curve, tube: tube, a: aId, b: bId });
+
+    const impulseGeo = new THREE.SphereGeometry(0.018, 8, 6);
+    for (let i = 0; i < 2; i++) {
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0xa78bfa,
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false
+      });
+      const mesh = new THREE.Mesh(impulseGeo, mat);
+      pathwaysGroup.add(mesh);
+      impulses.push({
+        curve: curve,
+        t: (i * 0.5 + idx * 0.13) % 1,
+        mesh: mesh,
+        speed: 0.18 + Math.random() * 0.06
+      });
+    }
+  });
+}
+
+/* ================================================================
+   RESIZE
+   ================================================================ */
+function resize() {
+  const w = viewport.clientWidth;
+  const h = viewport.clientHeight;
+  if (w === 0 || h === 0) return;
+
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+
+  const aspect = w / h;
+
+  if (aspect < 0.55) {
+    camera.fov = 65;
+  } else if (aspect < 0.75) {
+    camera.fov = 58;
+  } else if (aspect < 1) {
+    camera.fov = 52;
+  } else if (aspect < 1.5) {
+    camera.fov = 48;
+  } else {
+    camera.fov = 45;
+  }
+
+  camera.updateProjectionMatrix();
+}
+
+let resizeTimer = null;
+function debouncedResize() {
+  if (resizeTimer) clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(resize, 80);
+}
+window.addEventListener('resize', debouncedResize);
+window.addEventListener('orientationchange', function() {
+  setTimeout(resize, 300);
+});
+setTimeout(resize, 100);
+
+if (window.ResizeObserver) {
+  new ResizeObserver(debouncedResize).observe(viewport);
+}
+
+/* ================================================================
+   STATE
+   ================================================================ */
+const state = {
+  selectedRegion: null,
+  selectedSubzone: null,
+  hoveredRegion: null,
+  hoveredSubzone: null,
+  currentDisease: null,
+  severity: 50,
+  chips: { labels: true, impulses: true, rotate: false }
+};
+let camTween = null;
+
+/* ================================================================
+   CAMERA
+   ================================================================ */
+function resetCamera() {
+  const w = viewport.clientWidth;
+  const h = viewport.clientHeight;
+  const aspect = w / h;
+
+  const radius = brainState.radius || 1;
+
+  let d;
+  if (aspect < 0.6) {
+    d = radius * 3.4;
+  } else if (aspect < 0.85) {
+    d = radius * 2.9;
+  } else if (aspect < 1.2) {
+    d = radius * 2.5;
+  } else {
+    d = radius * 2.3;
+  }
+
+  d = Math.max(1.8, Math.min(6.5, d));
+
+  controls.minDistance = radius * 1.4;
+  controls.maxDistance = radius * 5.5;
+
+  camTween = {
+    from: camera.position.clone(),
+    to: new THREE.Vector3(0, 0, d),
+    fromT: controls.target.clone(),
+    toT: new THREE.Vector3(0, 0, 0),
+    t: 0
+  };
+}
+
+function focusOn(point) {
+  const dir = point.clone().normalize();
+  const radius = brainState.radius || 1;
+  const dist = Math.max(radius * 2.0, 1.9);
+  const toPos = dir.multiplyScalar(dist);
+  camTween = {
+    from: camera.position.clone(),
+    to: toPos,
+    fromT: controls.target.clone(),
+    toT: new THREE.Vector3(0, 0, 0),
+    t: 0
+  };
+}
+
+/* ================================================================
+   RAYCASTING
+   ================================================================ */
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+function updatePointer(e) {
+  const r = canvas.getBoundingClientRect();
+  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+}
+
+function raycastMarkers() {
+  raycaster.setFromCamera(pointer, camera);
+  const markers = [];
+  Object.keys(subzoneMeshes).forEach(function(id) {
+    if (subzoneMeshes[id].visible) markers.push(subzoneMeshes[id]);
+  });
+  return raycaster.intersectObjects(markers, false);
+}
+
+let downPos = null;
+canvas.addEventListener('pointerdown', function(e) {
+  downPos = { x: e.clientX, y: e.clientY };
+});
+canvas.addEventListener('pointerup', function(e) {
+  if (!downPos) return;
+  const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
+  downPos = null;
+  if (moved > 10) return;
+
+  updatePointer(e);
+  const hits = raycastMarkers();
+
+  if (!hits.length) {
+    if (state.selectedSubzone || state.selectedRegion) {
+      state.selectedSubzone = null;
+      state.selectedRegion = null;
+      state.currentDisease = null;
+      applyHighlight();
+      renderAnalytics();
+      updateRegionListUI();
+      updateDiseaseListUI();
+      updateSeverityUI();
+    }
+    return;
+  }
+
+  const found = SUBZONES.find(function(s) { return s.id === hits[0].object.userData.id; });
+  if (found) onZoneClick(found.id);
+});
+
+/* ================================================================
+   ZONE CLICK
+   ================================================================ */
+function onZoneClick(id) {
+  const sz = SUBZONES.find(function(s) { return s.id === id; });
+  if (!sz) return;
+  state.selectedSubzone = id;
+  state.selectedRegion = sz.region;
+  state.currentDisease = null;
+  if (subzoneMeshes[id]) focusOn(subzoneMeshes[id].position.clone());
+  applyHighlight();
+  renderAnalytics();
+  updateRegionListUI();
+  updateDiseaseListUI();
+  updateSeverityUI();
+}
+
+/* ================================================================
+   HIGHLIGHT
+   ================================================================ */
+function applyHighlight() {
+  const active = state.selectedRegion || state.hoveredRegion;
+
+  Object.keys(subzoneMeshes).forEach(function(id) {
+    const mesh = subzoneMeshes[id];
+    const sz = SUBZONES.find(function(s) { return s.id === id; });
+    const on = !active || sz.region === active;
+    mesh.visible = on;
+    mesh.material.opacity = on ? 1 : 0.15;
+    mesh.material.transparent = true;
+  });
+
+  Object.keys(htmlLabels).forEach(function(id) {
+    if (state.selectedSubzone === id) htmlLabels[id].classList.add('active');
+    else htmlLabels[id].classList.remove('active');
+  });
+
+  const fv = document.getElementById('focusValue');
+  if (state.selectedSubzone) {
+    const sz = SUBZONES.find(function(s) { return s.id === state.selectedSubzone; });
+    fv.textContent = sz[LANG].full;
+  } else if (state.selectedRegion) {
+    fv.textContent = REGIONS[state.selectedRegion][LANG].name;
+  } else if (state.hoveredRegion) {
+    fv.textContent = REGIONS[state.hoveredRegion][LANG].name;
+  } else {
+    fv.textContent = T('fullBrain');
+  }
+}
+
+/* ================================================================
+   DISEASE EFFECTS
+   ================================================================ */
+function applyDiseaseToBrain() {
+  const d = state.currentDisease;
+  const sev = state.severity / 100;
+
+  if (brainState.model) {
+    brainState.model.traverse(function(child) {
+      if (child.isMesh && child.material && child.material.emissive) {
+        if (!d) {
+          child.material.emissive.setHex(0x000000);
+          child.material.emissiveIntensity = 0;
+        } else {
+          child.material.emissive.setHex(d.hex);
+          child.material.emissiveIntensity = sev * 0.45;
+        }
+      }
+    });
+  }
+
+  const affectedSet = {};
+  if (d) {
+    d.affected.forEach(function(id) { affectedSet[id] = true; });
+  }
+
+  Object.keys(subzoneMeshes).forEach(function(id) {
+    const mesh = subzoneMeshes[id];
+    const sz = SUBZONES.find(function(s) { return s.id === id; });
+    if (!d) {
+      mesh.material.emissiveIntensity = 1.2;
+      mesh.visible = true;
+    } else if (affectedSet[id]) {
+      mesh.visible = true;
+      mesh.material.emissiveIntensity = 2.0;
+    } else {
+      mesh.visible = state.selectedRegion ? (sz.region === state.selectedRegion) : false;
+    }
+  });
+
+  impulses.forEach(function(p) {
+    if (d) p.mesh.material.color.setHex(d.hex);
+    else p.mesh.material.color.setHex(0xa78bfa);
+  });
+}
+
+/* ================================================================
+   PROJECT 3D TO 2D
+   ================================================================ */
+const _v = new THREE.Vector3();
+
+function projectLabels() {
+  const w = viewport.clientWidth;
+  const h = viewport.clientHeight;
+  const active = state.selectedRegion || state.hoveredRegion;
+
+  const MAIN = { m1: 1, s1: 1, wern: 1, v1: 1, pfc: 1 };
+  const isSmall = w < 500;
+  const pad = isSmall ? 42 : 60;
+  const pushAmt = isSmall ? 55 : 75;
+
+  Object.keys(htmlLabels).forEach(function(id) {
+    const el = htmlLabels[id];
+    const mesh = subzoneMeshes[id];
+    if (!mesh || !mesh.visible) {
+      el.classList.add('hidden');
+      return;
+    }
+
+    const sz = SUBZONES.find(function(s) { return s.id === id; });
+    const isMain = MAIN[id];
+    const isActive = active && sz.region === active;
+    const isSelected = state.selectedSubzone === id;
+
+    const shouldShow = state.chips.labels && (isSelected || isActive || (!active && isMain));
+
+    if (!shouldShow) {
+      el.classList.add('hidden');
+      return;
+    }
+    el.classList.remove('hidden');
+
+    _v.copy(mesh.position);
+    _v.y += 0.08;
+    _v.project(camera);
+
+    if (_v.z > 1) {
+      el.classList.add('hidden');
+      return;
+    }
+
+    let x = (_v.x * 0.5 + 0.5) * w;
+    let y = (-_v.y * 0.5 + 0.5) * h;
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const dx = x - cx;
+    const dy = y - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const push = Math.min(pushAmt, 30 + dist * 0.35);
+    x += (dx / dist) * push;
+    y += (dy / dist) * push;
+
+    x = Math.max(pad, Math.min(w - pad, x));
+    y = Math.max(30, Math.min(h - 30, y));
+
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.opacity = 1;
+  });
+}
+
+/* ================================================================
+   ANIMATION LOOP
+   ================================================================ */
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.elapsedTime;
+
+  if (camTween) {
+    camTween.t = Math.min(1, camTween.t + dt * 2);
+    const e = 1 - Math.pow(1 - camTween.t, 3);
+    camera.position.lerpVectors(camTween.from, camTween.to, e);
+    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
+    if (camTween.t >= 1) camTween = null;
+  }
+
+  if (state.chips.impulses) {
+    impulses.forEach(function(p) {
+      p.t = (p.t + dt * p.speed) % 1;
+      const pt = p.curve.getPointAt(p.t);
+      p.mesh.position.copy(pt);
+      const s = 0.7 + Math.sin(p.t * Math.PI) * 0.7;
+      p.mesh.scale.setScalar(s);
+      p.mesh.material.opacity = 0.3 + Math.sin(p.t * Math.PI) * 0.6;
+    });
+  }
+
+  Object.keys(subzoneMeshes).forEach(function(id) {
+    const mesh = subzoneMeshes[id];
+    if (!mesh.visible) return;
+    const isSel = state.selectedSubzone === id;
+    const pulse = 1 + Math.sin(t * 2.5 + id.length) * 0.08;
+    mesh.scale.setScalar(isSel ? pulse * 1.6 : pulse);
+  });
+
+  if (state.chips.rotate && brainState.model) {
+    brainGroup.rotation.y += dt * 0.15;
+  }
+
+  bottomLight.intensity = 0.6 + Math.sin(t * 0.9) * 0.2;
+
+  controls.update();
+  renderer.render(scene, camera);
+
+  projectLabels();
+}
+
+/* ================================================================
+   UI - REGION LIST
+   ================================================================ */
+function renderRegionList() {
+  const el = document.getElementById('regionList');
+  el.innerHTML = '';
+  Object.keys(REGIONS).forEach(function(rid) {
+    const r = REGIONS[rid];
+    const btn = document.createElement('button');
+    btn.className = 'region-item';
+    btn.dataset.region = r.id;
+    btn.innerHTML =
+      '<span class="region-dot" style="background:' + r.color + '"></span>' +
+      '<span class="region-name">' + r[LANG].name + '</span>';
+    btn.addEventListener('click', function() {
+      state.selectedRegion = (state.selectedRegion === r.id) ? null : r.id;
+      state.selectedSubzone = null;
+      state.currentDisease = null;
+      if (state.selectedRegion) {
+        const p = getSurfacePoint(r.dir, 0.05);
+        focusOn(p);
+      } else {
+        resetCamera();
+      }
+      applyHighlight();
+      renderAnalytics();
+      updateRegionListUI();
+      updateDiseaseListUI();
+      updateSeverityUI();
+      closeMobilePanels();
+    });
+    el.appendChild(btn);
+  });
+  updateRegionListUI();
+}
+
+function updateRegionListUI() {
+  const items = document.querySelectorAll('.region-item');
+  items.forEach(function(el) {
+    if (el.dataset.region === state.selectedRegion) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+}
+
+/* ================================================================
+   UI - DISEASE LIST
+   ================================================================ */
+function renderDiseaseList() {
+  const el = document.getElementById('diseaseList');
+  el.innerHTML = '';
+
+  const h = document.createElement('button');
+  h.className = 'disease-item';
+  h.dataset.disease = 'healthy';
+  h.style.setProperty('--d-color', '#10b981');
+  h.innerHTML =
+    '<span class="disease-icon" style="background:linear-gradient(135deg,#10b981,#059669)">+</span>' +
+    '<span class="disease-body">' +
+      '<span class="disease-name">' + T('healthy') + '</span>' +
+      '<span class="disease-desc">' + T('healthyDesc') + '</span>' +
+    '</span>';
+  h.addEventListener('click', function() { selectDisease(null); });
+  el.appendChild(h);
+
+  DISEASES.forEach(function(d) {
+    const btn = document.createElement('button');
+    btn.className = 'disease-item';
+    btn.dataset.disease = d.id;
+    btn.style.setProperty('--d-color', d.color);
+    btn.innerHTML =
+      '<span class="disease-icon">' + d.icon + '</span>' +
+      '<span class="disease-body">' +
+        '<span class="disease-name">' + d[LANG].name + '</span>' +
+        '<span class="disease-desc">' + d[LANG].short + '</span>' +
+      '</span>';
+    btn.addEventListener('click', function() { selectDisease(d.id); });
+    el.appendChild(btn);
+  });
+  updateDiseaseListUI();
+}
+
+function updateDiseaseListUI() {
+  const active = state.currentDisease ? state.currentDisease.id : 'healthy';
+  const items = document.querySelectorAll('.disease-item');
+  items.forEach(function(el) {
+    if (el.dataset.disease === active) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+}
+
+function selectDisease(id) {
+  if (id) {
+    state.currentDisease = DISEASES.find(function(d) { return d.id === id; });
+    state.selectedRegion = null;
+    state.selectedSubzone = null;
+    setStatus('alert', T('alert'));
+    document.getElementById('severityContainer').style.display = 'block';
+    applySeverity(state.severity);
+  } else {
+    state.currentDisease = null;
+    setStatus('ready', T('ready'));
+    document.getElementById('severityContainer').style.display = 'none';
+    applyDiseaseToBrain();
+    applyHighlight();
+  }
+  updateDiseaseListUI();
+  updateRegionListUI();
+  renderAnalytics();
+  closeMobilePanels();
+}
+
+/* ================================================================
+   SEVERITY
+   ================================================================ */
+function updateSeverityUI() {
+  document.getElementById('severityContainer').style.display = state.currentDisease ? 'block' : 'none';
+}
+
+function applySeverity(value) {
+  state.severity = value;
+  const slider = document.getElementById('severitySlider');
+  const valEl = document.getElementById('severityValue');
+  const stages = document.getElementById('severityStages');
+
+  slider.value = value;
+  slider.style.setProperty('--p', value + '%');
+  valEl.textContent = value + '%';
+
+  const idx = Math.min(3, Math.floor(value / 25));
+  const children = stages.children;
+  for (let i = 0; i < children.length; i++) {
+    if (i === idx) children[i].classList.add('active');
+    else children[i].classList.remove('active');
+  }
+
+  applyDiseaseToBrain();
+  renderAnalytics();
+}
+
+document.getElementById('severitySlider').addEventListener('input', function(e) {
+  applySeverity(+e.target.value);
+});
+
+/* ================================================================
+   ANALYTICS PANEL
+   ================================================================ */
+function renderAnalytics() {
+  const el = document.getElementById('analyticsContent');
+
+  if (state.currentDisease) { renderDiseaseAnalytics(el); return; }
+  if (state.selectedSubzone) { renderSubzoneAnalytics(el); return; }
+  if (state.selectedRegion) { renderRegionAnalytics(el); return; }
+
+  el.innerHTML =
+    '<div class="empty">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">' +
+        '<circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>' +
+      '</svg>' +
+      '<p><strong>' + T('emptyTitle') + '</strong><br>' + T('emptyText') + '</p>' +
+    '</div>';
+}
+
+function renderRegionAnalytics(el) {
+  const r = REGIONS[state.selectedRegion];
+  const d = r[LANG];
+  const subs = SUBZONES.filter(function(s) { return s.region === r.id; });
+
+  el.innerHTML =
+    '<div class="analytics-header"><div><h2>' + d.name + '</h2><span class="subtitle">' + d.latin + '</span></div></div>' +
+    '<div class="card"><div class="card-title">' + T('anatomy') + '</div><p>' + d.desc + '</p></div>' +
+    '<div class="card"><div class="card-title">' + T('functions') + '</div>' +
+      '<div class="tags">' + d.functions.map(function(f) { return '<span class="tag">' + f + '</span>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="card-title">' + T('subzones') + '<span class="badge">' + subs.length + '</span></div>' +
+      subs.map(function(s) {
+        return '<button class="sub-item" data-sub="' + s.id + '">' +
+          '<span class="pin" style="background:' + s.color + '"></span>' +
+          '<span>' + s[LANG].full + '</span>' +
+          '<span class="go">></span>' +
+        '</button>';
+      }).join('') +
+    '</div>';
+
+  el.querySelectorAll('.sub-item').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const sid = btn.dataset.sub;
+      state.selectedSubzone = sid;
+      if (subzoneMeshes[sid]) focusOn(subzoneMeshes[sid].position.clone());
+      applyHighlight();
+      renderAnalytics();
+    });
+  });
+}
+
+function renderSubzoneAnalytics(el) {
+  const sz = SUBZONES.find(function(s) { return s.id === state.selectedSubzone; });
+  if (!sz) return;
+  const d = sz[LANG];
+  const region = REGIONS[sz.region];
+
+  el.innerHTML =
+    '<div class="analytics-header"><div><h2>' + d.full + '</h2><span class="subtitle">' + region[LANG].name + '</span></div></div>' +
+    '<div class="card"><div class="card-title">' + T('anatomy') + '</div><p>' + d.note + '</p></div>' +
+    '<div class="card"><div class="card-title">' + T('functions') + '</div>' +
+      '<div class="tags">' + region[LANG].functions.slice(0, 4).map(function(f) { return '<span class="tag">' + f + '</span>'; }).join('') + '</div></div>';
+}
+
+function renderDiseaseAnalytics(el) {
+  const d = state.currentDisease;
+  const data = d[LANG];
+  const sev = state.severity;
+  const stageIdx = Math.min(3, Math.floor(sev / 25));
+  const stageLabels = ['I', 'II', 'III', 'IV'];
+  const stageLabel = stageLabels[stageIdx];
+
+  const affectedNames = d.affected.map(function(id) {
+    const sz = SUBZONES.find(function(s) { return s.id === id; });
+    return sz ? sz[LANG].name : id;
+  });
+
+  const metricMap = [
+    ['cognitive', 'metricCognitive'],
+    ['motor', 'metricMotor'],
+    ['language', 'metricLanguage'],
+    ['sensory', 'metricSensory'],
+    ['memory', 'metricMemory'],
+    ['connectivity', 'metricConnectivity']
+  ];
+
+  const metricsHtml = metricMap.map(function(pair) {
+    const key = pair[0];
+    const labelKey = pair[1];
+    const base = d.en.metrics[key];
+    const impairment = 1 - base;
+    const current = Math.max(0, base - impairment * (sev / 100));
+    const pct = Math.round(current * 100);
+    const cls = current > 0.75 ? 'good' : (current > 0.5 ? 'warn' : 'bad');
+    return '<div class="metric-row"><span class="metric-label">' + T(labelKey) + '</span><span class="metric-value ' + cls + '">' + pct + '%</span></div>';
+  }).join('');
+
+  const progBar = data.stages.map(function(_, i) {
+    const cls = i === stageIdx ? 'current' : (i < stageIdx ? 'past' : '');
+    return '<div class="progression-step ' + cls + '"></div>';
+  }).join('');
+
+  const progLabels = data.stages.map(function(_, i) {
+    return '<span class="' + (i === stageIdx ? 'active' : '') + '">' + (i + 1) + '</span>';
+  }).join('');
+
+  el.innerHTML =
+    '<div class="analytics-header"><div><h2>' + data.name + '</h2><span class="subtitle">' + data.short + '</span></div></div>' +
+    '<div class="card" style="border-left:2px solid ' + d.color + '">' +
+      '<div class="card-title">Stage ' + stageLabel + '<span class="badge">' + sev + '%</span></div>' +
+      '<p>' + data.desc + '</p></div>' +
+    '<div class="card"><div class="card-title">' + T('progression') + '</div>' +
+      '<div class="progression-bar">' + progBar + '</div>' +
+      '<div class="progression-labels">' + progLabels + '</div>' +
+      '<p style="font-size:11.5px"><strong>' + data.stages[stageIdx] + '</strong></p></div>' +
+    '<div class="card"><div class="card-title">' + T('mechanism') + '</div><p>' + data.mechanism + '</p></div>' +
+    '<div class="card"><div class="card-title">' + T('affected') + '</div>' +
+      '<div class="tags">' + affectedNames.map(function(n) { return '<span class="tag danger">' + n + '</span>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="card-title">' + T('neuro') + '</div>' +
+      '<div class="tags">' + data.neuro.map(function(n) { return '<span class="tag warn">' + n + '</span>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="card-title">' + T('symptoms') + '</div>' +
+      '<div class="tags">' + data.symptoms.map(function(s) { return '<span class="tag danger">' + s + '</span>'; }).join('') + '</div></div>' +
+    '<div class="card"><div class="card-title">' + T('metrics') + '</div>' + metricsHtml + '</div>';
+}
+
+/* ================================================================
+   STATUS
+   ================================================================ */
+function setStatus(type, text) {
+  const el = document.getElementById('statusIndicator');
+  let cls = 'status-indicator';
+  if (type === 'warn') cls += ' warn';
+  else if (type === 'alert') cls += ' danger';
+  el.className = cls;
+  el.textContent = text;
+}
+
+/* ================================================================
+   CHIPS
+   ================================================================ */
+document.querySelectorAll('.chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    const key = chip.dataset.toggle;
+    state.chips[key] = !state.chips[key];
+    if (state.chips[key]) chip.classList.add('on');
+    else chip.classList.remove('on');
+
+    if (key === 'labels') {
+      projectLabels();
+    }
+    if (key === 'impulses') {
+      impulses.forEach(function(p) { p.mesh.visible = state.chips.impulses; });
+      pathwayData.forEach(function(pw) { pw.tube.visible = state.chips.impulses; });
+    }
+  });
+});
+
+/* ================================================================
+   THEME
+   ================================================================ */
+function setTheme(theme, save) {
+  if (save === undefined) save = true;
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  if (theme === 'light') {
+    icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+  } else {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  }
+  if (save) {
+    try { localStorage.setItem('nm-theme', theme); } catch (e) {}
+  }
+  renderer.setClearColor(theme === 'light' ? 0xffffff : 0x000000, 0);
+}
+
+document.getElementById('themeBtn').addEventListener('click', function() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  setTheme(cur === 'dark' ? 'light' : 'dark');
+});
+
+/* ================================================================
+   LANGUAGE
+   ================================================================ */
+function setLanguage(lang) {
+  LANG = lang;
+  document.documentElement.setAttribute('data-lang', lang);
+
+  document.getElementById('chipLabels').textContent = T('labels');
+  document.getElementById('chipImpulses').textContent = T('impulses');
+  document.getElementById('chipRotate').textContent = T('rotate');
+  document.getElementById('focusTag').textContent = T('focus');
+  document.getElementById('hintDrag').textContent = T('drag');
+  document.getElementById('hintZoom').textContent = T('zoom');
+  document.getElementById('hintClick').textContent = T('click');
+  document.getElementById('lobesTitle').textContent = T('lobes');
+  document.getElementById('diseasesTitle').textContent = T('diseases');
+  document.getElementById('severityLabel').textContent = T('severity');
+  document.getElementById('leftTitle').textContent = T('atlas');
+  document.getElementById('rightTitle').textContent = T('analytics');
+  document.getElementById('tabAtlas').textContent = T('atlas');
+  document.getElementById('tabAnalytics').textContent = T('analytics');
+  document.getElementById('tabSimulation').textContent = T('simulation');
+
+  Object.keys(htmlLabels).forEach(function(id) {
+    const el = htmlLabels[id];
+    const sz = SUBZONES.find(function(s) { return s.id === id; });
+    if (sz) {
+      const spans = el.querySelectorAll('span');
+      if (spans.length >= 2) spans[1].textContent = sz[LANG].name;
+    }
+  });
+
+  renderRegionList();
+  renderDiseaseList();
+  applyHighlight();
+  renderAnalytics();
+}
+
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    setLanguage(btn.dataset.lang);
+  });
+});
+
+/* ================================================================
+   NAV TABS
+   ================================================================ */
+document.querySelectorAll('.nav-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+  });
+});
+
+/* ================================================================
+   MOBILE PANELS
+   ================================================================ */
+const panelLeft = document.getElementById('panelLeft');
+const panelRight = document.getElementById('panelRight');
+const scrim = document.getElementById('scrim');
+
+function openLeftPanel() {
+  panelLeft.classList.add('open');
+  panelRight.classList.remove('open');
+  scrim.classList.add('show');
+}
+function openRightPanel() {
+  panelRight.classList.add('open');
+  panelLeft.classList.remove('open');
+  scrim.classList.add('show');
+}
+function closeMobilePanels() {
+  panelLeft.classList.remove('open');
+  panelRight.classList.remove('open');
+  scrim.classList.remove('show');
+}
+
+document.getElementById('menuBtn').addEventListener('click', openLeftPanel);
+document.getElementById('panelBtn').addEventListener('click', openRightPanel);
+document.getElementById('closeLeft').addEventListener('click', closeMobilePanels);
+document.getElementById('closeRight').addEventListener('click', closeMobilePanels);
+scrim.addEventListener('click', closeMobilePanels);
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeMobilePanels();
+    state.selectedRegion = null;
+    state.selectedSubzone = null;
+    applyHighlight();
+    renderAnalytics();
+    updateRegionListUI();
+  }
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+function init() {
+  let savedTheme = 'dark';
+  try {
+    const stored = localStorage.getItem('nm-theme');
+    if (stored === 'light' || stored === 'dark') savedTheme = stored;
+  } catch (e) {}
+  setTheme(savedTheme, false);
+
+  renderRegionList();
+  renderDiseaseList();
+  renderAnalytics();
+  resize();
+
+  animate();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+console.log('NeuralMap v7.0 initialized');
+</script>
+</body>
+</html>
