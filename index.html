@@ -714,7 +714,7 @@ svg{display:block}
       <div class="model-loader" id="modelLoader">
         <div>
           <div class="model-loader-spinner"></div>
-          <div class="model-loader-text" id="loaderText">Синтез 3D-структур мозга</div>
+          <div class="model-loader-text" id="loaderText">Загрузка 3D-модели мозга</div>
         </div>
       </div>
 
@@ -800,7 +800,7 @@ const I18N = {
     neuro:'Neurotransmitters',symptoms:'Clinical Symptoms',
     progression:'Stage Progression',metrics:'Functional Integrity',
     healthy:'Healthy Brain',healthyDesc:'Normal vascular & synaptic state',
-    loadingModel:'Synthesizing 3D Brain Structures',
+    loadingModel:'Loading 3D Brain Model',
     metricCognitive:'Cognition',metricMotor:'Motor Control',metricLanguage:'Language',
     metricSensory:'Somatosensory',metricMemory:'Memory',metricConnectivity:'Tract Integrity'
   },
@@ -825,7 +825,7 @@ const I18N = {
     neuro:'Нейромедиаторы',symptoms:'Клинические симптомы',
     progression:'Стадия процесса',metrics:'Сохранность функций',
     healthy:'Здоровый мозг',healthyDesc:'Нормальное сосудистое и синаптическое состояние',
-    loadingModel:'Синтез 3D-структур мозга',
+    loadingModel:'Загрузка 3D-модели мозга',
     metricCognitive:'Когниции',metricMotor:'Моторика',metricLanguage:'Речь',
     metricSensory:'Сенсорика',metricMemory:'Память',metricConnectivity:'Проводящие пути'
   }
@@ -934,7 +934,7 @@ const SUBCORTICAL = {
       functions:['Межполушарная передача информации','Бимануальная координация рук','Объединение зрительных полуполей','Интеграция речи и образов']}
   },
   ventricles:{
-    id:'ventricles',color:'#22d3ee',hex:0x22d3ee,latin:'Systemaentriculorum',tag:'CSF System',
+    id:'ventricles',color:'#22d3ee',hex:0x22d3ee,latin:'Systema ventriculorum',tag:'CSF System',
     center:[0, 0.05, -0.02],
     bio:{cbf:'CSF 500 ml/d',cmr:'Volume 150 ml',eeg:'Choroid Pulsation',vasc:'Choroid Plexus'},
     nt:[{n:'CSF Production',v:92,c:'#22d3ee'},{n:'Intracranial Pressure',v:65,c:'#10b981'}],
@@ -1418,7 +1418,7 @@ function buildSubcorticalMeshes() {
   }
   registerMesh(ccGroup, 'callosum');
 
-  // 2. VENTRICULAR SYSTEM (Lateral C-shaped ventricles + III & IV ventricles)
+  // 2. VENTRICULAR SYSTEM
   const venGroup = new THREE.Group();
   const venMat = makeMat(SUBCORTICAL.ventricles.hex, 0.78);
   [-1, 1].forEach(function(side) {
@@ -1430,14 +1430,12 @@ function buildSubcorticalMeshes() {
       new THREE.Vector3(side * 0.19, -0.13, 0.02)
     ]);
     venGroup.add(new THREE.Mesh(new THREE.TubeGeometry(latCurve, 32, 0.028, 10, false), venMat));
-    // Posterior occipital horn
     const occHorn = new THREE.CatmullRomCurve3([
       new THREE.Vector3(side * 0.12, 0.06, -0.16),
       new THREE.Vector3(side * 0.09, 0.02, -0.32)
     ]);
     venGroup.add(new THREE.Mesh(new THREE.TubeGeometry(occHorn, 12, 0.018, 8, false), venMat));
   });
-  // III Ventricle, Aqueduct & IV Ventricle
   const midVenCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, 0.04, 0.05),
     new THREE.Vector3(0, -0.02, -0.04),
@@ -1475,7 +1473,6 @@ function buildSubcorticalMeshes() {
     hMesh.position.set(side * 0.045, -0.11, 0.06);
     hypGroup.add(hMesh);
   });
-  // Infundibular stalk + Pituitary (Hypophysis)
   const stalkCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, -0.14, 0.08),
     new THREE.Vector3(0, -0.24, 0.11)
@@ -1551,106 +1548,64 @@ function buildSubcorticalMeshes() {
 }
 
 /* ================================================================
-   FALLBACK PROCEDURAL CORTEX (IF GLB FAILS OR TAKES TOO LONG)
+   FINALIZE MODEL PIPELINE (PRESERVES ORIGINAL VASCULAR TEXTURE!)
    ================================================================ */
-function createProceduralCortexModel() {
-  const group = new THREE.Group();
-  [-1, 1].forEach(function(side) {
-    const hemiGeo = new THREE.SphereGeometry(0.68, 40, 32);
-    hemiGeo.scale(0.68, 0.95, 1.38);
-    const pos = hemiGeo.attributes.position;
-    const v = new THREE.Vector3();
-    for (let i = 0; i < pos.count; i++) {
-      v.fromBufferAttribute(pos, i);
-      // Organic gyri/sulci displacement
-      const wave = 0.022 * Math.sin(v.x * 18) * Math.cos(v.y * 16) * Math.sin(v.z * 14);
-      v.addScaledVector(v.clone().normalize(), wave);
-      pos.setXYZ(i, v.x, v.y, v.z);
-    }
-    hemiGeo.computeVertexNormals();
-    const mesh = new THREE.Mesh(hemiGeo, new THREE.MeshStandardMaterial({ color: 0xb89aa8 }));
-    mesh.position.set(side * 0.36, 0.08, 0.0);
-    group.add(mesh);
-  });
-  // Cerebellum lobes
-  [-1, 1].forEach(function(side) {
-    const cbGeo = new THREE.SphereGeometry(0.28, 24, 18);
-    cbGeo.scale(1.1, 0.75, 0.95);
-    const cb = new THREE.Mesh(cbGeo, new THREE.MeshStandardMaterial({ color: 0xa88a98 }));
-    cb.position.set(side * 0.26, -0.42, -0.48);
-    group.add(cb);
-  });
-  // Brainstem
-  const stemGeo = new THREE.CylinderGeometry(0.14, 0.10, 0.55, 18);
-  stemGeo.rotateX(0.25);
-  const stem = new THREE.Mesh(stemGeo, new THREE.MeshStandardMaterial({ color: 0xb89aa8 }));
-  stem.position.set(0, -0.58, -0.18);
-  group.add(stem);
-  return group;
-}
-
-/* ================================================================
-   FINALIZE MODEL PIPELINE
-   ================================================================ */
+const MODEL_URL = 'low-poly_human_brain_model.glb';
 let nebulaPoints = null;
 let nebulaUniforms = null;
 const modelLoaderEl = document.getElementById('modelLoader');
 const loaderTextEl = document.getElementById('loaderText');
 
-function setupBrainModel(model, isProcedural) {
+function setupBrainModel(model) {
   if (brainState.loaded) return;
 
-  if (!isProcedural) {
-    const bbox = new THREE.Box3().setFromObject(model);
-    const size = bbox.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z) || 1;
-    const scale = 2.15 / maxDim;
-    model.scale.setScalar(scale);
+  const bbox = new THREE.Box3().setFromObject(model);
+  const size = bbox.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z) || 1;
+  const scale = 2.15 / maxDim;
+  model.scale.setScalar(scale);
 
-    model.position.set(0, 0, 0);
-    const bbox2 = new THREE.Box3().setFromObject(model);
-    const center2 = bbox2.getCenter(new THREE.Vector3());
-    model.position.set(-center2.x, -center2.y, -center2.z);
-    model.updateMatrixWorld(true);
+  model.position.set(0, 0, 0);
+  const bbox2 = new THREE.Box3().setFromObject(model);
+  const center2 = bbox2.getCenter(new THREE.Vector3());
+  model.position.set(-center2.x, -center2.y, -center2.z);
+  model.updateMatrixWorld(true);
 
-    // Auto-orient
-    const allVerts = [];
-    const vTmp = new THREE.Vector3();
+  // Auto-calibrate orientation so Frontal is +Z and Stem/Cerebellum is -Z
+  const allVerts = [];
+  const vTmp = new THREE.Vector3();
+  model.traverse(function(c) {
+    if (c.isMesh && c.geometry) {
+      const p = c.geometry.attributes.position;
+      for (let i = 0; i < p.count; i += 4) {
+        vTmp.fromBufferAttribute(p, i).applyMatrix4(c.matrixWorld);
+        allVerts.push(vTmp.clone());
+      }
+    }
+  });
+
+  if (allVerts.length > 0) {
+    const fBox = new THREE.Box3().setFromPoints(allVerts);
+    const fSize = fBox.getSize(new THREE.Vector3());
+    if (fSize.x > fSize.z * 1.08) {
+      model.rotation.y = Math.PI * 0.5;
+      model.updateMatrixWorld(true);
+    }
+    let lowZSum = 0, lowCount = 0;
+    const yThresh = fBox.min.y + fSize.y * 0.25;
     model.traverse(function(c) {
       if (c.isMesh && c.geometry) {
         const p = c.geometry.attributes.position;
-        for (let i = 0; i < p.count; i += 4) {
+        for (let i = 0; i < p.count; i += 5) {
           vTmp.fromBufferAttribute(p, i).applyMatrix4(c.matrixWorld);
-          allVerts.push(vTmp.clone());
+          if (vTmp.y < yThresh) { lowZSum += vTmp.z; lowCount++; }
         }
       }
     });
-
-    if (allVerts.length > 0) {
-      const fBox = new THREE.Box3().setFromPoints(allVerts);
-      const fSize = fBox.getSize(new THREE.Vector3());
-      if (fSize.x > fSize.z * 1.08) {
-        model.rotation.y = Math.PI * 0.5;
-        model.updateMatrixWorld(true);
-      }
-      let lowZSum = 0, lowCount = 0;
-      const yThresh = fBox.min.y + fSize.y * 0.25;
-      model.traverse(function(c) {
-        if (c.isMesh && c.geometry) {
-          const p = c.geometry.attributes.position;
-          for (let i = 0; i < p.count; i += 5) {
-            vTmp.fromBufferAttribute(p, i).applyMatrix4(c.matrixWorld);
-            if (vTmp.y < yThresh) { lowZSum += vTmp.z; lowCount++; }
-          }
-        }
-      });
-      if (lowCount > 0 && (lowZSum / lowCount) > 0.05) {
-        model.rotation.y += Math.PI;
-        model.updateMatrixWorld(true);
-      }
+    if (lowCount > 0 && (lowZSum / lowCount) > 0.05) {
+      model.rotation.y += Math.PI;
+      model.updateMatrixWorld(true);
     }
-  } else {
-    model.updateMatrixWorld(true);
   }
 
   brainState.model = model;
@@ -1659,47 +1614,32 @@ function setupBrainModel(model, isProcedural) {
   brainState.radius = brainState.size.length() * 0.5;
   brainState.loaded = true;
 
-  const vTmp = new THREE.Vector3();
   model.traverse(function(child) {
     if (child.isMesh && child.geometry) {
       brainState.surfaceMeshes.push(child);
 
-      const posAttr = child.geometry.attributes.position;
-      const count = posAttr.count;
-      const colors = new Float32Array(count * 3);
-      for (let i = 0; i < count; i++) {
-        vTmp.fromBufferAttribute(posAttr, i).applyMatrix4(child.matrixWorld);
-        const lid = classifyLobe(vTmp.x, vTmp.y, vTmp.z);
-        const c = LOBE_COLORS[LOBE_INDEX[lid]];
-        colors[i * 3] = c.r;
-        colors[i * 3 + 1] = c.g;
-        colors[i * 3 + 2] = c.b;
-      }
-      child.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-      let surfMat;
-      if (child.material) {
-        surfMat = child.material.clone();
+      // 1. Keep 100% ORIGINAL texture & normal map from GLB (vessels, gyri, sulci)
+      const surfMat = child.material;
+      if (surfMat) {
         surfMat.side = THREE.DoubleSide;
-        surfMat.roughness = 0.55;
-        surfMat.metalness = 0.1;
         surfMat.clippingPlanes = activeClipPlanes;
-      } else {
-        surfMat = new THREE.MeshStandardMaterial({
-          color: 0xb89aa8,
-          roughness: 0.55,
-          metalness: 0.1,
-          side: THREE.DoubleSide,
-          clippingPlanes: activeClipPlanes
-        });
+        surfMat.vertexColors = false;
+        if (surfMat.map) {
+          surfMat.roughness = 0.65;
+          surfMat.metalness = 0.12;
+        }
+        surfMat.needsUpdate = true;
       }
 
+      // 2. Translucent holographic material for Internal 3D Nuclei & Neural mode
       const neurMat = new THREE.MeshStandardMaterial({
-        vertexColors: true,
-        roughness: 0.35,
-        metalness: 0.25,
+        color: 0x38bdf8,
+        emissive: 0x1e293b,
+        emissiveIntensity: 0.35,
+        roughness: 0.3,
+        metalness: 0.2,
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.13,
         depthWrite: false,
         side: THREE.DoubleSide,
         clippingPlanes: activeClipPlanes
@@ -2546,8 +2486,13 @@ function applyDiseaseToBrain() {
   brainState.surfaceMeshes.forEach(function(mesh) {
     if (mesh.material && mesh.material.emissive) {
       if (!d) {
-        mesh.material.emissive.setHex(0x000000);
-        mesh.material.emissiveIntensity = 0;
+        if (mesh.material === mesh.userData.surfMat) {
+          mesh.material.emissive.setHex(0x000000);
+          mesh.material.emissiveIntensity = 0;
+        } else {
+          mesh.material.emissive.setHex(0x1e293b);
+          mesh.material.emissiveIntensity = 0.35;
+        }
       } else {
         mesh.material.emissive.setHex(d.hex);
         mesh.material.emissiveIntensity = sev * 0.38;
@@ -3350,7 +3295,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ================================================================
-   SAFE BOOTSTRAP (GUARANTEED UI + 3D FALLBACK)
+   INIT (LOADS FULL-RESOLUTION GLB MODEL WITHOUT TIMEOUT FALLBACK)
    ================================================================ */
 function init() {
   let savedTheme = 'dark';
@@ -3360,36 +3305,27 @@ function init() {
   } catch (e) {}
   setTheme(savedTheme, false);
 
-  // 1. Immediately build 3D Subcortical Meshes & UI lists so the app is NEVER blank!
   buildSubcorticalMeshes();
   setLanguage('ru');
   resize();
   animate();
 
-  // 2. Load external GLB cortex with automatic fallback if file fails
   const gltfLoader = new GLTFLoader();
-  const fallbackTimer = setTimeout(function() {
-    if (!brainState.loaded) {
-      console.warn('GLB load timeout — activating procedural 3D cortex fallback');
-      setupBrainModel(createProceduralCortexModel(), true);
-    }
-  }, 6000);
-
   gltfLoader.load(
     MODEL_URL,
     function(gltf) {
-      clearTimeout(fallbackTimer);
-      setupBrainModel(gltf.scene, false);
+      setupBrainModel(gltf.scene);
     },
     function(progress) {
       if (progress.total > 0) {
-        loaderTextEl.textContent = T('loadingModel') + ' · ' + Math.round((progress.loaded / progress.total) * 100) + '%';
+        const pct = Math.round((progress.loaded / progress.total) * 100);
+        loaderTextEl.textContent = T('loadingModel') + ' · ' + pct + '%';
       }
     },
     function(err) {
-      clearTimeout(fallbackTimer);
-      console.warn('GLB load failed, using procedural 3D cortex fallback:', err);
-      setupBrainModel(createProceduralCortexModel(), true);
+      console.error('Ошибка загрузки файла low-poly_human_brain_model.glb:', err);
+      loaderTextEl.textContent = 'Ошибка загрузки ' + MODEL_URL;
+      loaderTextEl.style.color = '#ef4444';
     }
   );
 }
