@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-lang="en" data-theme="dark">
+<html lang="ru" data-lang="ru" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>NeuralMap — 3D Brain Atlas</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#030308">
+<title>NeuralMap — Neuro Cosmos Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#000;--bg-1:#0a0a0c;--bg-2:#121216;--bg-3:#1a1a20;
-  --border:rgba(255,255,255,.08);--border-hi:rgba(255,255,255,.22);
-  --text:#fff;--text-2:rgba(255,255,255,.65);--text-3:rgba(255,255,255,.38);
+  --bg:#030308;--bg-1:#070810;--bg-2:#0d0f1a;--bg-3:#141726;
+  --border:rgba(255,255,255,.07);--border-hi:rgba(255,255,255,.2);
+  --text:#f8fafc;--text-2:rgba(248,250,252,.65);--text-3:rgba(248,250,252,.36);
   --accent:#7c5cff;
   --danger:#ef4444;--warn:#f59e0b;--success:#10b981;
   --font:'Inter',-apple-system,system-ui,sans-serif;
@@ -20,39 +20,27 @@
   --safe-left:env(safe-area-inset-left,0px);
   --safe-right:env(safe-area-inset-right,0px);
   --topbar-h:52px;
-  --panel-l:290px;
-  --panel-r:350px;
+  --panel-l:310px;
+  --panel-r:360px;
   --ease-out:cubic-bezier(0.16, 1, 0.3, 1);
 }
 [data-theme="light"]{
-  --bg:#f8fafc;--bg-1:#ffffff;--bg-2:#f1f5f9;--bg-3:#e2e8f0;
-  --border:rgba(0,0,0,.08);--border-hi:rgba(0,0,0,.2);
-  --text:#0f172a;--text-2:rgba(15,23,42,.65);--text-3:rgba(15,23,42,.42);
+  --bg:#f1f5f9;--bg-1:#ffffff;--bg-2:#f8fafc;--bg-3:#e2e8f0;
+  --border:rgba(15,23,42,.08);--border-hi:rgba(15,23,42,.22);
+  --text:#0f172a;--text-2:rgba(15,23,42,.68);--text-3:rgba(15,23,42,.42);
 }
 
 /* ═══ 16:9 LARGE MONITORS SCALING (FHD / QHD / 4K) ═══ */
 @media (min-width:1440px){
-  :root{
-    --topbar-h:58px;
-    --panel-l:330px;
-    --panel-r:400px;
-  }
+  :root{--topbar-h:56px;--panel-l:340px;--panel-r:400px}
   html{font-size:15px}
 }
 @media (min-width:1920px){
-  :root{
-    --topbar-h:66px;
-    --panel-l:380px;
-    --panel-r:460px;
-  }
+  :root{--topbar-h:64px;--panel-l:390px;--panel-r:460px}
   html{font-size:16.5px}
 }
 @media (min-width:2560px){
-  :root{
-    --topbar-h:76px;
-    --panel-l:440px;
-    --panel-r:540px;
-  }
+  :root{--topbar-h:74px;--panel-l:450px;--panel-r:540px}
   html{font-size:19px}
 }
 
@@ -60,15 +48,13 @@
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-touch-callout:none}
 body{
   font-family:var(--font);background:var(--bg);color:var(--text);
-  font-size:0.95rem;line-height:1.5;-webkit-font-smoothing:antialiased;
+  font-size:0.94rem;line-height:1.5;-webkit-font-smoothing:antialiased;
   user-select:none;-webkit-user-select:none;
-  transition:background .25s ease,color .25s ease;
 }
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;font-size:inherit}
 svg{display:block}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-thumb{background:rgba(128,128,128,.28);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(128,128,128,.45)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(148,163,184,.25);border-radius:2px}
 
 .app{
   display:grid;
@@ -80,39 +66,35 @@ svg{display:block}
 
 /* ═══ TOPBAR ═══ */
 .topbar{
-  display:flex;align-items:center;gap:10px;
-  padding:var(--safe-top) calc(14px + var(--safe-right)) 0 calc(14px + var(--safe-left));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:var(--safe-top) calc(16px + var(--safe-right)) 0 calc(16px + var(--safe-left));
   height:calc(var(--topbar-h) + var(--safe-top));
   background:var(--bg-1);
   border-bottom:1px solid var(--border);
   z-index:100;
-  overflow:hidden;
 }
-.brand{display:flex;align-items:center;gap:9px;flex:none;min-width:0}
+.topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
 .brand-icon{
   width:28px;height:28px;
   display:grid;place-items:center;flex:none;
-  background:var(--text);color:var(--bg);
+  background:linear-gradient(135deg,#7c5cff,#38bdf8);color:#fff;
   border-radius:7px;
-  transition:transform .2s var(--ease-out);
+  box-shadow:0 0 16px rgba(124,92,255,.45);
 }
-.brand:hover .brand-icon{transform:rotate(15deg) scale(1.05)}
 .brand-icon svg{width:15px;height:15px}
-.brand-text{display:flex;flex-direction:column;line-height:1.15;min-width:0}
-.brand-text strong{font-size:0.95rem;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
-.brand-text span{font-size:0.68rem;color:var(--text-3);font-family:var(--mono)}
-.topbar-sep{width:1px;height:20px;background:var(--border);flex:none;margin:0 4px}
-.topbar-nav{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.topbar-nav::-webkit-scrollbar{display:none}
-.nav-tab{
-  padding:6px 12px;border-radius:6px;
-  font-size:0.82rem;font-weight:500;
-  color:var(--text-2);
-  transition:background .18s ease,color .18s ease,transform .15s ease;
-  white-space:nowrap;flex:none;
+.brand-text{display:flex;flex-direction:column;line-height:1.15}
+.brand-text strong{font-size:0.95rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono)}
+.brand-text span{font-size:0.65rem;color:var(--text-3);font-family:var(--mono);letter-spacing:.4px}
+
+.telemetry-bar{
+  display:none;align-items:center;gap:18px;
+  padding-left:14px;border-left:1px solid var(--border);
+  font-family:var(--mono);font-size:0.7rem;color:var(--text-3);
 }
-.nav-tab:hover{background:var(--bg-2);color:var(--text)}
-.nav-tab.active{color:var(--bg);background:var(--text);font-weight:600}
+@media (min-width:900px){.telemetry-bar{display:flex}}
+.telemetry-item strong{color:var(--text);font-weight:600;margin-left:4px}
+
 .topbar-actions{display:flex;align-items:center;gap:6px;flex:none}
 .lang-switch{
   display:flex;background:var(--bg-2);
@@ -121,41 +103,35 @@ svg{display:block}
 }
 .lang-btn{
   padding:4px 8px;
-  font-family:var(--mono);font-size:0.72rem;font-weight:600;
+  font-family:var(--mono);font-size:0.7rem;font-weight:600;
   letter-spacing:.4px;border-radius:4px;
   color:var(--text-3);
   transition:background .15s ease,color .15s ease;
 }
-.lang-btn:hover{color:var(--text)}
 .lang-btn.active{background:var(--text);color:var(--bg)}
 .icon-btn{
   width:34px;height:34px;min-width:34px;
   display:grid;place-items:center;
-  border-radius:6px;
-  color:var(--text-2);
-  border:1px solid var(--border);
-  background:var(--bg-2);
-  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+  border-radius:6px;color:var(--text-2);
+  border:1px solid var(--border);background:var(--bg-2);
+  transition:border-color .15s ease,color .15s ease,transform .15s ease;
 }
 .icon-btn:hover{border-color:var(--border-hi);color:var(--text)}
 .icon-btn:active{transform:scale(.94)}
-.icon-btn svg{width:16px;height:16px}
+.icon-btn svg{width:15px;height:15px}
 .mobile-only{display:grid}
 @media (min-width:1025px){.mobile-only{display:none}}
 
-/* ═══ BODY LAYOUT ═══ */
+/* ═══ BODY ═══ */
 .body{
-  display:grid;
-  grid-template-columns:1fr;
-  overflow:hidden;
-  min-height:0;
-  position:relative;
+  display:grid;grid-template-columns:1fr;
+  overflow:hidden;min-height:0;position:relative;
 }
 @media (min-width:1025px){
   .body{grid-template-columns:var(--panel-l) 1fr var(--panel-r)}
 }
 @media (min-width:641px) and (max-width:1024px){
-  .body{grid-template-columns:1fr 320px}
+  .body{grid-template-columns:1fr 330px}
 }
 
 .panel{
@@ -165,52 +141,38 @@ svg{display:block}
   -webkit-overflow-scrolling:touch;
   contain:content;
 }
-@media (min-width:1440px){
-  .panel{padding:20px 18px}
-}
+@media (min-width:1440px){.panel{padding:20px 18px}}
 .panel-left{border-right:1px solid var(--border)}
 .panel-right{border-left:1px solid var(--border)}
 
-/* ═══ MOBILE + TABLET DRAWERS ═══ */
 @media (max-width:1024px){
   .panel-left,.panel-right{
     position:fixed;
-    top:calc(var(--topbar-h) + var(--safe-top));
-    bottom:0;
-    width:min(330px,86vw);
-    z-index:200;
+    top:calc(var(--topbar-h) + var(--safe-top));bottom:0;
+    width:min(340px,88vw);z-index:200;
     background:var(--bg-1);
-    transition:transform .3s var(--ease-out);
+    transition:transform .28s var(--ease-out);
     padding-bottom:calc(18px + var(--safe-bottom));
-    overflow-y:auto;
     will-change:transform;
   }
-  .panel-left{
-    left:0;
-    transform:translate3d(-100%,0,0);
-    box-shadow:20px 0 50px rgba(0,0,0,.55);
-  }
-  .panel-right{
-    right:0;
-    transform:translate3d(100%,0,0);
-    box-shadow:-20px 0 50px rgba(0,0,0,.55);
-  }
+  .panel-left{left:0;transform:translate3d(-100%,0,0);box-shadow:20px 0 50px rgba(0,0,0,.6)}
+  .panel-right{right:0;transform:translate3d(100%,0,0);box-shadow:-20px 0 50px rgba(0,0,0,.6)}
   .panel-left.open,.panel-right.open{transform:translate3d(0,0,0)}
 }
 
 .panel-head{
   display:flex;align-items:center;justify-content:space-between;
-  padding-bottom:12px;margin-bottom:14px;
+  padding-bottom:11px;margin-bottom:14px;
   border-bottom:1px solid var(--border);
   position:sticky;top:-20px;background:var(--bg-1);
   padding-top:16px;margin-top:-16px;z-index:5;
 }
 .panel-head h2{
-  font-family:var(--mono);font-size:0.75rem;font-weight:600;
-  letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);
+  font-family:var(--mono);font-size:0.72rem;font-weight:700;
+  letter-spacing:1.6px;text-transform:uppercase;color:var(--text-3);
 }
 .panel-close{
-  width:30px;height:30px;display:grid;place-items:center;
+  width:28px;height:28px;display:grid;place-items:center;
   border-radius:6px;color:var(--text-2);background:var(--bg-2);
 }
 .panel-close svg{width:14px;height:14px}
@@ -218,67 +180,78 @@ svg{display:block}
 
 .section{margin-bottom:22px}
 .section-title{
-  font-family:var(--mono);font-size:0.7rem;font-weight:600;
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
   letter-spacing:1.4px;text-transform:uppercase;
   color:var(--text-3);margin-bottom:10px;
   display:flex;align-items:center;justify-content:space-between;
 }
 
-/* ═══ DETAILED REGION ITEMS ═══ */
+/* ═══ STRUCTURAL LOBE CARDS ═══ */
 .region-item{
-  display:flex;flex-direction:column;gap:5px;width:100%;
-  padding:11px 12px;border-radius:8px;text-align:left;
-  transition:background .18s ease,border-color .18s ease,transform .15s var(--ease-out);
-  margin-bottom:6px;
-  border:1px solid var(--border);background:var(--bg-2);
+  display:flex;flex-direction:column;gap:7px;width:100%;
+  padding:12px 13px;border-radius:9px;text-align:left;
+  transition:background .18s ease,border-color .18s ease,transform .15s var(--ease-out),box-shadow .2s ease;
+  margin-bottom:7px;
+  border:1px solid var(--border);
+  background:linear-gradient(135deg, var(--bg-2) 0%, rgba(20,23,38,.5) 100%);
   position:relative;overflow:hidden;
 }
 .region-item::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--r-color,#7c5cff);opacity:.35;
-  transition:opacity .2s ease,width .2s ease;
+  background:var(--r-color,#7c5cff);opacity:.5;
+  transition:opacity .2s ease,width .2s ease,box-shadow .2s ease;
 }
 .region-item:hover{
   background:var(--bg-3);
-  border-color:var(--border-hi);
+  border-color:color-mix(in srgb, var(--r-color,#7c5cff) 50%, var(--border-hi));
   transform:translateX(2px);
 }
-.region-item:hover::before{opacity:.85}
-.region-item:active{transform:scale(.985)}
+.region-item:hover::before{opacity:1;box-shadow:0 0 12px var(--r-color,#7c5cff)}
 .region-item.active{
-  background:var(--bg-3);
+  background:linear-gradient(135deg, color-mix(in srgb, var(--r-color,#7c5cff) 16%, var(--bg-3)) 0%, var(--bg-2) 100%);
   border-color:var(--r-color,#7c5cff);
-  box-shadow:0 4px 20px -4px rgba(0,0,0,.4);
+  box-shadow:0 6px 22px -6px color-mix(in srgb, var(--r-color,#7c5cff) 35%, transparent);
 }
-.region-item.active::before{opacity:1;width:4px}
-.region-top{display:flex;align-items:center;gap:9px;width:100%}
-.region-dot{
-  width:9px;height:9px;border-radius:50%;flex:none;
+.region-item.active::before{opacity:1;width:4px;box-shadow:0 0 14px var(--r-color,#7c5cff)}
+
+.region-top{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
+.region-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}
+.region-glyph{
+  width:14px;height:14px;border-radius:3px;flex:none;
+  border:1.5px solid var(--r-color,#7c5cff);
+  display:grid;place-items:center;
+}
+.region-glyph::after{
+  content:'';width:5px;height:5px;border-radius:1px;
   background:var(--r-color,#7c5cff);
-  transition:box-shadow .2s ease,transform .2s ease;
+  box-shadow:0 0 8px var(--r-color,#7c5cff);
 }
-.region-item:hover .region-dot,.region-item.active .region-dot{
-  box-shadow:0 0 10px var(--r-color,#7c5cff);
-  transform:scale(1.15);
-}
-.region-name{flex:1;font-size:0.9rem;font-weight:600;color:var(--text)}
-.region-count{
-  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+.region-name{font-size:0.88rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.region-ba{
+  font-family:var(--mono);font-size:0.64rem;font-weight:600;
   padding:2px 6px;border-radius:4px;
-  background:var(--bg-1);color:var(--text-3);
-  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text-2);
+  border:1px solid var(--border);flex:none;
 }
-.region-item.active .region-count{color:var(--text);border-color:var(--border-hi)}
-.region-meta{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-left:18px;font-size:0.75rem;color:var(--text-3);
+.region-sub{
+  font-size:0.74rem;color:var(--text-3);line-height:1.3;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
 }
-.region-latin{font-family:var(--mono);font-size:0.68rem;opacity:.75}
+.region-neurons{font-family:var(--mono);font-size:0.66rem;color:var(--r-color,#7c5cff);opacity:.9}
+.region-bar{
+  height:2px;width:100%;background:rgba(255,255,255,.06);
+  border-radius:2px;overflow:hidden;margin-top:1px;
+}
+.region-bar-fill{
+  height:100%;background:var(--r-color,#7c5cff);
+  opacity:.65;transition:width .3s var(--ease-out),opacity .2s ease;
+}
+.region-item.active .region-bar-fill{opacity:1}
 
 /* ═══ DISEASE ITEMS ═══ */
 .disease-item{
   display:flex;align-items:flex-start;gap:10px;width:100%;
-  padding:11px 12px;border-radius:8px;text-align:left;
+  padding:10px 12px;border-radius:8px;text-align:left;
   transition:background .18s ease,border-color .18s ease,transform .15s var(--ease-out);
   margin-bottom:5px;
   border:1px solid var(--border);background:var(--bg-2);
@@ -286,212 +259,180 @@ svg{display:block}
 }
 .disease-item::before{
   content:'';position:absolute;left:0;top:0;bottom:0;
-  width:3px;background:var(--d-color,#666);
-  opacity:.45;transition:opacity .18s ease;
+  width:3px;background:var(--d-color,#666);opacity:.45;
 }
 .disease-item:hover{background:var(--bg-3);border-color:var(--border-hi);transform:translateX(2px)}
-.disease-item:active{transform:scale(.985)}
 .disease-item.active{background:var(--bg-3);border-color:var(--d-color,#fff)}
 .disease-item.active::before{opacity:1}
 .disease-icon{
-  width:26px;height:26px;border-radius:6px;
+  width:24px;height:24px;border-radius:5px;
   display:grid;place-items:center;
   background:var(--d-color,#666);color:#fff;
-  font-family:var(--mono);font-size:0.75rem;font-weight:700;flex:none;
+  font-family:var(--mono);font-size:0.72rem;font-weight:700;flex:none;
 }
 .disease-body{flex:1;min-width:0}
-.disease-name{
-  font-size:0.86rem;font-weight:600;color:var(--text);
-  margin-bottom:2px;display:block;
-}
-.disease-desc{font-size:0.74rem;color:var(--text-3);line-height:1.35}
+.disease-name{font-size:0.84rem;font-weight:600;color:var(--text);display:block}
+.disease-desc{font-size:0.72rem;color:var(--text-3);line-height:1.3}
 
 /* ═══ SEVERITY ═══ */
 .severity-box{
   margin-top:12px;padding:14px;
   background:var(--bg-2);border:1px solid var(--border-hi);
-  border-radius:10px;animation:slideDown .25s var(--ease-out);
+  border-radius:10px;
 }
-@keyframes slideDown{
-  from{opacity:0;transform:translateY(-6px)}
-  to{opacity:1;transform:none}
-}
-.severity-head{
-  display:flex;justify-content:space-between;
-  align-items:baseline;margin-bottom:8px;
-}
-.severity-label{
-  font-family:var(--mono);font-size:0.7rem;font-weight:600;
-  letter-spacing:1.4px;text-transform:uppercase;color:var(--text-3);
-}
-.severity-value{
-  font-family:var(--mono);font-size:1.25rem;font-weight:700;
-  color:var(--text);font-variant-numeric:tabular-nums;
-}
-.severity-slider{
-  -webkit-appearance:none;appearance:none;
-  width:100%;height:30px;background:transparent;
-  cursor:pointer;display:block;
-}
+.severity-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.severity-label{font-family:var(--mono);font-size:0.68rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-3)}
+.severity-value{font-family:var(--mono);font-size:1.2rem;font-weight:700;color:var(--text)}
+.severity-slider{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;cursor:pointer;display:block}
 .severity-slider::-webkit-slider-runnable-track{
   height:4px;border-radius:2px;
   background:linear-gradient(to right,var(--text) var(--p,50%),var(--border) var(--p,50%));
 }
 .severity-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;width:20px;height:20px;
+  -webkit-appearance:none;width:18px;height:18px;
   border-radius:50%;background:var(--text);
-  margin-top:-8px;border:2px solid var(--bg-1);
-  box-shadow:0 2px 6px rgba(0,0,0,.4);
-  transition:transform .15s ease;
+  margin-top:-7px;border:2px solid var(--bg-1);
 }
-.severity-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
-.severity-stages{
-  display:flex;justify-content:space-between;
-  margin-top:6px;font-family:var(--mono);font-size:0.7rem;color:var(--text-3);
-}
+.severity-stages{display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:0.68rem;color:var(--text-3)}
 .severity-stages span.active{color:var(--text);font-weight:700}
 
-/* ═══ VIEWPORT (16:9 OPTIMIZED) ═══ */
+/* ═══ VIEWPORT (NEURO COSMOS) ═══ */
 .viewport{
   position:relative;
-  background:radial-gradient(circle at 50% 50%, rgba(124,92,255,0.07) 0%, transparent 70%), var(--bg);
+  background:
+    radial-gradient(circle at 50% 46%, rgba(88, 62, 255, 0.14) 0%, rgba(16, 185, 129, 0.05) 38%, transparent 72%),
+    var(--bg);
   overflow:hidden;min-height:0;min-width:0;
   display:flex;align-items:center;justify-content:center;
 }
-#canvas3d{
-  display:block;width:100%;height:100%;
-  touch-action:none;cursor:grab;
-}
+#canvas3d{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 #canvas3d:active{cursor:grabbing}
 
-/* ═══ GPU-ACCELERATED HTML LABELS ═══ */
-.labels-layer{
-  position:absolute;inset:0;
-  pointer-events:none;z-index:5;overflow:hidden;
-}
+/* ═══ STRUCTURAL HUD LABELS (CALLOUT STYLE) ═══ */
+.labels-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden}
 .zone-label{
   position:absolute;left:0;top:0;
   pointer-events:auto;
-  display:flex;align-items:center;gap:6px;
-  padding:5px 11px 5px 8px;border-radius:999px;
-  background:rgba(10,10,14,.82);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.16);
-  font-family:var(--mono);font-size:0.74rem;font-weight:600;
-  letter-spacing:.3px;color:#fff;white-space:nowrap;
+  display:flex;align-items:center;gap:7px;
+  padding:4px 10px 4px 7px;border-radius:4px;
+  background:rgba(6, 8, 16, 0.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14);
+  border-left:2.5px solid var(--ldot-color,#7c5cff);
+  font-family:var(--mono);font-size:0.7rem;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;color:#f8fafc;white-space:nowrap;
   transform:translate3d(-9999px,-9999px,0);
-  transition:opacity .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease;
+  transition:opacity .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;
   will-change:transform,opacity;
   cursor:pointer;
-  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  box-shadow:0 4px 16px rgba(0,0,0,.45);
 }
 [data-theme="light"] .zone-label{
   background:rgba(255,255,255,.88);
-  border-color:rgba(0,0,0,.15);color:#0f172a;
+  border-color:rgba(15,23,42,.15);
+  border-left:2.5px solid var(--ldot-color,#7c5cff);
+  color:#0f172a;
 }
 .zone-label.hidden{opacity:0;pointer-events:none}
 .zone-label:hover{
+  background:rgba(16, 20, 36, 0.95);
   border-color:var(--ldot-color,#7c5cff);
-  box-shadow:0 0 16px color-mix(in srgb, var(--ldot-color,#7c5cff) 45%, transparent);
+  box-shadow:0 0 18px color-mix(in srgb, var(--ldot-color,#7c5cff) 50%, transparent);
   z-index:10;
 }
 .zone-label.active{
-  background:var(--ldot-color,#7c5cff);
-  border-color:#fff;color:#fff;
-  box-shadow:0 0 22px var(--ldot-color,#7c5cff);
+  background:color-mix(in srgb, var(--ldot-color,#7c5cff) 28%, rgba(8,10,20,.94));
+  border-color:var(--ldot-color,#7c5cff);
+  color:#fff;
+  box-shadow:0 0 24px color-mix(in srgb, var(--ldot-color,#7c5cff) 65%, transparent);
   z-index:12;
 }
 .zone-label .ldot{
-  width:7px;height:7px;border-radius:50%;flex:none;
+  width:5px;height:5px;border-radius:1px;flex:none;
   background:var(--ldot-color,#7c5cff);
   box-shadow:0 0 8px var(--ldot-color,#7c5cff);
+  transform:rotate(45deg);
 }
-.zone-label.active .ldot{background:#fff;box-shadow:0 0 8px #fff}
-.zone-label .lba{
-  font-size:0.64rem;opacity:.65;font-weight:400;margin-left:2px;
-}
-.zone-label.active .lba{opacity:.9}
+.zone-label .lba{font-size:0.6rem;opacity:.6;font-weight:500}
 
 /* ═══ VIEWPORT CHIPS & HUD ═══ */
 .viewport-chips{
-  position:absolute;top:14px;left:14px;right:14px;
-  display:flex;gap:7px;z-index:10;
+  position:absolute;top:14px;left:14px;
+  display:flex;gap:6px;z-index:10;
   pointer-events:none;flex-wrap:wrap;
-  max-width:calc(100% - 200px);
 }
 .chip{
   pointer-events:auto;
   display:inline-flex;align-items:center;gap:6px;
-  height:34px;padding:0 13px;border-radius:8px;
+  height:32px;padding:0 12px;border-radius:6px;
   border:1px solid var(--border);
-  background:rgba(10,10,14,.72);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(7,8,16,.76);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   color:var(--text-2);
-  font-family:var(--mono);font-size:0.74rem;font-weight:500;
-  letter-spacing:.3px;white-space:nowrap;
-  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .15s ease;
+  font-family:var(--mono);font-size:0.7rem;font-weight:500;
+  letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
 }
 .chip:hover{border-color:var(--border-hi);color:var(--text)}
-.chip:active{transform:scale(.95)}
-[data-theme="light"] .chip{background:rgba(255,255,255,.8)}
-.chip.on{background:var(--text);border-color:var(--text);color:var(--bg);font-weight:600}
-.chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6}
-.chip.on .chip-dot{opacity:1}
+[data-theme="light"] .chip{background:rgba(255,255,255,.82)}
+.chip.on{
+  background:rgba(124,92,255,.18);
+  border-color:rgba(124,92,255,.65);
+  color:#fff;
+  box-shadow:0 0 14px rgba(124,92,255,.25);
+}
+[data-theme="light"] .chip.on{color:#0f172a;background:rgba(124,92,255,.15)}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+.chip.on .chip-dot{background:#a78bfa;opacity:1;box-shadow:0 0 6px #a78bfa}
 
 .focus-label{
   position:absolute;top:14px;right:14px;
   pointer-events:none;z-index:10;
-  max-width:240px;text-align:right;
-  background:rgba(10,10,14,.65);
+  max-width:250px;text-align:right;
+  background:rgba(7,8,16,.72);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  padding:7px 12px;border-radius:8px;
+  padding:7px 12px;border-radius:6px;
   border:1px solid var(--border);
 }
-[data-theme="light"] .focus-label{background:rgba(255,255,255,.8)}
+[data-theme="light"] .focus-label{background:rgba(255,255,255,.82)}
 .focus-label .tag{
-  display:block;font-family:var(--mono);font-size:0.65rem;
-  letter-spacing:1.3px;text-transform:uppercase;
+  display:block;font-family:var(--mono);font-size:0.62rem;
+  letter-spacing:1.4px;text-transform:uppercase;
   color:var(--text-3);margin-bottom:2px;
 }
 .focus-label .val{
-  font-family:var(--mono);font-size:0.82rem;font-weight:600;
+  font-family:var(--mono);font-size:0.8rem;font-weight:600;
   color:var(--text);line-height:1.25;display:block;
 }
 
-.viewport-hint{
-  position:absolute;bottom:14px;left:50%;
-  transform:translateX(-50%);
-  font-family:var(--mono);font-size:0.72rem;
-  color:var(--text-2);letter-spacing:.4px;
-  background:rgba(10,10,14,.68);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  padding:6px 14px;border-radius:8px;
-  border:1px solid var(--border);
-  pointer-events:none;white-space:nowrap;z-index:10;
+.cosmos-stats{
+  position:absolute;bottom:14px;left:16px;
+  display:none;gap:18px;z-index:10;pointer-events:none;
+  font-family:var(--mono);
 }
-[data-theme="light"] .viewport-hint{background:rgba(255,255,255,.8)}
-.viewport-hint .sep{opacity:.4;margin:0 6px}
+@media (min-width:768px){.cosmos-stats{display:flex}}
+.stat-block strong{
+  display:block;font-size:1.1rem;font-weight:700;color:var(--text);
+  letter-spacing:-.5px;line-height:1.1;
+}
+.stat-block span{font-size:0.62rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px}
 
 .status-indicator{
   position:absolute;bottom:14px;right:14px;
   display:flex;align-items:center;gap:6px;
-  padding:6px 11px;background:rgba(10,10,14,.68);
+  padding:6px 11px;background:rgba(7,8,16,.72);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--border);border-radius:8px;
-  font-family:var(--mono);font-size:0.7rem;
+  border:1px solid var(--border);border-radius:6px;
+  font-family:var(--mono);font-size:0.68rem;
   letter-spacing:.8px;text-transform:uppercase;
   color:var(--text-2);z-index:10;
 }
-[data-theme="light"] .status-indicator{background:rgba(255,255,255,.8)}
+[data-theme="light"] .status-indicator{background:rgba(255,255,255,.82)}
 .status-indicator::before{
   content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 8px var(--success);
-  animation:pulse 2s ease-in-out infinite;
+  background:var(--success);box-shadow:0 0 8px var(--success);
 }
-.status-indicator.warn::before{background:var(--warn);box-shadow:0 0 8px var(--warn)}
 .status-indicator.danger::before{background:var(--danger);box-shadow:0 0 8px var(--danger)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* ═══ MODEL LOADER ═══ */
 .model-loader{
@@ -504,21 +445,21 @@ svg{display:block}
 .model-loader-spinner{
   width:36px;height:36px;margin:0 auto 14px;
   border:2px solid var(--border);
-  border-top-color:var(--text);
+  border-top-color:#7c5cff;
   border-radius:50%;
-  animation:spin 0.9s linear infinite;
+  animation:spin 0.85s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .model-loader-text{
-  font-family:var(--mono);font-size:0.75rem;
+  font-family:var(--mono);font-size:0.72rem;
   letter-spacing:1.5px;text-transform:uppercase;
   color:var(--text-2);text-align:center;
 }
 
-/* ═══ ANALYTICS PANEL & DETAILED CARDS ═══ */
+/* ═══ ANALYTICS PANEL ═══ */
 .back-btn{
   display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--mono);font-size:0.72rem;font-weight:600;
+  font-family:var(--mono);font-size:0.7rem;font-weight:600;
   color:var(--text-2);background:var(--bg-2);
   border:1px solid var(--border);border-radius:6px;
   padding:5px 10px;margin-bottom:12px;
@@ -530,185 +471,128 @@ svg{display:block}
   display:flex;align-items:flex-start;
   justify-content:space-between;gap:10px;margin-bottom:14px;
 }
-.analytics-header h2{
-  font-size:1.15rem;font-weight:700;
-  letter-spacing:-.2px;margin-bottom:3px;line-height:1.25;
-}
-.analytics-header .subtitle{
-  font-family:var(--mono);font-size:0.74rem;
-  color:var(--text-3);letter-spacing:.3px;display:block;
-}
+.analytics-header h2{font-size:1.1rem;font-weight:700;letter-spacing:-.2px;margin-bottom:3px;line-height:1.25}
+.analytics-header .subtitle{font-family:var(--mono);font-size:0.72rem;color:var(--text-3);display:block}
 .ba-badge{
-  font-family:var(--mono);font-size:0.7rem;font-weight:600;
-  padding:4px 8px;border-radius:6px;
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
+  padding:4px 8px;border-radius:5px;
   background:var(--bg-3);border:1px solid var(--border-hi);
   color:var(--text);white-space:nowrap;flex:none;
 }
 .card{
   background:var(--bg-2);border:1px solid var(--border);
-  border-radius:10px;padding:14px;margin-bottom:11px;
-  animation:fadeIn .25s var(--ease-out);
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(5px)}
-  to{opacity:1;transform:none}
+  border-radius:9px;padding:13px;margin-bottom:10px;
 }
 .card-title{
-  font-family:var(--mono);font-size:0.7rem;font-weight:600;
+  font-family:var(--mono);font-size:0.68rem;font-weight:600;
   letter-spacing:1.4px;text-transform:uppercase;
-  color:var(--text-3);margin-bottom:10px;
+  color:var(--text-3);margin-bottom:9px;
   display:flex;align-items:center;justify-content:space-between;
 }
 .card-title .badge{
-  font-family:var(--mono);font-size:0.68rem;font-weight:600;
-  padding:2px 7px;border-radius:4px;
+  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  padding:2px 6px;border-radius:4px;
   background:var(--bg-3);color:var(--text-2);
   border:1px solid var(--border);
 }
-.card p{font-size:0.86rem;line-height:1.6;color:var(--text-2);margin:0}
-.card p strong{color:var(--text);font-weight:600}
+.card p{font-size:0.84rem;line-height:1.6;color:var(--text-2);margin:0}
 
-/* ═══ METRIC BARS ═══ */
-.metric-row{
-  padding:8px 0;border-bottom:1px solid var(--border);
-}
+.metric-row{padding:7px 0;border-bottom:1px solid var(--border)}
 .metric-row:last-child{border-bottom:none}
-.metric-top{
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:0.82rem;margin-bottom:5px;
-}
+.metric-top{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;margin-bottom:5px}
 .metric-label{color:var(--text-2);font-weight:500}
-.metric-value{
-  font-family:var(--mono);font-size:0.82rem;font-weight:600;
-  font-variant-numeric:tabular-nums;
-}
+.metric-value{font-family:var(--mono);font-size:0.8rem;font-weight:600}
 .metric-value.good{color:var(--success)}
 .metric-value.warn{color:var(--warn)}
 .metric-value.bad{color:var(--danger)}
-.metric-bar{
-  height:4px;border-radius:2px;background:var(--bg-3);overflow:hidden;
-}
-.metric-fill{
-  height:100%;border-radius:2px;transition:width .35s var(--ease-out);
-}
+.metric-bar{height:4px;border-radius:2px;background:var(--bg-3);overflow:hidden}
+.metric-fill{height:100%;border-radius:2px;transition:width .3s var(--ease-out)}
 .metric-fill.good{background:var(--success)}
 .metric-fill.warn{background:var(--warn)}
 .metric-fill.bad{background:var(--danger)}
 
 .tags{display:flex;flex-wrap:wrap;gap:5px}
 .tag{
-  font-family:var(--mono);font-size:0.72rem;
+  font-family:var(--mono);font-size:0.7rem;
   padding:4px 8px;border-radius:5px;
-  background:var(--bg-3);border:1px solid var(--border);
-  color:var(--text-2);letter-spacing:.2px;
+  background:var(--bg-3);border:1px solid var(--border);color:var(--text-2);
 }
-.tag.danger{
-  background:rgba(239,68,68,.12);
-  border-color:rgba(239,68,68,.3);color:#f87171;
-}
-.tag.warn{
-  background:rgba(245,158,11,.12);
-  border-color:rgba(245,158,11,.3);color:#fbbf24;
-}
+.tag.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#f87171}
+.tag.warn{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:#fbbf24}
+
 .empty{text-align:center;padding:48px 18px;color:var(--text-3)}
 .empty svg{width:34px;height:34px;margin:0 auto 14px;opacity:.35}
-.empty p{font-size:0.84rem;line-height:1.6;max-width:230px;margin:0 auto}
+.empty p{font-size:0.82rem;line-height:1.6;max-width:230px;margin:0 auto}
 
-/* ═══ INTERACTIVE SUBZONE ITEMS ═══ */
 .sub-item{
   display:flex;align-items:center;gap:10px;width:100%;
-  padding:10px 12px;border-radius:8px;
+  padding:9px 11px;border-radius:7px;
   border:1px solid var(--border);
   background:var(--bg-3);color:var(--text);
-  font-size:0.84rem;text-align:left;
-  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+  font-size:0.82rem;text-align:left;
+  transition:border-color .15s ease,transform .15s ease;
   margin-bottom:5px;
 }
-.sub-item:hover{
-  border-color:var(--border-hi);
-  transform:translateX(3px);
-}
-.sub-item:active{transform:scale(.98)}
+.sub-item:hover{border-color:var(--border-hi);transform:translateX(3px)}
 .sub-item .pin{
-  width:8px;height:8px;border-radius:50%;flex:none;
+  width:7px;height:7px;border-radius:1px;flex:none;
+  transform:rotate(45deg);
   box-shadow:0 0 8px currentColor;
 }
 .sub-item-info{flex:1;min-width:0}
-.sub-item-title{display:block;font-weight:600;color:var(--text);font-size:0.84rem}
-.sub-item-sub{display:block;font-size:0.72rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sub-item .go{
-  margin-left:auto;color:var(--text-3);
-  font-family:var(--mono);font-size:0.72rem;
-}
+.sub-item-title{display:block;font-weight:600;color:var(--text);font-size:0.82rem}
+.sub-item-sub{display:block;font-size:0.7rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-item .go{margin-left:auto;color:var(--text-3);font-family:var(--mono);font-size:0.72rem}
 
-.progression-bar{
-  display:flex;height:4px;border-radius:2px;
-  overflow:hidden;background:var(--bg-3);
-  margin-bottom:10px;gap:3px;
-}
-.progression-step{
-  flex:1;background:var(--border);
-  transition:background .3s ease;
-}
+.progression-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--bg-3);margin-bottom:10px;gap:3px}
+.progression-step{flex:1;background:var(--border)}
 .progression-step.past{background:var(--warn)}
 .progression-step.current{background:var(--text)}
-.progression-labels{
-  display:flex;gap:3px;margin-bottom:12px;
-  font-family:var(--mono);font-size:0.68rem;
-  text-align:center;color:var(--text-3);
-}
+.progression-labels{display:flex;gap:3px;margin-bottom:12px;font-family:var(--mono);font-size:0.68rem;text-align:center;color:var(--text-3)}
 .progression-labels span{flex:1}
 .progression-labels span.active{color:var(--text);font-weight:700}
 
-/* ═══ SCRIM ═══ */
 .scrim{
-  position:fixed;
-  inset:calc(var(--topbar-h) + var(--safe-top)) 0 0 0;
+  position:fixed;inset:calc(var(--topbar-h) + var(--safe-top)) 0 0 0;
   background:rgba(0,0,0,.6);z-index:150;
   opacity:0;pointer-events:none;transition:opacity .25s ease;
   backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
 .scrim.show{opacity:1;pointer-events:auto}
-
-@media (max-height:500px) and (orientation:landscape){
-  .viewport-hint{display:none}
-  .status-indicator{font-size:0.65rem;padding:4px 8px;bottom:8px;right:8px}
-  .viewport-chips{top:8px;left:8px;gap:4px}
-  .chip{height:28px;padding:0 9px;font-size:0.68rem}
-  .focus-label{top:8px;right:8px;padding:4px 8px}
-}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <button class="icon-btn mobile-only" id="menuBtn" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
-    <div class="brand">
-      <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
-        </svg>
+    <div class="topbar-left">
+      <button class="icon-btn mobile-only" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <strong>NEURO COSMOS</strong>
+          <span>VOLUMETRIC CORTEX ATLAS · v8.0</span>
+        </div>
       </div>
-      <div class="brand-text">
-        <strong>NeuralMap</strong>
-        <span>v7.2 · 16:9 HD</span>
+      <div class="telemetry-bar">
+        <span class="telemetry-item">DUST NODES <strong>8,500</strong></span>
+        <span class="telemetry-item">TRACTS <strong>12 BEAMS</strong></span>
+        <span class="telemetry-item">RENDER <strong id="fpsCounter">60 FPS</strong></span>
       </div>
     </div>
-    <div class="topbar-sep"></div>
-    <nav class="topbar-nav">
-      <button class="nav-tab active" data-view="atlas" id="tabAtlas">Atlas</button>
-      <button class="nav-tab" data-view="analytics" id="tabAnalytics">Analytics</button>
-      <button class="nav-tab" data-view="simulation" id="tabSimulation">Simulation</button>
-    </nav>
+
     <div class="topbar-actions">
       <div class="lang-switch">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn active" data-lang="ru">RU</button>
       </div>
-      <button class="icon-btn" id="resetCamBtn" title="Reset Camera" aria-label="Reset Camera">
+      <button class="icon-btn" id="resetCamBtn" title="Reset View" aria-label="Reset View">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
         </svg>
@@ -727,23 +611,23 @@ svg{display:block}
   <div class="body">
     <aside class="panel panel-left" id="panelLeft">
       <div class="panel-head">
-        <h2 id="leftTitle">Brain Atlas</h2>
+        <h2 id="leftTitle">Атлас коры</h2>
         <button class="panel-close" id="closeLeft" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
       <div class="section">
-        <div class="section-title"><span id="lobesTitle">Cortical Lobes</span><span>5</span></div>
+        <div class="section-title"><span id="lobesTitle">Структурные доли</span><span>5</span></div>
         <div id="regionList"></div>
       </div>
       <div class="section">
-        <div class="section-title"><span id="diseasesTitle">Pathologies</span><span>9</span></div>
+        <div class="section-title"><span id="diseasesTitle">Патологии</span><span>9</span></div>
         <div id="diseaseList"></div>
       </div>
       <div id="severityContainer" style="display:none">
         <div class="severity-box">
           <div class="severity-head">
-            <span class="severity-label" id="severityLabel">Severity</span>
+            <span class="severity-label" id="severityLabel">Тяжесть</span>
             <span class="severity-value" id="severityValue">50%</span>
           </div>
           <input type="range" class="severity-slider" id="severitySlider" min="0" max="100" value="50">
@@ -760,31 +644,30 @@ svg{display:block}
       <div class="model-loader" id="modelLoader">
         <div>
           <div class="model-loader-spinner"></div>
-          <div class="model-loader-text" id="loaderText">Loading model</div>
+          <div class="model-loader-text" id="loaderText">Загрузка 3D-модели</div>
         </div>
       </div>
       <div class="viewport-chips">
-        <button class="chip on" data-toggle="labels"><span class="chip-dot"></span><span id="chipLabels">Labels</span></button>
-        <button class="chip on" data-toggle="impulses"><span class="chip-dot"></span><span id="chipImpulses">Impulses</span></button>
-        <button class="chip" data-toggle="rotate"><span class="chip-dot"></span><span id="chipRotate">Auto-rotate</span></button>
+        <button class="chip on" data-toggle="nebula"><span class="chip-dot"></span><span id="chipNebula">Нейро-пыль</span></button>
+        <button class="chip on" data-toggle="impulses"><span class="chip-dot"></span><span id="chipImpulses">Лучевые тракты</span></button>
+        <button class="chip on" data-toggle="labels"><span class="chip-dot"></span><span id="chipLabels">Метки</span></button>
+        <button class="chip" data-toggle="rotate"><span class="chip-dot"></span><span id="chipRotate">Орбита</span></button>
       </div>
       <div class="focus-label">
-        <span class="tag" id="focusTag">Focus</span>
-        <span class="val" id="focusValue">Full brain</span>
+        <span class="tag" id="focusTag">Фокус</span>
+        <span class="val" id="focusValue">Весь мозг</span>
       </div>
-      <div class="viewport-hint">
-        <span id="hintDrag">Rotate</span>
-        <span class="sep">·</span>
-        <span id="hintZoom">Zoom</span>
-        <span class="sep">·</span>
-        <span id="hintClick">Tap zone</span>
+      <div class="cosmos-stats">
+        <div class="stat-block"><strong>86B</strong><span id="statTotal">нейронов всего</span></div>
+        <div class="stat-block"><strong>16B</strong><span id="statCortex">кора полушарий</span></div>
+        <div class="stat-block"><strong>69B</strong><span id="statCereb">мозжечок</span></div>
       </div>
-      <div class="status-indicator" id="statusIndicator">Ready</div>
+      <div class="status-indicator" id="statusIndicator">Готово</div>
     </main>
 
     <aside class="panel panel-right" id="panelRight">
       <div class="panel-head">
-        <h2 id="rightTitle">Analytics</h2>
+        <h2 id="rightTitle">Аналитика</h2>
         <button class="panel-close" id="closeRight" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -815,140 +698,145 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
    ================================================================ */
 const I18N = {
   en: {
-    atlas:'Atlas',analytics:'Analytics',simulation:'Simulation',
-    lobes:'Cortical Lobes',diseases:'Pathologies',
+    atlas:'Cortical Atlas',analytics:'Analytics',
+    lobes:'Structural Lobes',diseases:'Pathologies',
     severity:'Severity',focus:'Focus',fullBrain:'Full brain',
-    drag:'Rotate',zoom:'Zoom',click:'Tap zone',
-    labels:'Labels',impulses:'Impulses',rotate:'Auto-rotate',
-    ready:'Ready',warn:'Warning',alert:'Pathology Active',
-    anatomy:'Anatomy & Structure',functions:'Key Functions',subzones:'Functional Sub-zones',
-    connections:'Neural Pathways',backToLobe:'Back to lobe',
-    mechanism:'Pathogenesis',affected:'Affected Zones',
+    nebula:'Cosmic Dust',impulses:'Beam Tracts',labels:'HUD Labels',rotate:'Orbit',
+    ready:'Nominal',alert:'Pathology Active',
+    anatomy:'Cytoarchitecture & Anatomy',functions:'Key Functions',subzones:'Cortical Nodes',
+    connections:'Ray-Traced Pathways',backToLobe:'Back to lobe',
+    mechanism:'Pathogenesis',affected:'Affected Nodes',
     neuro:'Neurotransmitters',symptoms:'Clinical Symptoms',
     progression:'Stage Progression',metrics:'Functional Integrity',
     healthy:'Healthy Brain',healthyDesc:'Baseline physiological state',
-    emptyTitle:'Interactive 3D Brain Atlas',
-    emptyText:'Select a cortical lobe on the left, or click any glowing node on the 3D model to inspect Brodmann areas and pathways.',
-    loadingModel:'Loading 3D Atlas',
+    emptyTitle:'Neuro Cosmos Atlas',
+    emptyText:'Select a structural lobe on the left or click any cortical beacon on the 3D brain to inspect Brodmann areas and laser tracts.',
+    loadingModel:'Synthesizing 3D Cortex',
     loadError:'Model failed to load',
+    statTotal:'total neurons',statCortex:'cortical neurons',statCereb:'cerebellar',
     metricCognitive:'Cognitive',metricMotor:'Motor',metricLanguage:'Language',
     metricSensory:'Sensory',metricMemory:'Memory',metricConnectivity:'Connectivity'
   },
   ru: {
-    atlas:'Атлас',analytics:'Аналитика',simulation:'Симуляция',
-    lobes:'Доли коры',diseases:'Патологии',
+    atlas:'Атлас коры',analytics:'Аналитика',
+    lobes:'Структурные доли',diseases:'Патологии',
     severity:'Тяжесть',focus:'Фокус',fullBrain:'Весь мозг',
-    drag:'Вращение',zoom:'Масштаб',click:'Клик по зоне',
-    labels:'Метки',impulses:'Импульсы',rotate:'Автоповорот',
-    ready:'Готово',warn:'Внимание',alert:'Активна патология',
-    anatomy:'Анатомия и структура',functions:'Ключевые функции',subzones:'Функциональные подзоны',
-    connections:'Связанные тракты',backToLobe:'Назад к доле',
-    mechanism:'Патогенез',affected:'Поражённые зоны',
+    nebula:'Нейро-пыль',impulses:'Лучевые тракты',labels:'Метки',rotate:'Орбита',
+    ready:'Номинал',alert:'Активна патология',
+    anatomy:'Цитоархитектоника и анатомия',functions:'Ключевые функции',subzones:'Кортикальные узлы',
+    connections:'Лучевые магистрали',backToLobe:'Назад к доле',
+    mechanism:'Патогенез',affected:'Поражённые узлы',
     neuro:'Нейромедиаторы',symptoms:'Клинические симптомы',
     progression:'Прогрессия стадии',metrics:'Сохранность функций',
     healthy:'Здоровый мозг',healthyDesc:'Базовое физиологическое состояние',
-    emptyTitle:'Интерактивный 3D-атлас',
-    emptyText:'Выберите долю коры слева или нажмите на любой светящийся узел 3D-модели для анализа полей Бродмана и связей.',
-    loadingModel:'Загрузка 3D-модели',
+    emptyTitle:'Атлас Neuro Cosmos',
+    emptyText:'Выберите структурную долю слева или нажмите на кортикальный маяк 3D-модели для изучения полей Бродмана и лучевых трактов.',
+    loadingModel:'Синтез 3D-атласа коры',
     loadError:'Ошибка загрузки модели',
+    statTotal:'нейронов всего',statCortex:'кора полушарий',statCereb:'мозжечок',
     metricCognitive:'Когниции',metricMotor:'Моторика',metricLanguage:'Речь',
     metricSensory:'Сенсорика',metricMemory:'Память',metricConnectivity:'Связность'
   }
 };
-let LANG = 'en';
+let LANG = 'ru';
 const T = function(k) { return I18N[LANG][k] || k; };
 
 /* ================================================================
-   REGIONS
+   STRUCTURAL REGIONS
    ================================================================ */
 const REGIONS = {
   frontal:{
-    id:'frontal',color:'#7c5cff',hex:0x7c5cff,dir:[-0.15,0.15,0.85],
+    id:'frontal',color:'#34d399',hex:0x34d399,dir:[-0.15,0.22,0.85],
+    ba:'BA 4, 6, 8–12, 44–47',neurons:'5.8B neurons',share:38,
     en:{name:'Frontal Lobe',latin:'Lobus frontalis',short:'Executive / Motor / Speech',
-      desc:'The largest cortical lobe (~35% of cortex). Governs executive decision-making, working memory, voluntary movement planning, and expressive language.',
+      desc:'Anterior cortical pole (~38% of cortical surface). Houses primary motor pyramidal tracts, Broca expressive speech hub, and prefrontal executive networks.',
       functions:['Executive control','Working memory','Voluntary motor','Speech production','Impulse inhibition']},
     ru:{name:'Лобная доля',latin:'Lobus frontalis',short:'Контроль / Моторика / Речь',
-      desc:'Крупнейшая доля коры (~35% объёма). Отвечает за принятие решений, рабочую память, планирование произвольных движений и моторную речь.',
+      desc:'Передний полюс полушарий (~38% площади коры). Включает пирамидный моторный тракт, речевой центр Брока и префронтальные сети планирования.',
       functions:['Исполнительный контроль','Рабочая память','Моторика','Продукция речи','Самоконтроль']}
   },
   parietal:{
-    id:'parietal',color:'#10b981',hex:0x10b981,dir:[-0.15,0.6,-0.25],
-    en:{name:'Parietal Lobe',latin:'Lobus parietalis',short:'Somatosensory / Spatial',
-      desc:'Integrates tactile, proprioceptive, and visuospatial streams to construct a unified body schema and coordinate spatial attention.',
+    id:'parietal',color:'#38bdf8',hex:0x38bdf8,dir:[-0.15,0.68,-0.25],
+    ba:'BA 1–3, 5, 7, 39, 40',neurons:'3.7B neurons',share:24,
+    en:{name:'Parietal Lobe',latin:'Lobus parietalis',short:'Somatosensory / 3D Space',
+      desc:'Dorsal association cortex integrating tactile, proprioceptive, and dorsal visual streams into a real-time 3D coordinate system.',
       functions:['Tactile perception','Proprioception','3D Spatial mapping','Directed attention','Calculation']},
-    ru:{name:'Теменная доля',latin:'Lobus parietalis',short:'Сенсорика / Пространство',
-      desc:'Интегрирует тактильные, проприоцептивные и зрительно-пространственные сигналы, формируя схему тела и вектор внимания.',
+    ru:{name:'Теменная доля',latin:'Lobus parietalis',short:'Сенсорика / 3D-Пространство',
+      desc:'Дорсальная кора, объединяющая тактильные, проприоцептивные и зрительные потоки в единую 3D-схему тела и пространства.',
       functions:['Тактильность','Проприоцепция','Пространственная карта','Внимание','Счёт']}
   },
   temporal:{
-    id:'temporal',color:'#f59e0b',hex:0xf59e0b,dir:[-0.7,-0.3,0.05],
-    en:{name:'Temporal Lobe',latin:'Lobus temporalis',short:'Auditory / Memory / Semantics',
-      desc:'Houses the primary auditory cortex, Wernicke speech comprehension center, and medial limbic structures (hippocampus & amygdala).',
+    id:'temporal',color:'#a855f7',hex:0xa855f7,dir:[-0.75,-0.22,0.05],
+    ba:'BA 20–22, 38, 41, 42',neurons:'3.4B neurons',share:22,
+    en:{name:'Temporal Lobe',latin:'Lobus temporalis',short:'Auditory / Memory / Limbic',
+      desc:'Lateral-ventral cortex containing tonotopic auditory gyri, Wernicke semantic decoder, and deep hippocampal-amygdala limbic circuits.',
       functions:['Auditory decoding','Declarative memory','Speech comprehension','Emotional valence','Facial recognition']},
-    ru:{name:'Височная доля',latin:'Lobus temporalis',short:'Слух / Память / Семантика',
-      desc:'Содержит первичную слуховую кору, центр понимания речи Вернике, а также структуры лимбической системы — гиппокамп и миндалину.',
+    ru:{name:'Височная доля',latin:'Lobus temporalis',short:'Слух / Память / Лимбика',
+      desc:'Латерально-вентральный отдел, содержащий слуховые извилины Гешля, декодер речи Вернике, гиппокамп и миндалевидный комплекс.',
       functions:['Слуховой анализ','Декларативная память','Понимание речи','Эмоции','Распознавание лиц']}
   },
   occipital:{
-    id:'occipital',color:'#ec4899',hex:0xec4899,dir:[-0.1,0.05,-0.95],
-    en:{name:'Occipital Lobe',latin:'Lobus occipitalis',short:'Visual Processing Streams',
-      desc:'Posterior cortical pole dedicated to retinotopic decoding of edges, color, motion, and depth via dorsal and ventral visual streams.',
+    id:'occipital',color:'#eab308',hex:0xeab308,dir:[-0.1,0.08,-0.95],
+    ba:'BA 17, 18, 19',neurons:'3.1B neurons',share:16,
+    en:{name:'Occipital Lobe',latin:'Lobus occipitalis',short:'Retinotopic Visual Streams',
+      desc:'Posterior pole housing striate (V1) and extrastriate (V2–V5) visual cortices that feed the dorsal "where" and ventral "what" streams.',
       functions:['Retinotopic vision','Color perception','Motion tracking','Depth perception','Visual recognition']},
-    ru:{name:'Затылочная доля',latin:'Lobus occipitalis',short:'Зрительные потоки',
-      desc:'Задний полюс коры, декодирующий контуры, цвет, глубину и движение через дорсальный («где») и вентральный («что») потоки.',
+    ru:{name:'Затылочная доля',latin:'Lobus occipitalis',short:'Зрительные потоки V1–V5',
+      desc:'Задний полюс полушарий со стриарной корой (V1) и ассоциативными полями (V2–V5), питающими дорсальный и вентральный потоки зрения.',
       functions:['Первичное зрение','Цветовосприятие','Анализ движения','Оценка глубины','Зрительный гнозис']}
   },
   cerebellum:{
-    id:'cerebellum',color:'#38bdf8',hex:0x38bdf8,dir:[0,-0.7,-0.65],
-    en:{name:'Cerebellum',latin:'Cerebellum',short:'Motor Precision / Balance',
-      desc:'Contains over 50% of all brain neurons. Continuously compares intended motor commands with proprioceptive feedback for smooth execution.',
+    id:'cerebellum',color:'#ec4899',hex:0xec4899,dir:[0,-0.72,-0.65],
+    ba:'Folia / Deep Nuclei',neurons:'69.0B neurons',share:80,
+    en:{name:'Cerebellum',latin:'Cerebellum',short:'Motor Precision / Timing',
+      desc:'Posterior fossa structure containing 80% of all brain neurons (granule & Purkinje cells) for millisecond error-correction of movement.',
       functions:['Postural balance','Multi-joint coordination','Fine motor timing','Motor learning','Oculomotor control']},
-    ru:{name:'Мозжечок',latin:'Cerebellum',short:'Координация / Точность',
-      desc:'Содержит более половины всех нейронов мозга. Непрерывно сверяет моторные команды с проприоцептивной обратной связью для плавности движений.',
+    ru:{name:'Мозжечок',latin:'Cerebellum',short:'Координация / Микротайминг',
+      desc:'Содержит 69 млрд нейронов (80% всех нейронов мозга). Обеспечивает миллисекундную коррекцию моторных ошибок через клетки Пуркинье.',
       functions:['Баланс и осанка','Координация','Точность движений','Моторное обучение','Движения глаз']}
   }
 };
 
 /* ================================================================
-   DETAILED SUBZONES (WITH BRODMANN AREAS)
+   CORTICAL BEACON NODES
    ================================================================ */
 const SUBZONES = [
-  {id:'m1',region:'frontal',ba:'BA 4',dir:[-0.25,0.75,0.45],color:'#7c5cff',
-    en:{name:'M1',full:'Primary Motor Cortex',note:'Located in the precentral gyrus. Contains giant Betz pyramidal cells that project directly to spinal motor neurons via the corticospinal tract (somatotopic homunculus).'},
-    ru:{name:'M1',full:'Первичная моторная кора',note:'Прецентральная извилина. Содержит гигантские пирамидные клетки Беца, посылающие команды к мотонейронам спинного мозга по кортикоспинальному тракту.'}},
-  {id:'pfc',region:'frontal',ba:'BA 9/46',dir:[-0.15,0.1,0.95],color:'#a78bfa',
-    en:{name:'dlPFC',full:'Dorsolateral Prefrontal Cortex',note:'Central hub of executive control: maintains information in working memory, filters distractions, and orchestrates cognitive flexibility and abstract planning.'},
-    ru:{name:'ДЛПФК',full:'Дорсолатеральная префронтальная кора',note:'Главный узел исполнительного контроля: удерживает данные в рабочей памяти, подавляет помехи и отвечает за стратегическое планирование.'}},
-  {id:'broca',region:'frontal',ba:'BA 44/45',dir:[-0.55,-0.15,0.65],color:'#6d28d9',
-    en:{name:'Broca',full:'Broca Speech Area',note:'Inferior frontal gyrus (pars opercularis & triangularis). Orchestrates articulatory motor programs, syntax construction, and fluent speech production.'},
-    ru:{name:'Брока',full:'Зона Брока',note:'Нижняя лобная извилина. Формирует артикуляционные моторные программы, отвечает за грамматический строй и плавную продукцию речи.'}},
-  {id:'s1',region:'parietal',ba:'BA 1/2/3',dir:[-0.25,0.75,-0.35],color:'#10b981',
-    en:{name:'S1',full:'Primary Somatosensory Cortex',note:'Postcentral gyrus. Receives thalamic relay of touch, vibration, pain, temperature, and joint position from the contralateral side of the body.'},
-    ru:{name:'S1',full:'Первичная соматосенсорная кора',note:'Постцентральная извилина. Принимает от таламуса сигналы осязания, боли, температуры и положения суставов противоположной половины тела.'}},
-  {id:'ppc',region:'parietal',ba:'BA 5/7',dir:[-0.55,0.55,-0.5],color:'#34d399',
-    en:{name:'PPC',full:'Posterior Parietal Cortex',note:'Multimodal association cortex combining visual and proprioceptive inputs to guide reaching, grasping, and 3D spatial navigation.'},
-    ru:{name:'ЗТК',full:'Задняя теменная кора',note:'Мультимодальная ассоциативная зона, объединяющая зрение и проприоцепцию для точного захвата предметов и навигации в 3D-пространстве.'}},
-  {id:'ang',region:'parietal',ba:'BA 39',dir:[-0.6,0.2,-0.65],color:'#059669',
-    en:{name:'AG',full:'Angular Gyrus',note:'Cross-modal hub at the parieto-temporal junction. Translates visual symbols into phonetic representations for reading, math, and semantic retrieval.'},
-    ru:{name:'УИ',full:'Угловая извилина',note:'Кросс-модальный хаб на стыке долей. Связывает зрительные образы со звуковыми кодами при чтении, счёте и понимании метафор.'}},
-  {id:'a1',region:'temporal',ba:'BA 41/42',dir:[-0.85,-0.2,0.1],color:'#f59e0b',
-    en:{name:'A1',full:'Primary Auditory Cortex',note:'Located in Heschl transverse gyri. Features a strict tonotopic map decoding sound frequency, intensity, and temporal rhythm.'},
-    ru:{name:'A1',full:'Первичная слуховая кора',note:'Расположена в извилинах Гешля. Имеет строгую тонотопическую организацию, декодируя частоту, громкость и ритм звуков.'}},
-  {id:'wern',region:'temporal',ba:'BA 22',dir:[-0.75,-0.05,-0.4],color:'#fbbf24',
-    en:{name:'Wernicke',full:'Wernicke Area',note:'Posterior superior temporal gyrus. Decodes phonemes into meaningful words and sentences. Connected to Broca area via the arcuate fasciculus.'},
-    ru:{name:'Вернике',full:'Зона Вернике',note:'Задний отдел верхней височной извилины. Распознаёт фонемный код и смысл устной и письменной речи. Связана с зоной Брока дугообразным пучком.'}},
-  {id:'hip',region:'temporal',ba:'Archicortex',dir:[-0.35,-0.65,-0.45],color:'#d97706',
-    en:{name:'Hippo',full:'Hippocampal Formation',note:'Medial temporal structure essential for consolidating short-term episodic experiences into long-term cortical memory and spatial cognitive maps.'},
-    ru:{name:'Гиппокамп',full:'Гиппокампальная формация',note:'Ключевая структура консолидации кратковременного опыта в долговременную память и построения пространственных карт местности.'}},
-  {id:'amyg',region:'temporal',ba:'Subcortical',dir:[-0.45,-0.6,-0.2],color:'#b45309',
-    en:{name:'Amyg',full:'Amygdaloid Complex',note:'Almond-shaped nuclear complex driving threat detection, fear conditioning, autonomic arousal, and emotional tagging of memories.'},
-    ru:{name:'Миндалина',full:'Миндалевидный комплекс',note:'Отвечает за мгновенное распознавание угроз, формирование реакции страха, вегетативный отклик и эмоциональную окраску воспоминаний.'}},
-  {id:'v1',region:'occipital',ba:'BA 17',dir:[-0.15,-0.15,-1.0],color:'#ec4899',
-    en:{name:'V1',full:'Primary Visual (Striate) Cortex',note:'Banks of the calcarine sulcus. Performs initial cortical filtering of spatial orientation, contrast edges, spatial frequency, and binocular disparity.'},
-    ru:{name:'V1',full:'Первичная зрительная (стриарная) кора',note:'Шпорная борозда. Выполняет первичный анализ границ контраста, наклона линий, пространственной частоты и бинокулярной глубины.'}},
-  {id:'v5',region:'occipital',ba:'BA 19 (MT)',dir:[-0.55,0.05,-0.85],color:'#f472b6',
-    en:{name:'V5/MT',full:'Middle Temporal Visual Area',note:'Specialized node of the dorsal visual stream containing direction-selective neurons that compute object velocity and optical flow.'},
-    ru:{name:'V5/MT',full:'Средневисочная зрительная зона',note:'Специализированный узел дорсального потока, нейроны которого вычисляют направление, скорость движения объектов и оптический поток.'}}
+  {id:'m1',region:'frontal',ba:'BA 4',dir:[-0.25,0.75,0.45],color:'#34d399',
+    en:{name:'M1',full:'Primary Motor Cortex',note:'Precentral gyrus. Giant Betz pyramidal cells project directly to spinal motor neurons via the corticospinal tract.'},
+    ru:{name:'M1',full:'Первичная моторная кора',note:'Прецентральная извилина. Гигантские пирамидные клетки Беца управляют произвольными сокращениями мышц.'}},
+  {id:'pfc',region:'frontal',ba:'BA 9/46',dir:[-0.15,0.1,0.95],color:'#6ee7b7',
+    en:{name:'dlPFC',full:'Dorsolateral Prefrontal Cortex',note:'Top-level executive node maintaining working memory buffers, cognitive control, and abstract strategic planning.'},
+    ru:{name:'ДЛПФК',full:'Дорсолатеральная префронтальная кора',note:'Высший узел когнитивного контроля: удерживает буферы рабочей памяти и строит стратегические планы.'}},
+  {id:'broca',region:'frontal',ba:'BA 44/45',dir:[-0.55,-0.15,0.65],color:'#10b981',
+    en:{name:'Broca',full:'Broca Speech Area',note:'Inferior frontal gyrus. Compiles syntactic structures and coordinates articulatory motor sequences.'},
+    ru:{name:'Брока',full:'Речевая зона Брока',note:'Нижняя лобная извилина. Координирует синтаксис и моторные программы речевой артикуляции.'}},
+  {id:'s1',region:'parietal',ba:'BA 1/2/3',dir:[-0.25,0.75,-0.35],color:'#38bdf8',
+    en:{name:'S1',full:'Primary Somatosensory Cortex',note:'Postcentral gyrus. Processes contralateral tactile mechanoreceptors, pain, and joint proprioception.'},
+    ru:{name:'S1',full:'Первичная соматосенсорная кора',note:'Постцентральная извилина. Декодирует осязание, боль, температуру и проприоцепцию суставов.'}},
+  {id:'ppc',region:'parietal',ba:'BA 5/7',dir:[-0.55,0.55,-0.5],color:'#7dd3fc',
+    en:{name:'PPC',full:'Posterior Parietal Cortex',note:'Sensorimotor integration hub computing spatial trajectories for reaching, grasping, and attention.'},
+    ru:{name:'ЗТК',full:'Задняя теменная кора',note:'Интеграционный хаб, вычисляющий пространственные траектории для точного захвата цели и фокуса внимания.'}},
+  {id:'ang',region:'parietal',ba:'BA 39',dir:[-0.6,0.2,-0.65],color:'#0284c7',
+    en:{name:'AG',full:'Angular Gyrus',note:'Cross-modal semantic hub linking visual symbols with phonetic codes for reading and calculation.'},
+    ru:{name:'УИ',full:'Угловая извилина',note:'Кросс-модальный семантический узел, связывающий зрительные знаки с фонетикой при чтении и счёте.'}},
+  {id:'a1',region:'temporal',ba:'BA 41/42',dir:[-0.85,-0.2,0.1],color:'#c084fc',
+    en:{name:'A1',full:'Primary Auditory Cortex',note:'Heschl transverse gyri. Performs tonotopic spectral decomposition of incoming acoustic waves.'},
+    ru:{name:'A1',full:'Первичная слуховая кора',note:'Извилины Гешля. Выполняет тонотопическое спектральное разложение звуковых частот.'}},
+  {id:'wern',region:'temporal',ba:'BA 22',dir:[-0.75,-0.05,-0.4],color:'#a855f7',
+    en:{name:'Wernicke',full:'Wernicke Area',note:'Posterior superior temporal gyrus. Decodes acoustic phoneme streams into semantic language comprehension.'},
+    ru:{name:'Вернике',full:'Зона Вернике',note:'Задний отдел верхней височной извилины. Преобразует фонемный поток в осмысленную речь.'}},
+  {id:'hip',region:'temporal',ba:'Archicortex',dir:[-0.35,-0.65,-0.45],color:'#9333ea',
+    en:{name:'Hippo',full:'Hippocampal Formation',note:'Consolidates short-term episodic traces into long-term cortical memory and encodes spatial place cells.'},
+    ru:{name:'Гиппокамп',full:'Гиппокампальная формация',note:'Консолидирует кратковременные следы в долговременную память и формирует нейронные карты пространства.'}},
+  {id:'amyg',region:'temporal',ba:'Subcortical',dir:[-0.45,-0.6,-0.2],color:'#e879f9',
+    en:{name:'Amyg',full:'Amygdaloid Complex',note:'Subcortical nuclear complex orchestrating threat detection, fear conditioning, and emotional memory modulation.'},
+    ru:{name:'Миндалина',full:'Миндалевидный комплекс',note:'Отвечает за мгновенное распознавание угроз, реакцию страха, вегетативный отклик и эмоциональную память.'}},
+  {id:'v1',region:'occipital',ba:'BA 17',dir:[-0.15,-0.15,-1.0],color:'#facc15',
+    en:{name:'V1',full:'Primary Visual Cortex',note:'Calcarine sulcus. Retinotopic filtering of contrast edges, orientation columns, and binocular disparity.'},
+    ru:{name:'V1',full:'Первичная зрительная кора',note:'Шпорная борозда. Ретинотопическая фильтрация контуров, ориентации линий и бинокулярной глубины.'}},
+  {id:'v5',region:'occipital',ba:'BA 19 (MT)',dir:[-0.55,0.05,-0.85],color:'#eab308',
+    en:{name:'V5/MT',full:'Middle Temporal Visual Area',note:'Dorsal stream node with direction-selective neurons computing optical flow and target velocity.'},
+    ru:{name:'V5/MT',full:'Зона движения V5/MT',note:'Узел дорсального потока, нейроны которого вычисляют вектор скорости и оптический поток.'}}
 ];
 
 /* ================================================================
@@ -1111,7 +999,7 @@ const DISEASES = [
 ];
 
 /* ================================================================
-   THREE.JS SCENE & OPTIMIZATION
+   THREE.JS SCENE & SHADER PIPELINE
    ================================================================ */
 const canvas = document.getElementById('canvas3d');
 const viewport = document.getElementById('viewport');
@@ -1125,42 +1013,34 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setClearColor(0x000000, 0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
+renderer.toneMappingExposure = 1.2;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-camera.position.set(0, 0, 3.8);
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+camera.position.set(0, 0.15, 3.6);
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.dampingFactor = 0.055;
+controls.dampingFactor = 0.05;
 controls.rotateSpeed = 0.85;
 controls.zoomSpeed = 1.05;
-controls.minDistance = 1.4;
-controls.maxDistance = 10;
+controls.minDistance = 1.35;
+controls.maxDistance = 9;
 controls.enablePan = false;
 controls.target.set(0, 0, 0);
 
-scene.add(new THREE.AmbientLight(0x8899bb, 0.65));
-scene.add(new THREE.HemisphereLight(0xaabbff, 0x1a1a2a, 0.85));
+scene.add(new THREE.AmbientLight(0x88aaff, 0.45));
+scene.add(new THREE.HemisphereLight(0xaaddff, 0x090b16, 0.7));
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 2.1);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
 keyLight.position.set(4, 6, 5);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x7c5cff, 0.95);
-fillLight.position.set(-5, 0, -3);
-scene.add(fillLight);
-
-const rimLight = new THREE.DirectionalLight(0xa78bfa, 1.3);
-rimLight.position.set(-2, 4, -7);
+const rimLight = new THREE.DirectionalLight(0x7c5cff, 1.4);
+rimLight.position.set(-4, 3, -6);
 scene.add(rimLight);
-
-const bottomLight = new THREE.PointLight(0x7c5cff, 0.75, 8, 2);
-bottomLight.position.set(0, -2, 0);
-scene.add(bottomLight);
 
 const brainGroup = new THREE.Group();
 scene.add(brainGroup);
@@ -1174,12 +1054,70 @@ const brainState = {
 };
 
 /* ================================================================
-   GLB LOAD
+   DEEP SPACE AMBIENT STARFIELD (1 DRAW CALL)
+   ================================================================ */
+function createAmbientSpace() {
+  const count = 700;
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    const r = 3.2 + Math.random() * 6.5;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    pos[i * 3 + 2] = r * Math.cos(phi);
+
+    const c = new THREE.Color().setHSL(0.58 + Math.random() * 0.2, 0.7, 0.65);
+    col[i * 3] = c.r;
+    col[i * 3 + 1] = c.g;
+    col[i * 3 + 2] = c.b;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const mat = new THREE.PointsMaterial({
+    size: 0.022,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.45,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  scene.add(new THREE.Points(geo, mat));
+}
+createAmbientSpace();
+
+/* ================================================================
+   CLASSIFY POINT TO LOBE
+   ================================================================ */
+const LOBE_INDEX = { frontal: 0, parietal: 1, temporal: 2, occipital: 3, cerebellum: 4 };
+const LOBE_COLORS = [
+  new THREE.Color('#34d399'), // frontal
+  new THREE.Color('#38bdf8'), // parietal
+  new THREE.Color('#a855f7'), // temporal
+  new THREE.Color('#eab308'), // occipital
+  new THREE.Color('#ec4899')  // cerebellum
+];
+
+function classifyLobe(x, y, z) {
+  if (y < -0.25 && z < -0.1) return 'cerebellum';
+  if (z > 0.16) return 'frontal';
+  if (z < -0.45 && y >= -0.25) return 'occipital';
+  if (Math.abs(x) > 0.36 && y < 0.18 && z <= 0.22) return 'temporal';
+  if (y >= 0.1) return 'parietal';
+  return z >= 0 ? 'frontal' : 'temporal';
+}
+
+/* ================================================================
+   GLB LOAD + HOLOGRAPHIC CORTEX + COSMIC DUST NEBULA
    ================================================================ */
 const MODEL_URL = 'low-poly_human_brain_model.glb';
 const modelLoaderEl = document.getElementById('modelLoader');
 const loaderTextEl = document.getElementById('loaderText');
-loaderTextEl.textContent = T('loadingModel');
+
+let nebulaPoints = null;
+let nebulaUniforms = null;
 
 const gltfLoader = new GLTFLoader();
 gltfLoader.load(
@@ -1189,7 +1127,6 @@ gltfLoader.load(
 
     const bbox = new THREE.Box3().setFromObject(model);
     const size = bbox.getSize(new THREE.Vector3());
-
     const maxDim = Math.max(size.x, size.y, size.z);
     const scale = 2.15 / maxDim;
     model.scale.setScalar(scale);
@@ -1205,29 +1142,43 @@ gltfLoader.load(
     brainState.radius = brainState.size.length() * 0.5;
     brainState.loaded = true;
 
+    // Bake lobe vertex colors into mesh & make it translucent holographic
+    const vTemp = new THREE.Vector3();
+    model.updateMatrixWorld(true);
+
     model.traverse(function(child) {
-      if (child.isMesh) {
+      if (child.isMesh && child.geometry) {
         brainState.surfaceMeshes.push(child);
-        const mat = child.material;
-        if (mat) {
-          if (mat.map) {
-            mat.roughness = 0.65;
-            mat.metalness = 0.15;
-          } else {
-            child.material = new THREE.MeshStandardMaterial({
-              color: 0xc2c4d0,
-              roughness: 0.62,
-              metalness: 0.16
-            });
-          }
+        const posAttr = child.geometry.attributes.position;
+        const count = posAttr.count;
+        const colors = new Float32Array(count * 3);
+
+        for (let i = 0; i < count; i++) {
+          vTemp.fromBufferAttribute(posAttr, i).applyMatrix4(child.matrixWorld);
+          const lid = classifyLobe(vTemp.x, vTemp.y, vTemp.z);
+          const c = LOBE_COLORS[LOBE_INDEX[lid]];
+          colors[i * 3] = c.r * 0.55 + 0.15;
+          colors[i * 3 + 1] = c.g * 0.55 + 0.15;
+          colors[i * 3 + 2] = c.b * 0.55 + 0.2;
         }
+        child.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        child.material = new THREE.MeshStandardMaterial({
+          vertexColors: true,
+          roughness: 0.38,
+          metalness: 0.3,
+          transparent: true,
+          opacity: 0.34,
+          depthWrite: false
+        });
       }
     });
 
     brainGroup.add(model);
 
+    buildCosmicDustNebula();
     buildMarkers();
-    buildPathways();
+    buildLaserPathways();
     buildHtmlLabels();
 
     modelLoaderEl.classList.add('hidden');
@@ -1250,71 +1201,377 @@ gltfLoader.load(
 );
 
 /* ================================================================
-   SURFACE POINT
+   NEURO COSMOS DUST CLOUD (8,500 GPU PARTICLES IN 1 DRAW CALL)
    ================================================================ */
-const rayHelper = new THREE.Raycaster();
+function buildCosmicDustNebula() {
+  const sampled = [];
+  const v = new THREE.Vector3();
 
-function getSurfacePoint(dirArray, offset) {
-  if (offset === undefined) offset = 0.05;
-  if (!brainState.loaded || brainState.surfaceMeshes.length === 0) {
-    return new THREE.Vector3(0, 0, 0);
+  brainState.surfaceMeshes.forEach(function(mesh) {
+    const pos = mesh.geometry.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld);
+      sampled.push(v.clone());
+    }
+  });
+
+  if (sampled.length === 0) return;
+
+  const DUST_COUNT = 8500;
+  const positions = new Float32Array(DUST_COUNT * 3);
+  const colors = new Float32Array(DUST_COUNT * 3);
+  const scales = new Float32Array(DUST_COUNT);
+  const phases = new Float32Array(DUST_COUNT);
+  const lobeIds = new Float32Array(DUST_COUNT);
+
+  for (let i = 0; i < DUST_COUNT; i++) {
+    const base = sampled[Math.floor(Math.random() * sampled.length)];
+    // Volumetric scatter: mostly near cortex, some deeper inside nebula
+    const depth = Math.random() < 0.78 ? (0.92 + Math.random() * 0.14) : (0.35 + Math.random() * 0.55);
+    const jitter = 0.045;
+    const px = base.x * depth + (Math.random() - 0.5) * jitter;
+    const py = base.y * depth + (Math.random() - 0.5) * jitter;
+    const pz = base.z * depth + (Math.random() - 0.5) * jitter;
+
+    positions[i * 3] = px;
+    positions[i * 3 + 1] = py;
+    positions[i * 3 + 2] = pz;
+
+    const lid = classifyLobe(px, py, pz);
+    const lIdx = LOBE_INDEX[lid];
+    const baseCol = LOBE_COLORS[lIdx];
+
+    // Slight chromatic variation for cosmic nebula richness
+    const mixWhite = Math.random() < 0.14 ? 0.55 : 0.0;
+    colors[i * 3] = baseCol.r * (1 - mixWhite) + mixWhite;
+    colors[i * 3 + 1] = baseCol.g * (1 - mixWhite) + mixWhite;
+    colors[i * 3 + 2] = baseCol.b * (1 - mixWhite) + mixWhite;
+
+    scales[i] = Math.random() < 0.12 ? (1.8 + Math.random() * 1.4) : (0.55 + Math.random() * 0.9);
+    phases[i] = Math.random() * Math.PI * 2;
+    lobeIds[i] = lIdx;
   }
 
-  const dir = new THREE.Vector3(dirArray[0], dirArray[1], dirArray[2]).normalize();
-  rayHelper.set(new THREE.Vector3(0, 0, 0), dir);
-  rayHelper.far = brainState.radius * 4;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
+  geo.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
+  geo.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
+  geo.setAttribute('aLobe', new THREE.BufferAttribute(lobeIds, 1));
 
-  const hits = rayHelper.intersectObjects(brainState.surfaceMeshes, true);
+  nebulaUniforms = {
+    uTime: { value: 0 },
+    uActiveLobe: { value: -1.0 },
+    uDiseaseColor: { value: new THREE.Color(0xef4444) },
+    uDiseaseMix: { value: 0.0 },
+    uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) }
+  };
 
-  if (hits.length > 0) {
-    const hit = hits[0];
-    const point = hit.point.clone();
-    const outward = point.clone().normalize();
-    return point.add(outward.multiplyScalar(offset * 0.1));
-  }
+  const mat = new THREE.ShaderMaterial({
+    uniforms: nebulaUniforms,
+    vertexShader: `
+      attribute vec3 aColor;
+      attribute float aScale;
+      attribute float aPhase;
+      attribute float aLobe;
+      uniform float uTime;
+      uniform float uActiveLobe;
+      uniform vec3 uDiseaseColor;
+      uniform float uDiseaseMix;
+      uniform float uPixelRatio;
+      varying vec3 vColor;
+      varying float vAlpha;
 
-  return dir.multiplyScalar(brainState.radius * 0.9);
+      void main() {
+        float pulse = 0.72 + 0.28 * sin(uTime * 2.2 + aPhase);
+        float lobeMatch = (uActiveLobe < -0.5) ? 1.0 : (abs(aLobe - uActiveLobe) < 0.1 ? 1.35 : 0.18);
+
+        vec3 finalCol = mix(aColor, uDiseaseColor, uDiseaseMix * 0.65);
+        vColor = finalCol * (lobeMatch > 1.0 ? 1.25 : 1.0);
+        vAlpha = pulse * lobeMatch;
+
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mvPosition;
+        gl_PointSize = (13.0 * aScale * pulse * uPixelRatio * (lobeMatch > 1.0 ? 1.2 : 1.0)) / -mvPosition.z;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      varying float vAlpha;
+
+      void main() {
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        float core = smoothstep(0.5, 0.0, d);
+        float glow = pow(core, 1.7);
+        gl_FragColor = vec4(vColor, glow * vAlpha * 0.85);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  nebulaPoints = new THREE.Points(geo, mat);
+  brainGroup.add(nebulaPoints);
 }
 
 /* ================================================================
-   DETAILED MARKERS (CORE + PULSING HALO)
+   SURFACE POINT & NORMAL
+   ================================================================ */
+const rayHelper = new THREE.Raycaster();
+
+function getSurfaceHit(dirArray) {
+  const dir = new THREE.Vector3(dirArray[0], dirArray[1], dirArray[2]).normalize();
+  if (!brainState.loaded || brainState.surfaceMeshes.length === 0) {
+    return { point: dir.clone().multiplyScalar(0.9), normal: dir.clone() };
+  }
+
+  rayHelper.set(new THREE.Vector3(0, 0, 0), dir);
+  rayHelper.far = brainState.radius * 4;
+  const hits = rayHelper.intersectObjects(brainState.surfaceMeshes, true);
+
+  if (hits.length > 0) {
+    const point = hits[0].point.clone();
+    const normal = point.clone().normalize();
+    return { point: point.add(normal.clone().multiplyScalar(0.012)), normal: normal };
+  }
+  return { point: dir.clone().multiplyScalar(brainState.radius * 0.9), normal: dir.clone() };
+}
+
+/* ================================================================
+   STRUCTURAL CORTICAL BEACONS (NO SPHERES!)
    ================================================================ */
 const subzoneGroup = new THREE.Group();
 brainGroup.add(subzoneGroup);
-const subzoneMeshes = {};
-const subzoneHalos = {};
-const markerGeo = new THREE.IcosahedronGeometry(0.03, 2);
-const haloGeo = new THREE.SphereGeometry(0.062, 16, 16);
+const subzoneAnchors = {};
+const subzoneHitProxies = [];
+
+const outerRingGeo = new THREE.RingGeometry(0.036, 0.044, 32);
+const innerRingGeo = new THREE.RingGeometry(0.014, 0.02, 24);
+const hitProxyGeo = new THREE.PlaneGeometry(0.11, 0.11);
 
 function buildMarkers() {
   SUBZONES.forEach(function(sz) {
-    const p = getSurfacePoint(sz.dir, 0.05);
+    const hit = getSurfaceHit(sz.dir);
     const color = new THREE.Color(sz.color);
 
-    const mat = new THREE.MeshStandardMaterial({
-      color: color,
-      emissive: color,
-      emissiveIntensity: 1.5,
-      roughness: 0.25,
-      metalness: 0.4
-    });
-    const mesh = new THREE.Mesh(markerGeo, mat);
-    mesh.position.copy(p);
-    mesh.userData = { type: 'subzone', id: sz.id };
+    const anchor = new THREE.Group();
+    anchor.position.copy(hit.point);
+    anchor.lookAt(hit.point.clone().add(hit.normal));
 
-    const haloMat = new THREE.MeshBasicMaterial({
+    // Outer technical reticle ring
+    const ringMat = new THREE.MeshBasicMaterial({
       color: color,
+      side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
       depthWrite: false
     });
-    const halo = new THREE.Mesh(haloGeo, haloMat);
-    mesh.add(halo);
+    const outerRing = new THREE.Mesh(outerRingGeo, ringMat);
+    anchor.add(outerRing);
 
-    subzoneGroup.add(mesh);
-    subzoneMeshes[sz.id] = mesh;
-    subzoneHalos[sz.id] = halo;
+    // Inner core ring
+    const innerMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const innerRing = new THREE.Mesh(innerRingGeo, innerMat);
+    anchor.add(innerRing);
+
+    // Normal vector laser spike protruding from cortex
+    const beamPts = [new THREE.Vector3(0, 0, -0.02), new THREE.Vector3(0, 0, 0.085)];
+    const beamGeo = new THREE.BufferGeometry().setFromPoints(beamPts);
+    const beamMat = new THREE.LineBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+    const beamLine = new THREE.Line(beamGeo, beamMat);
+    anchor.add(beamLine);
+
+    // Invisible hit proxy for effortless clicking/hovering
+    const proxyMat = new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide });
+    const proxy = new THREE.Mesh(hitProxyGeo, proxyMat);
+    proxy.userData = { type: 'subzone', id: sz.id };
+    anchor.add(proxy);
+    subzoneHitProxies.push(proxy);
+
+    subzoneGroup.add(anchor);
+    subzoneAnchors[sz.id] = {
+      group: anchor,
+      outerRing: outerRing,
+      innerRing: innerRing,
+      beamLine: beamLine,
+      color: color,
+      region: sz.region
+    };
   });
+}
+
+/* ================================================================
+   RAY-LIKE LASER TUNNELS & GPU COMET STREAKS
+   ================================================================ */
+const pathwaysGroup = new THREE.Group();
+brainGroup.add(pathwaysGroup);
+const pathwayData = [];
+let impulseBeamSystem = null;
+let impulseUniforms = null;
+
+function buildLaserPathways() {
+  const streakPositions = [];
+  const streakColors = [];
+  const streakProgress = [];
+  const streakSpeeds = [];
+  const streakOffsets = [];
+
+  PATHWAYS.forEach(function(pair, idx) {
+    const aId = pair[0];
+    const bId = pair[1];
+    const ancA = subzoneAnchors[aId];
+    const ancB = subzoneAnchors[bId];
+    if (!ancA || !ancB) return;
+
+    const a = ancA.group.position.clone();
+    const b = ancB.group.position.clone();
+    // Deep white-matter arc
+    const mid = a.clone().add(b).multiplyScalar(0.5).multiplyScalar(0.48);
+
+    const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+    const cA = ancA.color;
+    const cB = ancB.color;
+
+    // Multi-strand laser tunnel (3 braided filaments per tract)
+    const strandGroup = new THREE.Group();
+    for (let s = 0; s < 3; s++) {
+      const pts = curve.getPoints(44);
+      const posArr = new Float32Array(pts.length * 3);
+      const colArr = new Float32Array(pts.length * 3);
+
+      for (let i = 0; i < pts.length; i++) {
+        const u = i / (pts.length - 1);
+        const env = Math.sin(u * Math.PI);
+        const angle = u * Math.PI * 4 + (s * Math.PI * 2) / 3;
+        const spread = s === 0 ? 0 : 0.008 * env;
+
+        posArr[i * 3] = pts[i].x + Math.cos(angle) * spread;
+        posArr[i * 3 + 1] = pts[i].y + Math.sin(angle) * spread;
+        posArr[i * 3 + 2] = pts[i].z;
+
+        const c = cA.clone().lerp(cB, u);
+        colArr[i * 3] = c.r;
+        colArr[i * 3 + 1] = c.g;
+        colArr[i * 3 + 2] = c.b;
+      }
+
+      const lGeo = new THREE.BufferGeometry();
+      lGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+      lGeo.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
+      const lMat = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: s === 0 ? 0.55 : 0.22,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      strandGroup.add(new THREE.Line(lGeo, lMat));
+    }
+
+    pathwaysGroup.add(strandGroup);
+    pathwayData.push({ group: strandGroup, a: aId, b: bId });
+
+    // Sample dense points along curve for GPU ray-comet impulses
+    const SAMPLES = 90;
+    const curvePts = curve.getPoints(SAMPLES);
+    const speed = 0.28 + (idx % 4) * 0.05;
+    const offset = idx * 0.17;
+
+    for (let i = 0; i <= SAMPLES; i++) {
+      const u = i / SAMPLES;
+      streakPositions.push(curvePts[i].x, curvePts[i].y, curvePts[i].z);
+      const c = cA.clone().lerp(cB, u);
+      streakColors.push(c.r, c.g, c.b);
+      streakProgress.push(u);
+      streakSpeeds.push(speed);
+      streakOffsets.push(offset);
+    }
+  });
+
+  const streakGeo = new THREE.BufferGeometry();
+  streakGeo.setAttribute('position', new THREE.Float32BufferAttribute(streakPositions, 3));
+  streakGeo.setAttribute('aColor', new THREE.Float32BufferAttribute(streakColors, 3));
+  streakGeo.setAttribute('aProgress', new THREE.Float32BufferAttribute(streakProgress, 1));
+  streakGeo.setAttribute('aSpeed', new THREE.Float32BufferAttribute(streakSpeeds, 1));
+  streakGeo.setAttribute('aOffset', new THREE.Float32BufferAttribute(streakOffsets, 1));
+
+  impulseUniforms = {
+    uTime: { value: 0 },
+    uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+    uDiseaseColor: { value: new THREE.Color(0xef4444) },
+    uDiseaseMix: { value: 0.0 }
+  };
+
+  const streakMat = new THREE.ShaderMaterial({
+    uniforms: impulseUniforms,
+    vertexShader: `
+      attribute vec3 aColor;
+      attribute float aProgress;
+      attribute float aSpeed;
+      attribute float aOffset;
+      uniform float uTime;
+      uniform float uPixelRatio;
+      uniform vec3 uDiseaseColor;
+      uniform float uDiseaseMix;
+      varying vec3 vColor;
+      varying float vIntensity;
+
+      void main() {
+        // Two counter-propagating laser pulses per tunnel
+        float head1 = fract(uTime * aSpeed + aOffset);
+        float dist1 = fract(head1 - aProgress);
+        float trail1 = smoothstep(0.22, 0.0, dist1);
+
+        float head2 = fract(uTime * aSpeed + aOffset + 0.5);
+        float dist2 = fract(head2 - aProgress);
+        float trail2 = smoothstep(0.22, 0.0, dist2);
+
+        float intensity = max(trail1, trail2);
+        vIntensity = pow(intensity, 1.5);
+
+        vec3 baseCol = mix(aColor, uDiseaseColor, uDiseaseMix);
+        // Bright white-hot laser tip
+        vColor = mix(baseCol, vec3(1.0), pow(intensity, 3.0) * 0.75);
+
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mvPosition;
+        gl_PointSize = (18.0 * vIntensity * uPixelRatio + 2.0) / -mvPosition.z;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      varying float vIntensity;
+
+      void main() {
+        if (vIntensity < 0.02) discard;
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        float glow = smoothstep(0.5, 0.0, d);
+        gl_FragColor = vec4(vColor, glow * vIntensity * 0.95);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  impulseBeamSystem = new THREE.Points(streakGeo, streakMat);
+  pathwaysGroup.add(impulseBeamSystem);
 }
 
 /* ================================================================
@@ -1353,61 +1610,7 @@ function buildHtmlLabels() {
 }
 
 /* ================================================================
-   PATHWAYS
-   ================================================================ */
-const pathwaysGroup = new THREE.Group();
-brainGroup.add(pathwaysGroup);
-const pathwayData = [];
-const impulses = [];
-
-function buildPathways() {
-  PATHWAYS.forEach(function(pair, idx) {
-    const aId = pair[0];
-    const bId = pair[1];
-    if (!subzoneMeshes[aId] || !subzoneMeshes[bId]) return;
-
-    const a = subzoneMeshes[aId].position.clone();
-    const b = subzoneMeshes[bId].position.clone();
-    const mid = a.clone().add(b).multiplyScalar(0.5).multiplyScalar(0.55);
-
-    const curve = new THREE.CatmullRomCurve3([a, mid, b]);
-
-    const tubeGeo = new THREE.TubeGeometry(curve, 24, 0.0055, 6, false);
-    const tubeMat = new THREE.MeshBasicMaterial({
-      color: 0x7c5cff,
-      transparent: true,
-      opacity: 0.28,
-      depthWrite: false
-    });
-    const tube = new THREE.Mesh(tubeGeo, tubeMat);
-    pathwaysGroup.add(tube);
-
-    pathwayData.push({ curve: curve, tube: tube, a: aId, b: bId });
-
-    const impulseGeo = new THREE.SphereGeometry(0.019, 8, 6);
-    for (let i = 0; i < 2; i++) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: 0xa78bfa,
-        transparent: true,
-        opacity: 0.9,
-        depthWrite: false
-      });
-      const mesh = new THREE.Mesh(impulseGeo, mat);
-      pathwaysGroup.add(mesh);
-      impulses.push({
-        curve: curve,
-        t: (i * 0.5 + idx * 0.13) % 1,
-        mesh: mesh,
-        a: aId,
-        b: bId,
-        speed: 0.19 + Math.random() * 0.06
-      });
-    }
-  });
-}
-
-/* ================================================================
-   RESIZE (OPTIMIZED FOR 16:9 WIDE VIEWPORTS)
+   RESIZE
    ================================================================ */
 let vpWidth = 1;
 let vpHeight = 1;
@@ -1423,16 +1626,10 @@ function resize() {
   camera.aspect = w / h;
 
   const aspect = w / h;
-  if (aspect < 0.55) {
-    camera.fov = 64;
-  } else if (aspect < 0.8) {
-    camera.fov = 56;
-  } else if (aspect < 1.2) {
-    camera.fov = 48;
-  } else {
-    // 16:9 widescreen optimal framing
-    camera.fov = 40;
-  }
+  if (aspect < 0.55) camera.fov = 62;
+  else if (aspect < 0.8) camera.fov = 54;
+  else if (aspect < 1.2) camera.fov = 46;
+  else camera.fov = 39;
 
   camera.updateProjectionMatrix();
 }
@@ -1455,7 +1652,7 @@ const state = {
   hoveredSubzone: null,
   currentDisease: null,
   severity: 50,
-  chips: { labels: true, impulses: true, rotate: false }
+  chips: { nebula: true, impulses: true, labels: true, rotate: false }
 };
 let camTween = null;
 
@@ -1467,25 +1664,19 @@ function resetCamera() {
   const radius = brainState.radius || 1;
 
   let d;
-  if (aspect < 0.6) {
-    d = radius * 3.3;
-  } else if (aspect < 0.85) {
-    d = radius * 2.8;
-  } else if (aspect < 1.25) {
-    d = radius * 2.35;
-  } else {
-    // Closer & larger brain presence on 16:9 monitors
-    d = radius * 2.05;
-  }
+  if (aspect < 0.6) d = radius * 3.2;
+  else if (aspect < 0.85) d = radius * 2.75;
+  else if (aspect < 1.25) d = radius * 2.3;
+  else d = radius * 2.0;
 
-  d = Math.max(1.7, Math.min(6.2, d));
+  d = Math.max(1.65, Math.min(6.0, d));
 
-  controls.minDistance = radius * 1.25;
-  controls.maxDistance = radius * 5.2;
+  controls.minDistance = radius * 1.2;
+  controls.maxDistance = radius * 5.0;
 
   camTween = {
     from: camera.position.clone(),
-    to: new THREE.Vector3(0, 0.1, d),
+    to: new THREE.Vector3(0, 0.12, d),
     fromT: controls.target.clone(),
     toT: new THREE.Vector3(0, 0, 0),
     t: 0
@@ -1505,11 +1696,10 @@ function focusOn(point) {
   const worldPt = point.clone().applyMatrix4(brainGroup.matrixWorld);
   const dir = worldPt.normalize();
   const radius = brainState.radius || 1;
-  const dist = Math.max(radius * 1.85, 1.75);
-  const toPos = dir.multiplyScalar(dist);
+  const dist = Math.max(radius * 1.8, 1.7);
   camTween = {
     from: camera.position.clone(),
-    to: toPos,
+    to: dir.multiplyScalar(dist),
     fromT: controls.target.clone(),
     toT: new THREE.Vector3(0, 0, 0),
     t: 0
@@ -1517,7 +1707,7 @@ function focusOn(point) {
 }
 
 /* ================================================================
-   RAYCASTING (CLICK + SMOOTH HOVER)
+   RAYCASTING
    ================================================================ */
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -1528,13 +1718,12 @@ function updatePointer(e) {
   pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
 }
 
-function raycastMarkers() {
+function raycastBeacons() {
   raycaster.setFromCamera(pointer, camera);
-  const markers = [];
-  Object.keys(subzoneMeshes).forEach(function(id) {
-    if (subzoneMeshes[id].visible) markers.push(subzoneMeshes[id]);
+  const activeProxies = subzoneHitProxies.filter(function(p) {
+    return p.parent && p.parent.visible;
   });
-  return raycaster.intersectObjects(markers, false);
+  return raycaster.intersectObjects(activeProxies, false);
 }
 
 let downPos = null;
@@ -1545,7 +1734,7 @@ canvas.addEventListener('pointerdown', function(e) {
 canvas.addEventListener('pointermove', function(e) {
   if (downPos) return;
   updatePointer(e);
-  const hits = raycastMarkers();
+  const hits = raycastBeacons();
   if (hits.length > 0) {
     const id = hits[0].object.userData.id;
     if (state.hoveredSubzone !== id) {
@@ -1565,7 +1754,7 @@ canvas.addEventListener('pointerup', function(e) {
   if (moved > 10) return;
 
   updatePointer(e);
-  const hits = raycastMarkers();
+  const hits = raycastBeacons();
 
   if (!hits.length) {
     if (state.selectedSubzone || state.selectedRegion) {
@@ -1581,12 +1770,12 @@ canvas.addEventListener('pointerup', function(e) {
     return;
   }
 
-  const found = SUBZONES.find(function(s) { return s.id === hits[0].object.userData.id; });
-  if (found) onZoneClick(found.id);
+  const id = hits[0].object.userData.id;
+  if (id) onZoneClick(id);
 });
 
 /* ================================================================
-   ZONE CLICK
+   ZONE CLICK & HIGHLIGHT
    ================================================================ */
 function onZoneClick(id) {
   const sz = SUBZONES.find(function(s) { return s.id === id; });
@@ -1594,7 +1783,7 @@ function onZoneClick(id) {
   state.selectedSubzone = id;
   state.selectedRegion = sz.region;
   state.currentDisease = null;
-  if (subzoneMeshes[id]) focusOn(subzoneMeshes[id].position.clone());
+  if (subzoneAnchors[id]) focusOn(subzoneAnchors[id].group.position.clone());
   applyHighlight();
   renderAnalytics();
   updateRegionListUI();
@@ -1602,33 +1791,29 @@ function onZoneClick(id) {
   updateSeverityUI();
 }
 
-/* ================================================================
-   HIGHLIGHT
-   ================================================================ */
 function applyHighlight() {
-  const active = state.selectedRegion || state.hoveredRegion;
+  const activeRegion = state.selectedRegion || state.hoveredRegion;
 
-  Object.keys(subzoneMeshes).forEach(function(id) {
-    const mesh = subzoneMeshes[id];
-    const sz = SUBZONES.find(function(s) { return s.id === id; });
-    const on = !active || sz.region === active;
-    mesh.visible = on;
-    mesh.material.opacity = on ? 1 : 0.18;
-    mesh.material.transparent = true;
+  if (nebulaUniforms) {
+    nebulaUniforms.uActiveLobe.value = activeRegion ? LOBE_INDEX[activeRegion] : -1.0;
+  }
+
+  Object.keys(subzoneAnchors).forEach(function(id) {
+    const anc = subzoneAnchors[id];
+    const on = !activeRegion || anc.region === activeRegion;
+    anc.group.visible = on;
   });
 
   pathwayData.forEach(function(pw) {
     if (!state.chips.impulses) {
-      pw.tube.visible = false;
+      pw.group.visible = false;
       return;
     }
-    pw.tube.visible = true;
-    if (state.selectedSubzone) {
-      const connected = pw.a === state.selectedSubzone || pw.b === state.selectedSubzone;
-      pw.tube.material.opacity = connected ? 0.75 : 0.1;
-    } else {
-      pw.tube.material.opacity = 0.28;
-    }
+    pw.group.visible = true;
+    const isConn = !state.selectedSubzone || pw.a === state.selectedSubzone || pw.b === state.selectedSubzone;
+    pw.group.children.forEach(function(line, idx) {
+      line.material.opacity = isConn ? (idx === 0 ? 0.72 : 0.3) : 0.08;
+    });
   });
 
   Object.keys(htmlLabels).forEach(function(id) {
@@ -1640,10 +1825,8 @@ function applyHighlight() {
   if (state.selectedSubzone) {
     const sz = SUBZONES.find(function(s) { return s.id === state.selectedSubzone; });
     fv.textContent = sz[LANG].full;
-  } else if (state.selectedRegion) {
-    fv.textContent = REGIONS[state.selectedRegion][LANG].name;
-  } else if (state.hoveredRegion) {
-    fv.textContent = REGIONS[state.hoveredRegion][LANG].name;
+  } else if (activeRegion) {
+    fv.textContent = REGIONS[activeRegion][LANG].name;
   } else {
     fv.textContent = T('fullBrain');
   }
@@ -1656,47 +1839,43 @@ function applyDiseaseToBrain() {
   const d = state.currentDisease;
   const sev = state.severity / 100;
 
-  if (brainState.model) {
-    brainState.model.traverse(function(child) {
-      if (child.isMesh && child.material && child.material.emissive) {
-        if (!d) {
-          child.material.emissive.setHex(0x000000);
-          child.material.emissiveIntensity = 0;
-        } else {
-          child.material.emissive.setHex(d.hex);
-          child.material.emissiveIntensity = sev * 0.48;
-        }
-      }
-    });
+  if (nebulaUniforms) {
+    if (d) {
+      nebulaUniforms.uDiseaseColor.value.setHex(d.hex);
+      nebulaUniforms.uDiseaseMix.value = sev;
+    } else {
+      nebulaUniforms.uDiseaseMix.value = 0.0;
+    }
+  }
+
+  if (impulseUniforms) {
+    if (d) {
+      impulseUniforms.uDiseaseColor.value.setHex(d.hex);
+      impulseUniforms.uDiseaseMix.value = sev * 0.85;
+    } else {
+      impulseUniforms.uDiseaseMix.value = 0.0;
+    }
   }
 
   const affectedSet = {};
-  if (d) {
-    d.affected.forEach(function(id) { affectedSet[id] = true; });
-  }
+  if (d) d.affected.forEach(function(id) { affectedSet[id] = true; });
 
-  Object.keys(subzoneMeshes).forEach(function(id) {
-    const mesh = subzoneMeshes[id];
-    const sz = SUBZONES.find(function(s) { return s.id === id; });
+  Object.keys(subzoneAnchors).forEach(function(id) {
+    const anc = subzoneAnchors[id];
     if (!d) {
-      mesh.material.emissiveIntensity = 1.5;
-      mesh.visible = true;
+      anc.group.visible = true;
+      anc.outerRing.material.color.copy(anc.color);
     } else if (affectedSet[id]) {
-      mesh.visible = true;
-      mesh.material.emissiveIntensity = 2.4;
+      anc.group.visible = true;
+      anc.outerRing.material.color.setHex(d.hex);
     } else {
-      mesh.visible = state.selectedRegion ? (sz.region === state.selectedRegion) : false;
+      anc.group.visible = false;
     }
-  });
-
-  impulses.forEach(function(p) {
-    if (d) p.mesh.material.color.setHex(d.hex);
-    else p.mesh.material.color.setHex(0xa78bfa);
   });
 }
 
 /* ================================================================
-   PROJECT 3D TO 2D (HARDWARE-ACCELERATED)
+   PROJECT 3D TO 2D (GPU TRANSLATE3D)
    ================================================================ */
 const _v = new THREE.Vector3();
 
@@ -1705,19 +1884,19 @@ function projectLabels() {
   const h = vpHeight;
   const active = state.selectedRegion || state.hoveredRegion;
 
-  const isWide = w >= 1200;
+  const isWide = w >= 1150;
   const MAIN = isWide
     ? { m1: 1, s1: 1, wern: 1, v1: 1, pfc: 1, broca: 1, hip: 1, a1: 1 }
     : { m1: 1, s1: 1, wern: 1, v1: 1, pfc: 1 };
 
   const isSmall = w < 500;
-  const pad = isSmall ? 44 : 68;
-  const pushAmt = isSmall ? 52 : (isWide ? 88 : 72);
+  const pad = isSmall ? 46 : 70;
+  const pushAmt = isSmall ? 50 : (isWide ? 84 : 68);
 
   Object.keys(htmlLabels).forEach(function(id) {
     const el = htmlLabels[id];
-    const mesh = subzoneMeshes[id];
-    if (!mesh || !mesh.visible) {
+    const anc = subzoneAnchors[id];
+    if (!anc || !anc.group.visible) {
       el.classList.add('hidden');
       return;
     }
@@ -1729,14 +1908,13 @@ function projectLabels() {
     const isHovered = state.hoveredSubzone === id;
 
     const shouldShow = state.chips.labels && (isSelected || isHovered || isActive || (!active && isMain));
-
     if (!shouldShow) {
       el.classList.add('hidden');
       return;
     }
 
-    mesh.getWorldPosition(_v);
-    _v.y += 0.08;
+    anc.group.getWorldPosition(_v);
+    _v.y += 0.06;
     _v.project(camera);
 
     if (_v.z > 1) {
@@ -1754,27 +1932,39 @@ function projectLabels() {
     const dx = x - cx;
     const dy = y - cy;
     const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const push = Math.min(pushAmt, 28 + dist * 0.35);
+    const push = Math.min(pushAmt, 26 + dist * 0.32);
     x += (dx / dist) * push;
     y += (dy / dist) * push;
 
     x = Math.max(pad, Math.min(w - pad, x));
     y = Math.max(34, Math.min(h - 34, y));
 
-    const scale = (isSelected || isHovered) ? 1.08 : 1;
+    const scale = (isSelected || isHovered) ? 1.07 : 1;
     el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) translate(-50%,-50%) scale(' + scale + ')';
   });
 }
 
 /* ================================================================
-   ANIMATION LOOP
+   ANIMATION LOOP & FPS TELEMETRY
    ================================================================ */
 const clock = new THREE.Clock();
+const fpsEl = document.getElementById('fpsCounter');
+let frameCount = 0;
+let fpsAccum = 0;
 
 function animate() {
   requestAnimationFrame(animate);
-  const dt = Math.min(clock.getDelta(), 0.05);
+  const rawDt = clock.getDelta();
+  const dt = Math.min(rawDt, 0.05);
   const t = clock.elapsedTime;
+
+  frameCount++;
+  fpsAccum += rawDt;
+  if (fpsAccum >= 0.5) {
+    if (fpsEl) fpsEl.textContent = Math.round(frameCount / fpsAccum) + ' FPS';
+    frameCount = 0;
+    fpsAccum = 0;
+  }
 
   if (camTween) {
     camTween.t = Math.min(1, camTween.t + dt * 2.4);
@@ -1784,66 +1974,54 @@ function animate() {
     if (camTween.t >= 1) camTween = null;
   }
 
-  if (state.chips.impulses) {
-    impulses.forEach(function(p) {
-      p.t = (p.t + dt * p.speed) % 1;
-      const pt = p.curve.getPointAt(p.t);
-      p.mesh.position.copy(pt);
-      const s = 0.7 + Math.sin(p.t * Math.PI) * 0.75;
-      p.mesh.scale.setScalar(s);
-      p.mesh.material.opacity = 0.3 + Math.sin(p.t * Math.PI) * 0.65;
-    });
-  }
+  if (nebulaUniforms) nebulaUniforms.uTime.value = t;
+  if (impulseUniforms) impulseUniforms.uTime.value = t;
 
-  Object.keys(subzoneMeshes).forEach(function(id) {
-    const mesh = subzoneMeshes[id];
-    if (!mesh.visible) return;
+  Object.keys(subzoneAnchors).forEach(function(id) {
+    const anc = subzoneAnchors[id];
+    if (!anc.group.visible) return;
     const isSel = state.selectedSubzone === id;
     const isHov = state.hoveredSubzone === id;
-    const pulse = 1 + Math.sin(t * 2.8 + id.length) * 0.1;
-    const targetScale = isSel ? pulse * 1.65 : (isHov ? pulse * 1.38 : pulse);
-    mesh.scale.setScalar(targetScale);
-
-    const halo = subzoneHalos[id];
-    if (halo) {
-      halo.material.opacity = isSel ? 0.42 : (isHov ? 0.32 : 0.18);
-    }
+    const pulse = 1 + Math.sin(t * 3.0 + id.length) * 0.12;
+    const s = isSel ? pulse * 1.55 : (isHov ? pulse * 1.3 : pulse);
+    anc.outerRing.scale.setScalar(s);
+    anc.outerRing.rotation.z = t * 0.8;
   });
 
-  if (state.chips.rotate && brainState.model) {
-    brainGroup.rotation.y += dt * 0.18;
+  if (state.chips.rotate && brainState.loaded) {
+    brainGroup.rotation.y += dt * 0.2;
   }
-
-  bottomLight.intensity = 0.65 + Math.sin(t * 0.9) * 0.2;
 
   controls.update();
   renderer.render(scene, camera);
-
   projectLabels();
 }
 
 /* ================================================================
-   UI - DETAILED REGION LIST
+   UI - STRUCTURAL REGION LIST
    ================================================================ */
 function renderRegionList() {
   const el = document.getElementById('regionList');
   el.innerHTML = '';
   Object.keys(REGIONS).forEach(function(rid) {
     const r = REGIONS[rid];
-    const subCount = SUBZONES.filter(function(s) { return s.region === rid; }).length;
     const btn = document.createElement('button');
     btn.className = 'region-item';
     btn.dataset.region = r.id;
     btn.style.setProperty('--r-color', r.color);
     btn.innerHTML =
       '<div class="region-top">' +
-        '<span class="region-dot"></span>' +
-        '<span class="region-name">' + r[LANG].name + '</span>' +
-        (subCount ? '<span class="region-count">' + subCount + '</span>' : '') +
+        '<div class="region-title-wrap">' +
+          '<span class="region-glyph"></span>' +
+          '<span class="region-name">' + r[LANG].name + '</span>' +
+        '</div>' +
+        '<span class="region-ba">' + r.ba + '</span>' +
       '</div>' +
-      '<div class="region-meta">' +
+      '<div class="region-sub">' +
         '<span>' + r[LANG].short + '</span>' +
-      '</div>';
+        '<span class="region-neurons">' + r.neurons + '</span>' +
+      '</div>' +
+      '<div class="region-bar"><div class="region-bar-fill" style="width:' + r.share + '%"></div></div>';
 
     btn.addEventListener('pointerenter', function() {
       if (!state.selectedRegion) {
@@ -1862,8 +2040,8 @@ function renderRegionList() {
       state.selectedSubzone = null;
       state.currentDisease = null;
       if (state.selectedRegion) {
-        const p = getSurfacePoint(r.dir, 0.05);
-        focusOn(p);
+        const hit = getSurfaceHit(r.dir);
+        focusOn(hit.point);
       } else {
         resetCamera();
       }
@@ -1880,13 +2058,9 @@ function renderRegionList() {
 }
 
 function updateRegionListUI() {
-  const items = document.querySelectorAll('.region-item');
-  items.forEach(function(el) {
-    if (el.dataset.region === state.selectedRegion) {
-      el.classList.add('active');
-    } else {
-      el.classList.remove('active');
-    }
+  document.querySelectorAll('.region-item').forEach(function(el) {
+    if (el.dataset.region === state.selectedRegion) el.classList.add('active');
+    else el.classList.remove('active');
   });
 }
 
@@ -1929,13 +2103,9 @@ function renderDiseaseList() {
 
 function updateDiseaseListUI() {
   const active = state.currentDisease ? state.currentDisease.id : 'healthy';
-  const items = document.querySelectorAll('.disease-item');
-  items.forEach(function(el) {
-    if (el.dataset.disease === active) {
-      el.classList.add('active');
-    } else {
-      el.classList.remove('active');
-    }
+  document.querySelectorAll('.disease-item').forEach(function(el) {
+    if (el.dataset.disease === active) el.classList.add('active');
+    else el.classList.remove('active');
   });
 }
 
@@ -1993,7 +2163,7 @@ document.getElementById('severitySlider').addEventListener('input', function(e) 
 });
 
 /* ================================================================
-   ANALYTICS PANEL (ENHANCED DETAILS & INTERACTIVITY)
+   ANALYTICS PANEL
    ================================================================ */
 function renderAnalytics() {
   const el = document.getElementById('analyticsContent');
@@ -2018,8 +2188,8 @@ function renderRegionAnalytics(el) {
 
   el.innerHTML =
     '<div class="analytics-header">' +
-      '<div><h2>' + d.name + '</h2><span class="subtitle">' + d.latin + '</span></div>' +
-      '<span class="ba-badge" style="border-color:' + r.color + '">' + subs.length + ' zones</span>' +
+      '<div><h2>' + d.name + '</h2><span class="subtitle">' + d.latin + ' · ' + r.neurons + '</span></div>' +
+      '<span class="ba-badge" style="border-color:' + r.color + '">' + r.ba + '</span>' +
     '</div>' +
     '<div class="card" style="border-left:3px solid ' + r.color + '">' +
       '<div class="card-title">' + T('anatomy') + '</div>' +
@@ -2058,7 +2228,6 @@ function renderSubzoneAnalytics(el) {
   const d = sz[LANG];
   const region = REGIONS[sz.region];
 
-  // Find connected zones via PATHWAYS
   const connectedIds = [];
   PATHWAYS.forEach(function(pair) {
     if (pair[0] === sz.id) connectedIds.push(pair[1]);
@@ -2102,8 +2271,8 @@ function renderSubzoneAnalytics(el) {
   if (backBtn) {
     backBtn.addEventListener('click', function() {
       state.selectedSubzone = null;
-      const p = getSurfacePoint(region.dir, 0.05);
-      focusOn(p);
+      const hit = getSurfaceHit(region.dir);
+      focusOn(hit.point);
       applyHighlight();
       renderAnalytics();
     });
@@ -2199,39 +2368,35 @@ function renderDiseaseAnalytics(el) {
 }
 
 /* ================================================================
-   STATUS
+   STATUS & CHIPS
    ================================================================ */
 function setStatus(type, text) {
   const el = document.getElementById('statusIndicator');
-  let cls = 'status-indicator';
-  if (type === 'warn') cls += ' warn';
-  else if (type === 'alert') cls += ' danger';
-  el.className = cls;
+  el.className = 'status-indicator' + (type === 'alert' ? ' danger' : '');
   el.textContent = text;
 }
 
-/* ================================================================
-   CHIPS
-   ================================================================ */
 document.querySelectorAll('.chip').forEach(function(chip) {
   chip.addEventListener('click', function() {
     const key = chip.dataset.toggle;
     state.chips[key] = !state.chips[key];
-    if (state.chips[key]) chip.classList.add('on');
-    else chip.classList.remove('on');
+    chip.classList.toggle('on', state.chips[key]);
 
-    if (key === 'labels') {
-      projectLabels();
+    if (key === 'nebula' && nebulaPoints) {
+      nebulaPoints.visible = state.chips.nebula;
     }
     if (key === 'impulses') {
-      impulses.forEach(function(p) { p.mesh.visible = state.chips.impulses; });
-      pathwayData.forEach(function(pw) { pw.tube.visible = state.chips.impulses; });
+      if (impulseBeamSystem) impulseBeamSystem.visible = state.chips.impulses;
+      pathwayData.forEach(function(pw) { pw.group.visible = state.chips.impulses; });
+    }
+    if (key === 'labels') {
+      projectLabels();
     }
   });
 });
 
 /* ================================================================
-   THEME
+   THEME & LANGUAGE
    ================================================================ */
 function setTheme(theme, save) {
   if (save === undefined) save = true;
@@ -2245,7 +2410,6 @@ function setTheme(theme, save) {
   if (save) {
     try { localStorage.setItem('nm-theme', theme); } catch (e) {}
   }
-  renderer.setClearColor(theme === 'light' ? 0xf8fafc : 0x000000, 0);
 }
 
 document.getElementById('themeBtn').addEventListener('click', function() {
@@ -2253,28 +2417,23 @@ document.getElementById('themeBtn').addEventListener('click', function() {
   setTheme(cur === 'dark' ? 'light' : 'dark');
 });
 
-/* ================================================================
-   LANGUAGE
-   ================================================================ */
 function setLanguage(lang) {
   LANG = lang;
   document.documentElement.setAttribute('data-lang', lang);
 
-  document.getElementById('chipLabels').textContent = T('labels');
+  document.getElementById('chipNebula').textContent = T('nebula');
   document.getElementById('chipImpulses').textContent = T('impulses');
+  document.getElementById('chipLabels').textContent = T('labels');
   document.getElementById('chipRotate').textContent = T('rotate');
   document.getElementById('focusTag').textContent = T('focus');
-  document.getElementById('hintDrag').textContent = T('drag');
-  document.getElementById('hintZoom').textContent = T('zoom');
-  document.getElementById('hintClick').textContent = T('click');
   document.getElementById('lobesTitle').textContent = T('lobes');
   document.getElementById('diseasesTitle').textContent = T('diseases');
   document.getElementById('severityLabel').textContent = T('severity');
   document.getElementById('leftTitle').textContent = T('atlas');
   document.getElementById('rightTitle').textContent = T('analytics');
-  document.getElementById('tabAtlas').textContent = T('atlas');
-  document.getElementById('tabAnalytics').textContent = T('analytics');
-  document.getElementById('tabSimulation').textContent = T('simulation');
+  document.getElementById('statTotal').textContent = T('statTotal');
+  document.getElementById('statCortex').textContent = T('statCortex');
+  document.getElementById('statCereb').textContent = T('statCereb');
   setStatus(state.currentDisease ? 'alert' : 'ready', state.currentDisease ? T('alert') : T('ready'));
 
   Object.keys(htmlLabels).forEach(function(id) {
@@ -2297,16 +2456,6 @@ document.querySelectorAll('.lang-btn').forEach(function(btn) {
     document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     setLanguage(btn.dataset.lang);
-  });
-});
-
-/* ================================================================
-   NAV TABS
-   ================================================================ */
-document.querySelectorAll('.nav-tab').forEach(function(tab) {
-  tab.addEventListener('click', function() {
-    document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
   });
 });
 
@@ -2361,12 +2510,9 @@ function init() {
     if (stored === 'light' || stored === 'dark') savedTheme = stored;
   } catch (e) {}
   setTheme(savedTheme, false);
+  setLanguage('ru');
 
-  renderRegionList();
-  renderDiseaseList();
-  renderAnalytics();
   resize();
-
   animate();
 }
 
