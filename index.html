@@ -3,54 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#050508">
-<title>Neuro - Cortex — 3D Brain Atlas</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#040508">
+<title>Neuro - Cortex — Clinical 3D Brain Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#050508;--bg-1:#0a0a0e;--bg-2:#111116;--bg-3:#181820;
-  --border:rgba(255,255,255,.08);--border-hi:rgba(255,255,255,.2);
-  --text:#f8fafc;--text-2:rgba(248,250,252,.64);--text-3:rgba(248,250,252,.36);
-  --danger:#ef4444;--warn:#f59e0b;--success:#10b981;
+  --bg:#040508;--bg-1:#080a10;--bg-2:#0e111a;--bg-3:#151a26;
+  --border:rgba(255,255,255,.07);--border-hi:rgba(255,255,255,.18);
+  --text:#f8fafc;--text-2:rgba(248,250,252,.68);--text-3:rgba(248,250,252,.4);
+  --danger:#f43f5e;--warn:#f59e0b;--success:#10b981;--accent:#00e5ff;
   --font:'Inter',-apple-system,system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
   --safe-left:env(safe-area-inset-left,0px);
   --safe-right:env(safe-area-inset-right,0px);
-  --topbar-h:48px;
-  --panel-l:290px;
-  --panel-r:350px;
+  --topbar-h:56px;
+  --panel-l:320px;
+  --panel-r:390px;
   --ease:cubic-bezier(0.16, 1, 0.3, 1);
 }
 [data-theme="light"]{
-  --bg:#f8fafc;--bg-1:#ffffff;--bg-2:#f1f5f9;--bg-3:#e2e8f0;
-  --border:rgba(15,23,42,.08);--border-hi:rgba(15,23,42,.2);
-  --text:#0f172a;--text-2:rgba(15,23,42,.65);--text-3:rgba(15,23,42,.4);
+  --bg:#f1f5f9;--bg-1:#ffffff;--bg-2:#f8fafc;--bg-3:#e2e8f0;
+  --border:rgba(15,23,42,.08);--border-hi:rgba(15,23,42,.18);
+  --text:#0f172a;--text-2:rgba(15,23,42,.68);--text-3:rgba(15,23,42,.44);
+  --accent:#0284c7;
 }
 
-/* ═══ 16:9 LARGE MONITORS SCALING ═══ */
+/* ═══ ADAPTIVE SCALING FOR 16:9 FHD / QHD / 4K MONITORS ═══ */
 @media (min-width:1440px){
-  :root{--topbar-h:52px;--panel-l:320px;--panel-r:380px}
-  html{font-size:15px}
+  :root{--topbar-h:60px;--panel-l:350px;--panel-r:420px}
+  html{font-size:15.5px}
 }
 @media (min-width:1920px){
-  :root{--topbar-h:58px;--panel-l:360px;--panel-r:430px}
-  html{font-size:16.5px}
+  :root{--topbar-h:68px;--panel-l:395px;--panel-r:480px}
+  html{font-size:17px}
 }
 @media (min-width:2560px){
-  :root{--topbar-h:68px;--panel-l:420px;--panel-r:500px}
-  html{font-size:18.5px}
+  :root{--topbar-h:78px;--panel-l:460px;--panel-r:560px}
+  html{font-size:19.5px}
 }
 
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-touch-callout:none}
 body{
   font-family:var(--font);background:var(--bg);color:var(--text);
-  font-size:0.92rem;line-height:1.5;-webkit-font-smoothing:antialiased;
+  font-size:0.94rem;line-height:1.5;-webkit-font-smoothing:antialiased;
   user-select:none;-webkit-user-select:none;
 }
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;font-size:inherit}
+input{font-family:inherit;color:inherit}
 svg{display:block}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:rgba(148,163,184,.22);border-radius:2px}
@@ -63,64 +65,99 @@ svg{display:block}
   overflow:hidden;
 }
 
-/* ═══ MINIMAL TOPBAR ═══ */
+/* ═══ FUTURISTIC MINIMAL TOPBAR ═══ */
 .topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:var(--safe-top) calc(14px + var(--safe-right)) 0 calc(14px + var(--safe-left));
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:var(--safe-top) calc(18px + var(--safe-right)) 0 calc(18px + var(--safe-left));
   height:calc(var(--topbar-h) + var(--safe-top));
   background:var(--bg-1);
   border-bottom:1px solid var(--border);
   z-index:100;
 }
-.topbar-left{display:flex;align-items:center;gap:10px;min-width:0}
-.brand{display:flex;align-items:center;gap:8px;flex:none}
-.brand-icon{
-  width:24px;height:24px;
+.topbar-left{display:flex;align-items:center;gap:14px;min-width:0}
+.brand{display:flex;align-items:center;gap:11px;flex:none}
+.brand-logo{
+  width:32px;height:32px;
   display:grid;place-items:center;flex:none;
-  background:var(--text);color:var(--bg);
-  border-radius:6px;
+  color:var(--accent);
+  filter:drop-shadow(0 0 10px rgba(0,229,255,.35));
 }
-.brand-icon svg{width:13px;height:13px}
+.brand-logo svg{width:28px;height:28px}
 .brand-name{
-  font-size:0.9rem;font-weight:600;letter-spacing:-.2px;white-space:nowrap;
+  font-size:1.18rem;font-weight:700;letter-spacing:-.3px;white-space:nowrap;
+  color:var(--text);
 }
-.fps-badge{
-  font-family:var(--mono);font-size:0.68rem;font-weight:500;
-  color:var(--text-3);padding:2px 6px;border-radius:4px;
-  background:var(--bg-2);border:1px solid var(--border);
-  font-variant-numeric:tabular-nums;
+.fps-readout{
+  font-family:var(--mono);font-size:0.88rem;font-weight:600;
+  color:var(--success);letter-spacing:.3px;
+  font-variant-numeric:tabular-nums;flex:none;
+  padding-left:12px;border-left:1px solid var(--border);
 }
 
-.topbar-actions{display:flex;align-items:center;gap:6px;flex:none}
-.lang-switch{
-  display:flex;background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:5px;padding:2px;gap:1px;
+/* Smart Anatomical Search */
+.search-wrap{position:relative;flex:1;max-width:380px;margin:0 8px}
+@media (max-width:700px){.search-wrap{max-width:185px;margin:0 2px}}
+@media (max-width:440px){.brand-name{font-size:1rem}.fps-readout{ font-size:0.75rem;padding-left:8px}}
+.search-input{
+  width:100%;height:36px;padding:0 12px 0 34px;
+  border-radius:999px;border:1px solid transparent;
+  background:var(--bg-2);color:var(--text);
+  font-size:0.82rem;outline:none;
+  transition:border-color .18s ease,background .18s ease;
 }
+.search-input::placeholder{color:var(--text-3)}
+.search-input:focus{border-color:var(--border-hi);background:var(--bg-3)}
+.search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--text-3);pointer-events:none;
+}
+.search-results{
+  position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:var(--bg-1);border:1px solid var(--border-hi);
+  border-radius:10px;max-height:290px;overflow-y:auto;
+  box-shadow:0 16px 40px rgba(0,0,0,.6);
+  display:none;z-index:300;padding:5px;
+}
+.search-results.open{display:block}
+.search-item{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  width:100%;padding:8px 10px;border-radius:6px;text-align:left;
+  font-size:0.8rem;color:var(--text);
+}
+.search-item:hover{background:var(--bg-3)}
+.search-item-type{
+  font-family:var(--mono);font-size:0.64rem;color:var(--accent);
+  text-transform:uppercase;flex:none;
+}
+
+/* Borderless Large Topbar Controls */
+.topbar-actions{display:flex;align-items:center;gap:8px;flex:none}
+.lang-switch{display:flex;align-items:center;gap:2px}
 .lang-btn{
-  padding:3px 7px;
-  font-family:var(--mono);font-size:0.68rem;font-weight:600;
-  letter-spacing:.3px;border-radius:3px;
-  color:var(--text-3);
-  transition:background .15s ease,color .15s ease;
+  padding:6px 11px;border-radius:999px;
+  font-family:var(--mono);font-size:0.82rem;font-weight:600;
+  letter-spacing:.4px;color:var(--text-3);
+  transition:color .18s ease,background .18s ease;
 }
-.lang-btn.active{background:var(--text);color:var(--bg)}
-.icon-btn{
-  width:32px;height:32px;min-width:32px;
+.lang-btn:hover{color:var(--text)}
+.lang-btn.active{color:var(--text);background:var(--bg-3)}
+
+.action-btn{
+  width:38px;height:38px;min-width:38px;
   display:grid;place-items:center;
-  border-radius:5px;color:var(--text-2);
-  border:1px solid var(--border);background:var(--bg-2);
-  transition:border-color .15s ease,color .15s ease;
+  border-radius:999px;color:var(--text-2);
+  background:transparent;
+  transition:background .18s ease,color .18s ease,transform .15s ease;
 }
-.icon-btn:hover{border-color:var(--border-hi);color:var(--text)}
-.icon-btn svg{width:14px;height:14px}
+.action-btn:hover{background:var(--bg-3);color:var(--text)}
+.action-btn:active{transform:scale(.92)}
+.action-btn svg{width:19px;height:19px}
 .mobile-only{display:grid}
 @media (min-width:1025px){.mobile-only{display:none}}
 
-/* ═══ BODY LAYOUT (LEFT FIXED, RIGHT SLIDE-OVER DRAWER) ═══ */
+/* ═══ BODY LAYOUT ═══ */
 .body{
-  display:grid;
-  grid-template-columns:1fr;
+  display:grid;grid-template-columns:1fr;
   overflow:hidden;min-height:0;position:relative;
 }
 @media (min-width:1025px){
@@ -129,7 +166,7 @@ svg{display:block}
 
 .panel{
   overflow-y:auto;overflow-x:hidden;
-  padding:14px 12px;min-height:0;
+  padding:16px 14px;min-height:0;
   background:var(--bg-1);
   -webkit-overflow-scrolling:touch;
   contain:content;
@@ -137,25 +174,25 @@ svg{display:block}
 @media (min-width:1440px){.panel{padding:18px 16px}}
 .panel-left{border-right:1px solid var(--border)}
 
-/* Right Panel is ALWAYS a sleek collapsible curtain drawer */
+/* Right Collapsible Curtain */
 .panel-right{
   position:fixed;
   top:calc(var(--topbar-h) + var(--safe-top));
   right:0;bottom:0;
-  width:min(var(--panel-r), 90vw);
+  width:min(var(--panel-r), 94vw);
   z-index:180;
-  background:rgba(10, 10, 14, 0.92);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(8, 10, 16, 0.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-left:1px solid var(--border);
   transform:translate3d(100%, 0, 0);
   transition:transform .28s var(--ease);
-  padding-bottom:calc(16px + var(--safe-bottom));
-  box-shadow:-16px 0 40px rgba(0,0,0,.45);
+  padding-bottom:calc(18px + var(--safe-bottom));
+  box-shadow:-20px 0 50px rgba(0,0,0,.55);
   will-change:transform;
 }
 [data-theme="light"] .panel-right{
-  background:rgba(255, 255, 255, 0.94);
-  box-shadow:-12px 0 32px rgba(0,0,0,.08);
+  background:rgba(255, 255, 255, 0.95);
+  box-shadow:-12px 0 36px rgba(0,0,0,.08);
 }
 .panel-right.open{transform:translate3d(0, 0, 0)}
 
@@ -164,12 +201,12 @@ svg{display:block}
     position:fixed;
     top:calc(var(--topbar-h) + var(--safe-top));
     left:0;bottom:0;
-    width:min(310px, 86vw);z-index:200;
+    width:min(330px, 88vw);z-index:200;
     background:var(--bg-1);
     transform:translate3d(-100%,0,0);
     transition:transform .28s var(--ease);
-    padding-bottom:calc(16px + var(--safe-bottom));
-    box-shadow:16px 0 40px rgba(0,0,0,.5);
+    padding-bottom:calc(18px + var(--safe-bottom));
+    box-shadow:20px 0 50px rgba(0,0,0,.55);
   }
   .panel-left.open{transform:translate3d(0,0,0)}
 }
@@ -179,182 +216,223 @@ svg{display:block}
   padding-bottom:10px;margin-bottom:12px;
   border-bottom:1px solid var(--border);
   position:sticky;top:-18px;background:inherit;
-  padding-top:14px;margin-top:-14px;z-index:5;
+  padding-top:16px;margin-top:-16px;z-index:5;
 }
 .panel-head h2{
-  font-family:var(--mono);font-size:0.68rem;font-weight:600;
-  letter-spacing:1.4px;text-transform:uppercase;color:var(--text-3);
+  font-family:var(--mono);font-size:0.7rem;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);
 }
 .panel-close{
-  width:26px;height:26px;display:grid;place-items:center;
-  border-radius:5px;color:var(--text-2);background:var(--bg-2);
-  border:1px solid var(--border);
+  width:30px;height:30px;display:grid;place-items:center;
+  border-radius:999px;color:var(--text-2);background:transparent;
 }
-.panel-close:hover{color:var(--text);border-color:var(--border-hi)}
-.panel-close svg{width:12px;height:12px}
+.panel-close:hover{background:var(--bg-3);color:var(--text)}
+.panel-close svg{width:15px;height:15px}
 @media (min-width:1025px){#closeLeft{display:none}}
 
 .section{margin-bottom:18px}
 .section-title{
-  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  font-family:var(--mono);font-size:0.66rem;font-weight:600;
   letter-spacing:1.3px;text-transform:uppercase;
   color:var(--text-3);margin-bottom:8px;
   display:flex;align-items:center;justify-content:space-between;
 }
 
-/* ═══ MINIMALIST & STRUCTURAL LOBE ITEMS ═══ */
+/* ═══ DEEP-COLORED CLINICAL NAVIGATION ITEMS ═══ */
 .region-item{
   display:flex;align-items:center;gap:10px;width:100%;
-  padding:9px 11px;border-radius:6px;text-align:left;
-  transition:background .15s ease,border-color .15s ease;
-  margin-bottom:4px;
-  border:1px solid transparent;
-  background:transparent;
+  padding:8px 10px;border-radius:8px;text-align:left;
+  transition:background .16s ease,transform .15s ease;
+  margin-bottom:3px;
+  background:transparent;position:relative;
 }
-.region-item:hover{background:var(--bg-2);border-color:var(--border)}
-.region-item.active{background:var(--bg-3);border-color:var(--border-hi)}
+.region-item:hover{background:var(--bg-2)}
+.region-item.active{
+  background:color-mix(in srgb, var(--r-color,#00e5ff) 14%, var(--bg-3));
+}
 .region-dot{
-  width:8px;height:8px;border-radius:50%;flex:none;
-  background:var(--r-color,#34d399);
+  width:9px;height:9px;border-radius:50%;flex:none;
+  background:var(--r-color,#00e5ff);
+  box-shadow:0 0 8px color-mix(in srgb, var(--r-color,#00e5ff) 60%, transparent);
 }
+.region-dot.cube{border-radius:2px;transform:rotate(45deg)}
 .region-item.active .region-dot{
-  box-shadow:0 0 0 3px color-mix(in srgb, var(--r-color,#34d399) 28%, transparent);
+  box-shadow:0 0 12px var(--r-color,#00e5ff), 0 0 0 3px color-mix(in srgb, var(--r-color,#00e5ff) 28%, transparent);
 }
 .region-info{flex:1;min-width:0}
 .region-name{display:block;font-size:0.84rem;font-weight:500;color:var(--text);line-height:1.25}
-.region-meta{display:block;font-size:0.7rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.region-item.active .region-name{font-weight:600}
+.region-meta{display:block;font-size:0.69rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .region-ba{
   font-family:var(--mono);font-size:0.62rem;color:var(--text-3);
-  padding:2px 5px;border-radius:4px;background:var(--bg-2);border:1px solid var(--border);flex:none;
+  padding:2px 6px;border-radius:999px;background:var(--bg-2);flex:none;
 }
+.region-item.active .region-ba{color:var(--r-color,#00e5ff);font-weight:600}
 
-/* ═══ DISEASE ITEMS ═══ */
-.disease-item{
+/* fMRI Task Items */
+.task-item{
   display:flex;align-items:center;gap:9px;width:100%;
-  padding:8px 10px;border-radius:6px;text-align:left;
-  transition:background .15s ease,border-color .15s ease;
-  margin-bottom:4px;
-  border:1px solid var(--border);background:transparent;
+  padding:8px 10px;border-radius:8px;text-align:left;
+  margin-bottom:4px;background:var(--bg-2);
+  transition:background .16s ease;
+}
+.task-item:hover{background:var(--bg-3)}
+.task-item.active{background:rgba(0,229,255,.14)}
+.task-play{
+  width:22px;height:22px;border-radius:999px;display:grid;place-items:center;
+  background:var(--bg-3);color:var(--accent);font-family:var(--mono);font-size:0.66rem;flex:none;
+}
+.task-item.active .task-play{background:var(--accent);color:#000}
+
+/* Disease Items */
+.disease-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:8px 10px;border-radius:8px;text-align:left;
+  transition:background .16s ease;
+  margin-bottom:3px;background:transparent;
   position:relative;overflow:hidden;
 }
-.disease-item::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:2px;background:var(--d-color,#666);opacity:.6;
-}
 .disease-item:hover{background:var(--bg-2)}
-.disease-item.active{background:var(--bg-3);border-color:var(--border-hi)}
-.disease-item.active::before{opacity:1;width:3px}
+.disease-item.active{
+  background:color-mix(in srgb, var(--d-color,#ef4444) 15%, var(--bg-3));
+}
 .disease-icon{
-  width:22px;height:22px;border-radius:4px;
+  width:22px;height:22px;border-radius:6px;
   display:grid;place-items:center;
   background:var(--d-color,#666);color:#fff;
   font-family:var(--mono);font-size:0.68rem;font-weight:700;flex:none;
 }
 .disease-body{flex:1;min-width:0}
-.disease-name{font-size:0.8rem;font-weight:500;color:var(--text);display:block;line-height:1.2}
+.disease-name{font-size:0.82rem;font-weight:500;color:var(--text);display:block;line-height:1.25}
 .disease-desc{font-size:0.68rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 
 /* ═══ SEVERITY ═══ */
 .severity-box{
   margin-top:10px;padding:12px;
-  background:var(--bg-2);border:1px solid var(--border);
-  border-radius:7px;
+  background:var(--bg-2);border-radius:10px;
 }
 .severity-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.severity-label{font-family:var(--mono);font-size:0.65rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-3)}
-.severity-value{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--text)}
+.severity-label{font-family:var(--mono);font-size:0.66rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-3)}
+.severity-value{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--text)}
 .severity-slider{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;cursor:pointer;display:block}
 .severity-slider::-webkit-slider-runnable-track{
-  height:3px;border-radius:2px;
-  background:linear-gradient(to right,var(--text) var(--p,50%),var(--border) var(--p,50%));
+  height:4px;border-radius:2px;
+  background:linear-gradient(to right,var(--danger) var(--p,50%),var(--border) var(--p,50%));
 }
 .severity-slider::-webkit-slider-thumb{
   -webkit-appearance:none;width:16px;height:16px;
   border-radius:50%;background:var(--text);
-  margin-top:-6.5px;border:none;
+  margin-top:-6px;border:none;
 }
 .severity-stages{display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:0.64rem;color:var(--text-3)}
-.severity-stages span.active{color:var(--text);font-weight:600}
+.severity-stages span.active{color:var(--text);font-weight:700}
 
 /* ═══ VIEWPORT ═══ */
 .viewport{
   position:relative;
-  background:radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 70%), var(--bg);
+  background:radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.05) 0%, transparent 72%), var(--bg);
   overflow:hidden;min-height:0;min-width:0;
   display:flex;align-items:center;justify-content:center;
 }
 #canvas3d{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 #canvas3d:active{cursor:grabbing}
 
-/* ═══ VIEWPORT CONTROLS (TOP LEFT) ═══ */
+/* ═══ LARGE FUTURISTIC VIEWPORT TOGGLES (TOP LEFT) ═══ */
 .viewport-controls{
-  position:absolute;top:12px;left:12px;
+  position:absolute;top:14px;left:14px;
   display:flex;align-items:center;gap:8px;z-index:10;
-  pointer-events:none;flex-wrap:wrap;
+  pointer-events:none;flex-wrap:wrap;max-width:calc(100% - 260px);
+}
+@media (max-width:768px){
+  .viewport-controls{
+    top:auto;bottom:14px;left:12px;right:12px;max-width:none;
+    flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .viewport-controls::-webkit-scrollbar{display:none}
 }
 .mode-switch{
-  pointer-events:auto;
-  display:inline-flex;background:rgba(10,10,14,.78);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--border);border-radius:6px;padding:2px;gap:2px;
+  pointer-events:auto;flex:none;
+  display:inline-flex;background:rgba(10,12,20,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-radius:999px;padding:3px;gap:2px;
 }
-[data-theme="light"] .mode-switch{background:rgba(255,255,255,.85)}
+[data-theme="light"] .mode-switch{background:rgba(255,255,255,.88)}
 .mode-btn{
-  padding:4px 10px;border-radius:4px;
-  font-family:var(--mono);font-size:0.68rem;font-weight:500;
-  color:var(--text-2);transition:background .15s ease,color .15s ease;
+  padding:6px 14px;border-radius:999px;
+  font-family:var(--mono);font-size:0.74rem;font-weight:500;
+  color:var(--text-2);transition:background .18s ease,color .18s ease;
+  white-space:nowrap;
 }
 .mode-btn.active{background:var(--text);color:var(--bg);font-weight:600}
 
 .chip{
-  pointer-events:auto;
-  display:inline-flex;align-items:center;gap:5px;
-  height:28px;padding:0 10px;border-radius:6px;
-  border:1px solid var(--border);
-  background:rgba(10,10,14,.75);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  pointer-events:auto;flex:none;
+  display:inline-flex;align-items:center;gap:6px;
+  height:34px;padding:0 14px;border-radius:999px;
+  background:rgba(10,12,20,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   color:var(--text-2);
-  font-family:var(--mono);font-size:0.68rem;font-weight:500;
+  font-family:var(--mono);font-size:0.74rem;font-weight:500;
   white-space:nowrap;
-  transition:background .15s ease,border-color .15s ease,color .15s ease;
+  transition:background .18s ease,color .18s ease;
 }
-[data-theme="light"] .chip{background:rgba(255,255,255,.85)}
-.chip.on{background:var(--bg-3);border-color:var(--border-hi);color:var(--text)}
-.chip-dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5}
-.chip.on .chip-dot{background:var(--success);opacity:1}
+[data-theme="light"] .chip{background:rgba(255,255,255,.88)}
+.chip.on{background:var(--bg-3);color:var(--text)}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45}
+.chip.on .chip-dot{background:var(--success);opacity:1;box-shadow:0 0 8px var(--success)}
+
+/* Dual Slice Controls */
+.slice-bar{
+  pointer-events:auto;flex:none;
+  display:inline-flex;align-items:center;gap:8px;
+  height:34px;padding:0 14px;border-radius:999px;
+  background:rgba(10,12,20,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-family:var(--mono);font-size:0.72rem;color:var(--text-2);
+}
+[data-theme="light"] .slice-bar{background:rgba(255,255,255,.88)}
+.slice-slider{
+  -webkit-appearance:none;appearance:none;
+  width:72px;height:4px;border-radius:2px;
+  background:var(--border-hi);cursor:pointer;
+}
+.slice-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:13px;height:13px;
+  border-radius:50%;background:var(--text);
+}
+.slice-val{min-width:34px;text-align:right;color:var(--text);font-weight:600}
 
 /* ═══ NON-CLICKABLE FOCUS INDICATOR ═══ */
 .focus-indicator{
-  position:absolute;top:12px;right:12px;
+  position:absolute;top:14px;right:14px;
   pointer-events:none;user-select:none;z-index:10;
-  display:flex;align-items:center;gap:8px;
-  padding:5px 10px;border-radius:6px;
-  background:rgba(10,10,14,.65);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid var(--border);
-  font-family:var(--mono);font-size:0.7rem;
-  transition:border-color .2s ease,transform .2s ease;
+  display:flex;align-items:center;gap:9px;
+  padding:7px 14px;border-radius:999px;
+  background:rgba(10,12,20,.78);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-family:var(--mono);font-size:0.76rem;
 }
-[data-theme="light"] .focus-indicator{background:rgba(255,255,255,.8)}
+[data-theme="light"] .focus-indicator{background:rgba(255,255,255,.88)}
 .focus-dot{
-  width:6px;height:6px;border-radius:50%;
+  width:8px;height:8px;border-radius:50%;flex:none;
   background:var(--f-color, var(--text-3));
-  box-shadow:0 0 8px var(--f-color, transparent);
+  box-shadow:0 0 10px var(--f-color, transparent);
 }
-.focus-tag{color:var(--text-3);font-size:0.62rem;text-transform:uppercase;letter-spacing:1px}
+.focus-tag{color:var(--text-3);font-size:0.66rem;text-transform:uppercase;letter-spacing:1px}
 .focus-val{color:var(--text);font-weight:600}
 
-/* ═══ HTML LABELS ON CORTEX ═══ */
+/* ═══ HTML LABELS ═══ */
 .labels-layer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden}
 .zone-label{
   position:absolute;left:0;top:0;
   pointer-events:auto;
-  display:flex;align-items:center;gap:5px;
-  padding:3px 8px 3px 6px;border-radius:4px;
-  background:rgba(8, 8, 12, 0.82);
+  display:flex;align-items:center;gap:6px;
+  padding:4px 10px 4px 7px;border-radius:999px;
+  background:rgba(8, 10, 16, 0.86);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.14);
-  font-family:var(--mono);font-size:0.66rem;font-weight:500;
+  border:1px solid rgba(255,255,255,.12);
+  font-family:var(--mono);font-size:0.68rem;font-weight:500;
   color:#f8fafc;white-space:nowrap;
   transform:translate3d(-9999px,-9999px,0);
   transition:opacity .15s ease,border-color .15s ease,background .15s ease;
@@ -362,40 +440,43 @@ svg{display:block}
   cursor:pointer;
 }
 [data-theme="light"] .zone-label{
-  background:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.92);
   border-color:rgba(15,23,42,.15);color:#0f172a;
 }
 .zone-label.hidden{opacity:0;pointer-events:none}
 .zone-label:hover{border-color:var(--ldot-color,#fff);z-index:10}
 .zone-label.active{
-  background:var(--bg-3);
+  background:color-mix(in srgb, var(--ldot-color,#00e5ff) 24%, rgba(8,10,16,.95));
   border-color:var(--ldot-color,#fff);
-  color:var(--text);
-  z-index:12;
+  box-shadow:0 0 16px color-mix(in srgb, var(--ldot-color,#fff) 50%, transparent);
+  color:#fff;z-index:12;
 }
 .zone-label .ldot{
-  width:5px;height:5px;border-radius:50%;flex:none;
-  background:var(--ldot-color,#34d399);
+  width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--ldot-color,#00e5ff);
+  box-shadow:0 0 6px var(--ldot-color,#00e5ff);
 }
-.zone-label .lba{font-size:0.58rem;opacity:.55;margin-left:2px}
+.zone-label .lba{font-size:0.6rem;opacity:.6;margin-left:2px}
 
 .status-indicator{
-  position:absolute;bottom:12px;left:12px;
+  position:absolute;bottom:14px;left:14px;
   pointer-events:none;
-  display:flex;align-items:center;gap:5px;
-  padding:4px 9px;background:rgba(10,10,14,.65);
+  display:flex;align-items:center;gap:6px;
+  padding:5px 12px;background:rgba(10,12,20,.76);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border:1px solid var(--border);border-radius:5px;
-  font-family:var(--mono);font-size:0.64rem;
-  letter-spacing:.7px;text-transform:uppercase;
-  color:var(--text-3);z-index:10;
+  border-radius:999px;
+  font-family:var(--mono);font-size:0.68rem;
+  letter-spacing:.8px;text-transform:uppercase;
+  color:var(--text-2);z-index:10;
 }
-[data-theme="light"] .status-indicator{background:rgba(255,255,255,.8)}
+@media (max-width:768px){.status-indicator{display:none}}
+[data-theme="light"] .status-indicator{background:rgba(255,255,255,.85)}
 .status-indicator::before{
-  content:'';width:5px;height:5px;border-radius:50%;
-  background:var(--success);
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--success);box-shadow:0 0 8px var(--success);
 }
-.status-indicator.danger::before{background:var(--danger)}
+.status-indicator.danger::before{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.status-indicator.fmri::before{background:var(--accent);box-shadow:0 0 8px var(--accent)}
 
 /* ═══ MODEL LOADER ═══ */
 .model-loader{
@@ -406,108 +487,107 @@ svg{display:block}
 }
 .model-loader.hidden{opacity:0;pointer-events:none}
 .model-loader-spinner{
-  width:30px;height:30px;margin:0 auto 10px;
+  width:34px;height:34px;margin:0 auto 12px;
   border:2px solid var(--border);
-  border-top-color:var(--text);
+  border-top-color:var(--accent);
   border-radius:50%;
   animation:spin 0.85s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .model-loader-text{
-  font-family:var(--mono);font-size:0.68rem;
-  letter-spacing:1.3px;text-transform:uppercase;
-  color:var(--text-3);text-align:center;
+  font-family:var(--mono);font-size:0.72rem;
+  letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--text-2);text-align:center;
 }
 
-/* ═══ MINIMALIST ANALYTICS PANEL (RIGHT CURTAIN) ═══ */
+/* ═══ RIGHT CURTAIN ANALYTICS ═══ */
 .back-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  font-family:var(--mono);font-size:0.66rem;font-weight:500;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:0.7rem;font-weight:500;
   color:var(--text-2);background:var(--bg-2);
-  border:1px solid var(--border);border-radius:5px;
-  padding:4px 8px;margin-bottom:10px;
+  border-radius:999px;padding:5px 12px;margin-bottom:12px;
 }
-.back-btn:hover{color:var(--text);border-color:var(--border-hi)}
+.back-btn:hover{color:var(--text);background:var(--bg-3)}
 
 .analytics-header{
   display:flex;align-items:flex-start;
-  justify-content:space-between;gap:8px;margin-bottom:12px;
+  justify-content:space-between;gap:10px;margin-bottom:14px;
 }
-.analytics-header h2{font-size:1rem;font-weight:600;letter-spacing:-.2px;margin-bottom:2px;line-height:1.25}
-.analytics-header .subtitle{font-family:var(--mono);font-size:0.68rem;color:var(--text-3);display:block}
+.analytics-header h2{font-size:1.08rem;font-weight:600;letter-spacing:-.2px;margin-bottom:3px;line-height:1.25}
+.analytics-header .subtitle{font-family:var(--mono);font-size:0.7rem;color:var(--text-3);display:block}
 .ba-badge{
-  font-family:var(--mono);font-size:0.64rem;font-weight:500;
-  padding:3px 7px;border-radius:4px;
-  background:var(--bg-2);border:1px solid var(--border);
-  color:var(--text-2);white-space:nowrap;flex:none;
+  font-family:var(--mono);font-size:0.66rem;font-weight:600;
+  padding:4px 9px;border-radius:999px;
+  background:var(--bg-2);color:var(--accent);
+  white-space:nowrap;flex:none;
 }
 .card{
   background:var(--bg-2);border:1px solid var(--border);
-  border-radius:7px;padding:11px 12px;margin-bottom:8px;
+  border-radius:10px;padding:12px 14px;margin-bottom:10px;
 }
 .card-title{
-  font-family:var(--mono);font-size:0.64rem;font-weight:600;
-  letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--text-3);margin-bottom:7px;
+  font-family:var(--mono);font-size:0.65rem;font-weight:600;
+  letter-spacing:1.3px;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:8px;
   display:flex;align-items:center;justify-content:space-between;
 }
 .card-title .badge{
   font-family:var(--mono);font-size:0.62rem;
-  padding:1px 5px;border-radius:3px;
+  padding:2px 6px;border-radius:999px;
   background:var(--bg-3);color:var(--text-2);
 }
-.card p{font-size:0.8rem;line-height:1.55;color:var(--text-2);margin:0}
+.card p{font-size:0.82rem;line-height:1.6;color:var(--text-2);margin:0}
 
 .metric-row{padding:6px 0;border-bottom:1px solid var(--border)}
 .metric-row:last-child{border-bottom:none}
-.metric-top{display:flex;align-items:center;justify-content:space-between;font-size:0.76rem;margin-bottom:4px}
+.metric-top{display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;margin-bottom:4px}
 .metric-label{color:var(--text-2)}
-.metric-value{font-family:var(--mono);font-size:0.76rem;font-weight:600}
+.metric-value{font-family:var(--mono);font-size:0.78rem;font-weight:600}
 .metric-value.good{color:var(--success)}
 .metric-value.warn{color:var(--warn)}
 .metric-value.bad{color:var(--danger)}
-.metric-bar{height:3px;border-radius:2px;background:var(--bg-3);overflow:hidden}
+.metric-bar{height:4px;border-radius:2px;background:var(--bg-3);overflow:hidden}
 .metric-fill{height:100%;border-radius:2px;transition:width .3s var(--ease)}
 .metric-fill.good{background:var(--success)}
 .metric-fill.warn{background:var(--warn)}
 .metric-fill.bad{background:var(--danger)}
 
-.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
 .tag{
-  font-family:var(--mono);font-size:0.66rem;
-  padding:3px 7px;border-radius:4px;
-  background:var(--bg-3);border:1px solid var(--border);color:var(--text-2);
+  font-family:var(--mono);font-size:0.68rem;
+  padding:4px 9px;border-radius:999px;
+  background:var(--bg-3);color:var(--text-2);
 }
-.tag.danger{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25);color:#f87171}
-.tag.warn{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:#fbbf24}
+.tag.danger{background:rgba(244,63,94,.14);color:#fb7185}
+.tag.warn{background:rgba(245,158,11,.14);color:#fbbf24}
 
 .sub-item{
-  display:flex;align-items:center;gap:8px;width:100%;
-  padding:8px 10px;border-radius:5px;
-  border:1px solid var(--border);
+  display:flex;align-items:center;gap:9px;width:100%;
+  padding:8px 11px;border-radius:8px;
   background:var(--bg-3);color:var(--text);
-  font-size:0.78rem;text-align:left;
-  transition:border-color .15s ease;
-  margin-bottom:4px;
+  font-size:0.79rem;text-align:left;
+  transition:background .15s ease,transform .15s ease;
+  margin-bottom:5px;
 }
-.sub-item:hover{border-color:var(--border-hi)}
-.sub-item .pin{width:6px;height:6px;border-radius:50%;flex:none}
+.sub-item:hover{transform:translateX(2px)}
+.sub-item.active-step{background:rgba(0,229,255,.16);border:1px solid var(--accent)}
+.sub-item .pin{width:7px;height:7px;border-radius:50%;flex:none;box-shadow:0 0 6px currentColor}
 .sub-item-info{flex:1;min-width:0}
-.sub-item-title{display:block;font-weight:500;color:var(--text);font-size:0.78rem}
-.sub-item-sub{display:block;font-size:0.66rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sub-item .go{margin-left:auto;color:var(--text-3);font-family:var(--mono);font-size:0.68rem}
+.sub-item-title{display:block;font-weight:500;color:var(--text);font-size:0.8rem}
+.sub-item-sub{display:block;font-size:0.67rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-item .go{margin-left:auto;color:var(--text-3);font-family:var(--mono);font-size:0.7rem}
 
-.progression-bar{display:flex;height:3px;border-radius:2px;overflow:hidden;background:var(--bg-3);margin-bottom:8px;gap:2px}
+.progression-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--bg-3);margin-bottom:8px;gap:3px}
 .progression-step{flex:1;background:var(--border)}
 .progression-step.past{background:var(--warn)}
 .progression-step.current{background:var(--text)}
-.progression-labels{display:flex;gap:2px;margin-bottom:8px;font-family:var(--mono);font-size:0.64rem;text-align:center;color:var(--text-3)}
+.progression-labels{display:flex;gap:3px;margin-bottom:8px;font-family:var(--mono);font-size:0.64rem;text-align:center;color:var(--text-3)}
 .progression-labels span{flex:1}
-.progression-labels span.active{color:var(--text);font-weight:600}
+.progression-labels span.active{color:var(--text);font-weight:700}
 
 .scrim{
   position:fixed;inset:calc(var(--topbar-h) + var(--safe-top)) 0 0 0;
-  background:rgba(0,0,0,.5);z-index:150;
+  background:rgba(0,0,0,.55);z-index:150;
   opacity:0;pointer-events:none;transition:opacity .25s ease;
 }
 .scrim.show{opacity:1;pointer-events:auto}
@@ -517,19 +597,31 @@ svg{display:block}
 <div class="app">
   <header class="topbar">
     <div class="topbar-left">
-      <button class="icon-btn mobile-only" id="menuBtn" aria-label="Menu">
+      <button class="action-btn mobile-only" id="menuBtn" aria-label="Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="brand">
-        <div class="brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+        <div class="brand-logo">
+          <!-- Custom Clinical Brain + Neural Synapse Vector Icon -->
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 5.5C11.2 4 7.5 5 6 8c-1.8 1.5-2.2 4.5-.8 6.8-.9 2.4.3 5.2 2.8 6.2 1.6.9 4.2.7 6-.5V5.5z"/>
+            <path d="M14 5.5C16.8 4 20.5 5 22 8c1.8 1.5 2.2 4.5.8 6.8.9 2.4-.3 5.2-2.8 6.2-1.6.9-4.2.7-6-.5V5.5z"/>
+            <circle cx="10" cy="11" r="1.3" fill="currentColor"/>
+            <circle cx="18" cy="11" r="1.3" fill="currentColor"/>
+            <circle cx="9.5" cy="16.5" r="1.3" fill="currentColor"/>
+            <circle cx="18.5" cy="16.5" r="1.3" fill="currentColor"/>
+            <path d="M10 11l4 2.5 4-2.5M9.5 16.5L14 13.5l4.5 3" stroke-width="1.2" opacity=".75"/>
           </svg>
         </div>
         <span class="brand-name">Neuro - Cortex</span>
       </div>
-      <span class="fps-badge" id="fpsCounter">60 FPS</span>
+      <span class="fps-readout" id="fpsCounter">165 FPS</span>
+    </div>
+
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" class="search-input" id="searchInput" placeholder="Поиск: Таламус, Желудочки, BA 44..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
     </div>
 
     <div class="topbar-actions">
@@ -537,12 +629,12 @@ svg{display:block}
         <button class="lang-btn" data-lang="en">EN</button>
         <button class="lang-btn active" data-lang="ru">RU</button>
       </div>
-      <button class="icon-btn" id="resetCamBtn" title="Сброс вида" aria-label="Reset View">
+      <button class="action-btn" id="resetCamBtn" title="Reset View" aria-label="Reset View">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
         </svg>
       </button>
-      <button class="icon-btn" id="themeBtn" aria-label="Theme">
+      <button class="action-btn" id="themeBtn" aria-label="Theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
@@ -553,19 +645,32 @@ svg{display:block}
   <div class="body">
     <aside class="panel panel-left" id="panelLeft">
       <div class="panel-head">
-        <h2 id="leftTitle">Атлас мозга</h2>
+        <h2 id="leftTitle">Анатомический атлас</h2>
         <button class="panel-close" id="closeLeft" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
+
       <div class="section">
-        <div class="section-title"><span id="lobesTitle">Отделы и доли</span><span>6</span></div>
+        <div class="section-title"><span id="lobesTitle">Отделы и доли коры</span><span>6</span></div>
         <div id="regionList"></div>
       </div>
+
+      <div class="section">
+        <div class="section-title"><span id="subcorticalTitle">Глубокие 3D-структуры</span><span>7</span></div>
+        <div id="subcorticalList"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span id="fmriTitle">фМРТ-Сценарии (Активность)</span><span>4</span></div>
+        <div id="fmriList"></div>
+      </div>
+
       <div class="section">
         <div class="section-title"><span id="diseasesTitle">Клинические патологии</span><span>9</span></div>
         <div id="diseaseList"></div>
       </div>
+
       <div id="severityContainer" style="display:none">
         <div class="severity-box">
           <div class="severity-head">
@@ -586,23 +691,33 @@ svg{display:block}
       <div class="model-loader" id="modelLoader">
         <div>
           <div class="model-loader-spinner"></div>
-          <div class="model-loader-text" id="loaderText">Калибровка 3D-атласа</div>
+          <div class="model-loader-text" id="loaderText">Синтез 3D-структур мозга</div>
         </div>
       </div>
 
       <div class="viewport-controls">
         <div class="mode-switch">
           <button class="mode-btn active" data-mode="surface" id="modeSurface">Поверхность (Сосуды)</button>
-          <button class="mode-btn" data-mode="neural" id="modeNeural">Внутри (Нейросеть)</button>
+          <button class="mode-btn" data-mode="neural" id="modeNeural">Внутри (3D-Ядра + Нейросеть)</button>
         </div>
         <button class="chip on" data-toggle="labels"><span class="chip-dot"></span><span id="chipLabels">Метки</span></button>
         <button class="chip" data-toggle="rotate"><span class="chip-dot"></span><span id="chipRotate">Вращение</span></button>
+
+        <div class="slice-bar">
+          <span id="sliceXLabel">Срез X:</span>
+          <input type="range" class="slice-slider" id="sliceXSlider" min="-1.1" max="1.2" step="0.02" value="1.2">
+          <span class="slice-val" id="sliceXVal">Выкл</span>
+        </div>
+        <div class="slice-bar">
+          <span id="sliceYLabel">Срез Y:</span>
+          <input type="range" class="slice-slider" id="sliceYSlider" min="-1.0" max="1.2" step="0.02" value="1.2">
+          <span class="slice-val" id="sliceYVal">Выкл</span>
+        </div>
       </div>
 
-      <!-- Non-clickable status indicator for current anatomical selection -->
       <div class="focus-indicator" id="focusIndicator">
         <span class="focus-dot" id="focusDot"></span>
-        <span class="focus-tag" id="focusTag">Область:</span>
+        <span class="focus-tag" id="focusTag">Фокус:</span>
         <span class="focus-val" id="focusValue">Весь мозг</span>
       </div>
 
@@ -611,7 +726,7 @@ svg{display:block}
 
     <aside class="panel panel-right" id="panelRight">
       <div class="panel-head">
-        <h2 id="rightTitle">Нейробиология</h2>
+        <h2 id="rightTitle">Клиническая нейробиология</h2>
         <button class="panel-close" id="closeRight" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -638,340 +753,457 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 /* ================================================================
-   i18n
+   BILINGUAL CLINICAL TERMINOLOGY (EN / RU)
    ================================================================ */
 const I18N = {
   en: {
-    atlas:'Brain Atlas',analytics:'Neurobiology',
-    lobes:'Cortical Lobes & Divisions',diseases:'Clinical Pathologies',
-    severity:'Lesion Severity',focus:'Region:',fullBrain:'Full Brain (Both Hemispheres)',
-    modeSurface:'Surface (Vessels)',modeNeural:'Internal (Neurons)',
-    labels:'Labels',rotate:'Auto-rotate',
-    ready:'Normal',alert:'Pathology Active',
-    anatomy:'Anatomical Structure',functions:'Physiological Functions',
-    hemispheres:'Hemispheric Dominance',subzones:'Brodmann Areas & Nuclei',
-    connections:'White Matter Tracts',backToLobe:'Back to division',
+    atlas:'Anatomical Atlas',analytics:'Clinical Neurobiology',
+    lobes:'Cortical Lobes & Divisions',subcortical:'Deep 3D Structures (Meshes)',
+    fmri:'fMRI Task Paradigms',diseases:'Neurological Pathologies',
+    severity:'Lesion Severity',focus:'Focus:',fullBrain:'Full Brain (Both Hemispheres)',
+    modeSurface:'Surface (Vessels)',modeNeural:'Internal (3D Nuclei + Tracts)',
+    labels:'Labels',rotate:'Orbit',
+    sliceX:'Sagittal X:',sliceY:'Axial Y:',sliceOff:'Off',
+    searchPlaceholder:'Search: Thalamus, Ventricles, BA 44, Stroke...',
+    ready:'Physiological Norm',alert:'Pathology Active',fmriActive:'fMRI Paradigm Active',
+    anatomy:'Cytoarchitecture & Anatomy',functions:'Physiological Functions',
+    hemispheres:'Hemispheric Dominance & Vascularization',subzones:'Brodmann Areas & Nuclei',
+    connections:'DTI White Matter Tracts',backToLobe:'Back to division',
+    fmriSteps:'Sequential Activation Chain (BOLD Signal)',
+    stageWord:'Stage',zonesWord:'zones',
+    typeLobe:'Lobe',typeMesh:'3D Mesh',typePathology:'Pathology',
     mechanism:'Pathogenesis',affected:'Affected Structures',
-    neuro:'Neurotransmitters',symptoms:'Clinical Symptoms',
-    progression:'Stage Progression',metrics:'Functional Integrity',
-    healthy:'Healthy Brain',healthyDesc:'Normal vascular & synaptic state',
-    loadingModel:'Calibrating 3D Atlas',loadError:'Model failed to load',
-    metricCognitive:'Cognition',metricMotor:'Motor Control',metricLanguage:'Language',
-    metricSensory:'Somatosensory',metricMemory:'Memory',metricConnectivity:'Tract Integrity'
+    neuro:'Neurotransmitter Profile',symptoms:'Clinical Presentation',
+    progression:'Disease Staging',metrics:'Functional Integrity',
+    healthy:'Healthy Brain',healthyDesc:'Baseline vascular & synaptic homeostasis',
+    loadingModel:'Synthesizing 3D Brain Structures',loadError:'Model failed to load',
+    metricCognitive:'Executive & Cognition',metricMotor:'Pyramidal & Extrapyramidal Motor',
+    metricLanguage:'Speech & Praxis',metricSensory:'Somatosensory & Visual',
+    metricMemory:'Episodic & Working Memory',metricConnectivity:'Connectome Integrity'
   },
   ru: {
-    atlas:'Атлас мозга',analytics:'Нейробиология',
-    lobes:'Отделы и доли мозга',diseases:'Клинические патологии',
-    severity:'Тяжесть поражения',focus:'Область:',fullBrain:'Весь мозг (Оба полушария)',
-    modeSurface:'Поверхность (Сосуды)',modeNeural:'Внутри (Нейросеть)',
+    atlas:'Анатомический атлас',analytics:'Клиническая нейробиология',
+    lobes:'Отделы и доли коры',subcortical:'Глубокие 3D-структуры (Меши)',
+    fmri:'фМРТ-Сценарии (Активность)',diseases:'Клинические патологии',
+    severity:'Тяжесть поражения',focus:'Фокус:',fullBrain:'Весь мозг (Оба полушария)',
+    modeSurface:'Поверхность (Сосуды)',modeNeural:'Внутри (3D-Ядра + Нейросеть)',
     labels:'Метки',rotate:'Вращение',
-    ready:'Норма',alert:'Патология',
-    anatomy:'Анатомическое строение',functions:'Физиологические функции',
-    hemispheres:'Межполушарная специализация',subzones:'Поля Бродмана и ядра',
-    connections:'Проводящие пути (Белое вещество)',backToLobe:'Назад к отделу',
+    sliceX:'Срез X:',sliceY:'Срез Y:',sliceOff:'Выкл',
+    searchPlaceholder:'Поиск: Таламус, Желудочки, BA 44, Инсульт...',
+    ready:'Физиологическая норма',alert:'Активна патология',fmriActive:'фМРТ-Симуляция',
+    anatomy:'Цитоархитектоника и строение',functions:'Физиологические функции',
+    hemispheres:'Межполушарная асимметрия и кровоснабжение',subzones:'Поля Бродмана и ядра',
+    connections:'Трактография (DTI Проводящие пути)',backToLobe:'Назад к отделу',
+    fmriSteps:'Цепочка нейроактивации (BOLD-сигнал)',
+    stageWord:'Стадия',zonesWord:'зон',
+    typeLobe:'Отдел',typeMesh:'3D-Меш',typePathology:'Патология',
     mechanism:'Патогенез',affected:'Поражённые структуры',
-    neuro:'Нейромедиаторы',symptoms:'Клинические симптомы',
-    progression:'Стадия процесса',metrics:'Сохранность функций',
-    healthy:'Здоровый мозг',healthyDesc:'Нормальное сосудистое и синаптическое состояние',
-    loadingModel:'Калибровка 3D-атласа',loadError:'Ошибка загрузки модели',
-    metricCognitive:'Когниции',metricMotor:'Моторика',metricLanguage:'Речь',
-    metricSensory:'Сенсорика',metricMemory:'Память',metricConnectivity:'Проводящие пути'
+    neuro:'Нейромедиаторный профиль',symptoms:'Клиническая картина',
+    progression:'Стадирование процесса',metrics:'Сохранность функций',
+    healthy:'Здоровый мозг',healthyDesc:'Нормальный сосудистый и синаптический гомеостаз',
+    loadingModel:'Синтез 3D-структур мозга',loadError:'Ошибка загрузки 3D-модели',
+    metricCognitive:'Когниции и контроль',metricMotor:'Пирамидная и экстрапирамидная моторика',
+    metricLanguage:'Речь и праксис',metricSensory:'Соматосенсорика и зрение',
+    metricMemory:'Эпизодическая и рабочая память',metricConnectivity:'Целостность коннектома'
   }
 };
 let LANG = 'ru';
 const T = function(k) { return I18N[LANG][k] || k; };
 
 /* ================================================================
-   TEXTBOOK ANATOMICAL DIVISIONS
-   Coordinates after auto-calibration:
-   +Z = Anterior (Frontal), -Z = Posterior (Occipital)
-   +Y = Superior (Parietal), -Y = Inferior (Temporal/Cerebellum/Stem)
-   -X = Left Hemisphere, +X = Right Hemisphere
+   CORTICAL DIVISIONS (DEEP CLINICAL PALETTE)
    ================================================================ */
 const REGIONS = {
   frontal:{
-    id:'frontal',color:'#10b981',hex:0x10b981,dir:[-0.25,0.35,0.9],
-    ba:'BA 4, 6, 8–12, 44–47',
-    en:{name:'Frontal Lobe',latin:'Lobus frontalis',short:'Executive, Motor & Speech',
-      desc:'Occupies the anterior pole of the hemispheres (anterior to the central sulcus of Rolando). Houses the primary motor cortex (precentral gyrus), premotor areas, Broca center, and prefrontal executive cortex.',
-      hemi:'Left hemisphere: dominant for motor speech (Broca area) and logical sequential planning. Right hemisphere: prosody, emotional tone, and spatial attention.',
-      functions:['Voluntary movement (Pyramidal tract)','Executive control & planning','Working memory','Expressive speech (Broca)','Behavioral inhibition']},
-    ru:{name:'Лобная доля',latin:'Lobus frontalis',short:'Моторика, речь и контроль',
-      desc:'Занимает передний отдел полушарий (кпереди от центральной борозды Роландо). Включает предцентральную моторную извилину, премоторную кору, речевой центр Брока и префронтальный полюс.',
-      hemi:'Левое полушарие (доминантное): моторная речь (зона Брока), абстрактно-логическое планирование. Правое полушарие: интонация речи, контроль эмоционального поведения.',
-      functions:['Произвольные движения (пирамидный путь)','Исполнительный контроль','Рабочая память','Моторная речь (Брока)','Волевая регуляция']}
+    id:'frontal',color:'#00e5a3',hex:0x00e5a3,dir:[-0.25,0.35,0.9],ba:'BA 4, 6, 8–12, 44–47',
+    en:{name:'Frontal Lobe',latin:'Lobus frontalis',short:'Executive Control, Motor & Speech',
+      desc:'Occupies the anterior pole of the cerebral hemispheres (anterior to the central sulcus of Rolando). Houses the primary motor cortex (precentral gyrus), premotor areas, frontal eye fields, Broca expressive speech center, and prefrontal executive networks.',
+      hemi:'Left (dominant) hemisphere: motor speech (Broca area) and logical sequential planning. Right hemisphere: emotional prosody and spatial attention. Blood supply: Anterior (ACA) and Middle (MCA) cerebral arteries.',
+      functions:['Voluntary movement (Pyramidal tract)','Executive control & planning','Working memory maintenance','Expressive speech (Broca)','Behavioral & impulse inhibition']},
+    ru:{name:'Лобная доля',latin:'Lobus frontalis',short:'Исполнительный контроль, моторика и речь',
+      desc:'Занимает передний полюс полушарий (кпереди от центральной борозды Роландо). Включает предцентральную моторную извилину (BA 4), премоторную кору, глазодвигательное поле (BA 8), центр речи Брока и префронтальную кору.',
+      hemi:'Левое полушарие (доминантное): моторная речь (зона Брока) и логическое планирование. Правое: интонация речи и контроль аффекта. Кровоснабжение: передняя (ПМА) и средняя (СМА) мозговые артерии.',
+      functions:['Произвольные движения (пирамидный путь)','Исполнительный контроль','Рабочая память','Моторная продукция речи (Брока)','Волевое торможение импульсов']}
   },
   parietal:{
-    id:'parietal',color:'#38bdf8',hex:0x38bdf8,dir:[-0.28,0.82,-0.25],
-    ba:'BA 1–3, 5, 7, 39, 40',
-    en:{name:'Parietal Lobe',latin:'Lobus parietalis',short:'Somatosensory & Spatial Schema',
-      desc:'Located posterior to the central sulcus and superior to the parieto-occipital sulcus. Integrates contralateral tactile, pain, temperature, and proprioceptive inputs into a unified body schema.',
-      hemi:'Left hemisphere: praxis (purposeful skilled movement), calculation, reading/writing (angular gyrus). Right hemisphere: 3D visuospatial navigation and contralateral body awareness.',
-      functions:['Cutaneous & deep sensitivity','Somatotopic body schema','3D Spatial orientation','Praxis & tool use','Symbolic calculation']},
-    ru:{name:'Теменная доля',latin:'Lobus parietalis',short:'Соматосенсорика и схема тела',
-      desc:'Расположена позади центральной борозды Роландо. Обрабатывает сигналы поверхностной (осязание, боль, температура) и глубокой (проприоцепция) чувствительности от противоположной половины тела.',
-      hemi:'Левое полушарие: праксис (целенаправленные действия), счёт, чтение и письмо (угловая извилина). Правое полушарие: трёхмерная ориентация в пространстве и схема тела.',
-      functions:['Кожная и глубокая чувствительность','Соматотопическая схема тела','Пространственная ориентация','Праксис (навыки действий)','Математический счёт']}
+    id:'parietal',color:'#00b8ff',hex:0x00b8ff,dir:[-0.28,0.82,-0.25],ba:'BA 1–3, 5, 7, 39, 40',
+    en:{name:'Parietal Lobe',latin:'Lobus parietalis',short:'Somatosensory Integration & Praxis',
+      desc:'Located posterior to the central sulcus and superior to the lateral Sylvian fissure. Integrates contralateral tactile, nociceptive, thermal, and proprioceptive inputs into a unified 3D somatognostic body schema.',
+      hemi:'Left hemisphere: skilled motor praxis, calculation, reading and writing (supramarginal & angular gyri). Right hemisphere: 3D spatial topology and contralateral hemispace attention. Blood supply: MCA & ACA.',
+      functions:['Cutaneous & deep proprioception','Somatotopic body schema','3D Visuospatial orientation','Motor praxis & tool use','Symbolic calculation & reading']},
+    ru:{name:'Теменная доля',latin:'Lobus parietalis',short:'Соматосенсорика, праксис и схема тела',
+      desc:'Расположена позади центральной борозды Роландо. Интегрирует сигналы поверхностной (осязание, боль, температура) и глубокой (суставно-мышечное чувство) чувствительности от противоположной половины тела.',
+      hemi:'Левое полушарие: целенаправленный праксис, счёт, чтение и письмо (надкраевая и угловая извилины). Правое: трёхмерная ориентация и схема тела. Кровоснабжение: СМА и ПМА.',
+      functions:['Поверхностная и глубокая чувствительность','Соматотопическая схема тела','Трёхмерная ориентация','Моторный праксис','Математический счёт и чтение']}
   },
   temporal:{
-    id:'temporal',color:'#a855f7',hex:0xa855f7,dir:[-0.92,-0.12,0.08],
-    ba:'BA 20–22, 38, 41, 42',
-    en:{name:'Temporal Lobe',latin:'Lobus temporalis',short:'Auditory, Speech & Memory',
-      desc:'Situated inferior to the lateral sulcus (Sylvian fissure). Contains primary auditory cortex (Heschl gyri), Wernicke sensory speech center, and medial limbic structures (hippocampus and amygdala).',
-      hemi:'Left hemisphere: phonemic decoding and semantic speech comprehension (Wernicke area), verbal memory. Right hemisphere: musical pitch, timbre, facial recognition, and visual memory.',
-      functions:['Tonotopic auditory perception','Speech comprehension (Wernicke)','Declarative memory consolidation','Emotional evaluation','Visual object & face recognition']},
-    ru:{name:'Височная доля',latin:'Lobus temporalis',short:'Слух, понимание речи и память',
-      desc:'Отделена от лобной и теменной долей латеральной (Сильвиевой) бороздой. Содержит первичную слуховую кору (извилины Гешля), сенсорный центр речи Вернике, гиппокамп и миндалевидное тело.',
-      hemi:'Левое полушарие: распознавание фонем и понимание смысла речи (зона Вернике), словесная память. Правое полушарие: восприятие музыки, тембра голоса и узнавание лиц.',
-      functions:['Тонотопический анализ слуха','Понимание речи (Вернике)','Консолидация памяти (гиппокамп)','Эмоциональная оценка','Узнавание лиц и объектов']}
+    id:'temporal',color:'#a855f7',hex:0xa855f7,dir:[-0.92,-0.12,0.08],ba:'BA 20–22, 38, 41, 42',
+    en:{name:'Temporal Lobe',latin:'Lobus temporalis',short:'Auditory Decoding, Semantics & Memory',
+      desc:'Situated inferior to the lateral sulcus of Sylvius. Contains the primary tonotopic auditory cortex (Heschl gyri), Wernicke sensory speech comprehension center, and parahippocampal memory gateways.',
+      hemi:'Left hemisphere: phonemic decoding and semantic speech comprehension (Wernicke area), verbal memory. Right hemisphere: musical pitch, prosody, and facial recognition (fusiform gyrus). Blood supply: MCA & PCA.',
+      functions:['Tonotopic auditory perception','Speech comprehension (Wernicke)','Declarative memory encoding','Multimodal semantic synthesis','Facial & object recognition']},
+    ru:{name:'Височная доля',latin:'Lobus temporalis',short:'Слух, понимание речи и семантика памяти',
+      desc:'Отделена от лобной и теменной долей латеральной (Сильвиевой) бороздой. Содержит первичную слуховую кору (извилины Гешля), сенсорный центр речи Вернике и парагиппокампальные отделы памяти.',
+      hemi:'Левое полушарие: распознавание фонем и понимание смысла речи (зона Вернике), словесная память. Правое: восприятие музыки, тембра и узнавание лиц. Кровоснабжение: СМА и ЗМА.',
+      functions:['Тонотопический анализ слуха','Понимание устной и письменной речи','Кодирование декларативной памяти','Семантический синтез','Узнавание лиц и объектов']}
   },
   occipital:{
-    id:'occipital',color:'#eab308',hex:0xeab308,dir:[-0.22,0.12,-0.96],
-    ba:'BA 17, 18, 19',
-    en:{name:'Occipital Lobe',latin:'Lobus occipitalis',short:'Primary & Associative Vision',
-      desc:'Forms the posterior pole of the hemisphere around the calcarine sulcus. Receives optic radiation fibers from the lateral geniculate body of the thalamus for retinotopic visual processing.',
-      hemi:'Each occipital lobe processes the contralateral visual hemifield (left lobe sees right visual field; right lobe sees left visual field).',
-      functions:['Primary retinotopic vision (V1)','Contour & orientation analysis','Color perception (V4)','Motion tracking (V5/MT)','Visual gnosia & memory']},
-    ru:{name:'Затылочная доля',latin:'Lobus occipitalis',short:'Первичная и ассоциативная кора зрения',
+    id:'occipital',color:'#f59e0b',hex:0xf59e0b,dir:[-0.22,0.12,-0.96],ba:'BA 17, 18, 19',
+    en:{name:'Occipital Lobe',latin:'Lobus occipitalis',short:'Retinotopic & Associative Vision',
+      desc:'Forms the posterior cortical pole around the calcarine sulcus. Receives geniculocalcarine optic radiation fibers (Gratiolet bundle) from the lateral geniculate nucleus for retinotopic decoding of vision.',
+      hemi:'Each occipital lobe processes the contralateral visual hemifield. Macular (central) vision has dual representation at the occipital pole. Blood supply: Posterior Cerebral Artery (PCA).',
+      functions:['Primary retinotopic vision (V1)','Contour & spatial orientation','Color constancy (V4)','Optical flow & motion (V5/MT)','Visual gnosia & imagery']},
+    ru:{name:'Затылочная доля',latin:'Lobus occipitalis',short:'Ретинотопическая и ассоциативная кора зрения',
       desc:'Образует задний полюс полушария вокруг шпорной борозды (Sulcus calcarinus). Принимает волокна зрительной лучистости Грациоле от латерального коленчатого тела таламуса.',
-      hemi:'Каждая затылочная доля обрабатывает противоположное поле зрения (левая доля — правую половину поля зрения обоих глаз, правая — левую).',
-      functions:['Первичный зрительный анализ (V1)','Восприятие контуров и глубины','Цветовосприятие (V4)','Анализ движения (V5/MT)','Зрительный гнозис']}
+      hemi:'Каждая затылочная доля обрабатывает противоположное поле зрения обоих глаз. Кровоснабжение: задняя мозговая артерия (ЗМА, вертебробазилярный бассейн).',
+      functions:['Первичный зрительный анализ (V1)','Восприятие контуров и глубины','Цветовосприятие (V4)','Анализ скорости и движения (V5/MT)','Зрительный гнозис']}
   },
   cerebellum:{
-    id:'cerebellum',color:'#ec4899',hex:0xec4899,dir:[-0.25,-0.58,-0.75],
-    ba:'Cortex cerebelli',
-    en:{name:'Cerebellum',latin:'Cerebellum',short:'Motor Coordination & Equilibrium',
-      desc:'Located in the posterior cranial fossa dorsal to the pons and medulla. Consists of two hemispheres and the midline vermis. Coordinates ipsilateral muscle synergy, posture, and motor learning.',
-      hemi:'Unlike the cerebral cortex, cerebellar hemispheres control the IPSILATERAL (same) side of the body via double-crossed tracts.',
-      functions:['Postural equilibrium (Vermis)','Ipsilateral movement coordination','Muscle tone regulation','Fine motor timing','Motor skill automation']},
-    ru:{name:'Мозжечок',latin:'Cerebellum',short:'Координация движений и равновесие',
-      desc:'Расположен в задней черепной ямке под затылочными долями (позади моста и продолговатого мозга). Состоит из червя и двух полушарий, содержит клетки Пуркинье и ядра шатра/зубчатое ядро.',
-      hemi:'В отличие от больших полушарий, полушария мозжечка контролируют ИПСИЛАТЕРАЛЬНУЮ (свою же) сторону тела.',
-      functions:['Равновесие и осанка (червь)','Координация и точность движений','Регуляция мышечного тонуса','Синхронизация агонистов/антагонистов','Моторное обучение']}
+    id:'cerebellum',color:'#ec4899',hex:0xec4899,dir:[-0.25,-0.58,-0.75],ba:'Cortex cerebelli',
+    en:{name:'Cerebellum',latin:'Cerebellum',short:'Motor Synergy, Equilibrium & Timing',
+      desc:'Located in the posterior cranial fossa beneath the tentorium cerebelli. Comprises the midline vermis, two hemispheres, Purkinje cortical layer, and deep nuclei (dentate, emboliform, globose, fastigial).',
+      hemi:'Controls the IPSILATERAL (same) side of the body via double-crossed cerebro-ponto-cerebello-rubro-spinal loops. Blood supply: SCA, AICA, and PICA arteries.',
+      functions:['Postural equilibrium (Vermis)','Ipsilateral movement coordination','Muscle tone regulation','Agonist-antagonist synergy','Motor skill automation']},
+    ru:{name:'Мозжечок',latin:'Cerebellum',short:'Координация движений, тонус и равновесие',
+      desc:'Расположен в задней черепной ямке под намётом мозжечка. Состоит из червя, двух полушарий, коры с клетками Пуркинье и глубоких ядер (зубчатое, пробковидное, шаровидное, ядро шатра).',
+      hemi:'Контролирует ИПСИЛАТЕРАЛЬНУЮ (свою же) половину тела благодаря двойному перекрёсту проводящих путей. Кровоснабжение: ВМА, ПНМА и ЗНМА.',
+      functions:['Равновесие и статика (червь)','Точность и метрия движений','Регуляция мышечного тонуса','Синхронизация агонистов/антагонистов','Автоматизация моторных навыков']}
   },
   brainstem:{
-    id:'brainstem',color:'#06b6d4',hex:0x06b6d4,dir:[0.0,-0.92,-0.18],
-    ba:'Truncus encephali',
-    en:{name:'Brainstem',latin:'Truncus encephali',short:'Vital Autonomic Centers & Cranial Nerves',
-      desc:'Includes the midbrain (mesencephalon), pons, and medulla oblongata. Contains cranial nerve nuclei (III–XII), ascending/descending tracts, reticular activating system (ARAS), and vital respiratory/cardiac centers.',
-      hemi:'Bilateral symmetrical organization housing crossed corticospinal pyramids and medial lemniscus.',
-      functions:['Respiratory & cardiovascular centers','Wakefulness (Reticular formation)','Cranial nerve reflexes (III–XII)','Descending motor & ascending sensory transit','Autonomic regulation']},
-    ru:{name:'Ствол мозга',latin:'Truncus encephali',short:'Жизненно важные центры и проводящие пути',
-      desc:'Включает средний мозг, варолиев мост и продолговатый мозг. Содержит ядра черепных нервов (III–XII пары), ретикулярную формацию и жизненно важные центры дыхания и кровообращения.',
-      hemi:'Симметричная билатеральная структура; в нижней части продолговатого мозга происходит перекрёст пирамидных моторных путей.',
-      functions:['Дыхательный и сосудодвигательный центры','Поддержание бодрствования (РФ)','Ядра черепных нервов (III–XII)','Транзит восходящих и нисходящих трактов','Защитные рефлексы']}
+    id:'brainstem',color:'#06b6d4',hex:0x06b6d4,dir:[0.0,-0.92,-0.18],ba:'Truncus encephali',
+    en:{name:'Brainstem',latin:'Truncus encephali',short:'Vital Autonomic Centers & Cranial Nuclei',
+      desc:'Includes the mesencephalon (midbrain), pons Varolii, and medulla oblongata. Houses cranial nerve nuclei (III–XII), ascending/descending projection tracts, reticular activating system (ARAS), and vital cardiorespiratory centers.',
+      hemi:'Bilateral organization; pyramidal decussation and medial lemniscus decussation occur in the lower medulla. Blood supply: Basilar and Vertebral arteries.',
+      functions:['Respiratory & vasomotor centers','Wakefulness (Reticular formation)','Cranial nerve nuclei (III–XII)','Pyramidal & lemniscal tract transit','Protective bulbar reflexes']},
+    ru:{name:'Ствол мозга',latin:'Truncus encephali',short:'Жизненно важные центры и ядра ЧМН',
+      desc:'Включает средний мозг (ножки и четверохолмие), варолиев мост и продолговатый мозг. Содержит ядра черепных нервов (III–XII пары), восходящую ретикулярную формацию (ARAS) и центры дыхания и кровообращения.',
+      hemi:'Билатеральная организация; на границе со спинным мозгом происходит перекрёст пирамид. Кровоснабжение: позвоночные и базилярная артерии.',
+      functions:['Дыхательный и сосудодвигательный центры','Поддержание бодрствования (РФ)','Ядра черепных нервов (III–XII)','Транзит восходящих и нисходящих трактов','Защитные бульбарные рефлексы']}
   }
 };
 
 /* ================================================================
-   TEXTBOOK SUBZONES (SURFACE-CLAMPED ANATOMICAL DIRECTIONS)
+   7 DEEP 3D SUBCORTICAL STRUCTURES (PROCEDURAL MESHES)
+   ================================================================ */
+const SUBCORTICAL = {
+  callosum:{
+    id:'callosum',color:'#e2e8f0',hex:0xe2e8f0,latin:'Corpus callosum',tag:'Commissure',
+    en:{name:'Corpus Callosum',short:'200M interhemispheric commissural axons',
+      desc:'The largest white matter commissure of the human brain (~200 million myelinated fibers). Subdivided into the rostrum, genu (anterior forceps minor), body (truncus), and splenium (posterior forceps major), synchronizing both hemispheres.',
+      functions:['Interhemispheric data transfer','Bimanual motor coordination','Unified visual field integration','Left-right cognitive integration']},
+    ru:{name:'Мозолистое тело',short:'200 млн межполушарных комиссуральных волокон',
+      desc:'Крупнейшая спайка белого вещества мозга (~200 млн миелиновых аксонов), соединяющая идентичные зоны правого и левого полушарий. Включает клюв (rostrum), колено (genu), ствол (truncus) и валик (splenium).',
+      functions:['Межполушарная передача информации','Бимануальная координация рук','Объединение зрительных полуполей','Интеграция речи и праксиса']}
+  },
+  ventricles:{
+    id:'ventricles',color:'#00e5ff',hex:0x00e5ff,latin:'Ventriculi cerebri & Liquor',tag:'CSF System',
+    en:{name:'Ventricular System (CSF)',short:'Lateral, III & IV ventricles + Choroid plexus',
+      desc:'Internal cavities lined with ependyma and filled with cerebrospinal fluid (CSF). CSF is secreted by the choroid plexuses of the paired C-shaped lateral ventricles, flows via the foramina of Monro into the III ventricle, through the cerebral aqueduct of Sylvius into the IV ventricle.',
+      functions:['CSF production (~500 ml/day)','Mechanical buoyancy & shock absorption','Intracranial pressure homeostasis','Glymphatic metabolic clearance']},
+    ru:{name:'Желудочковая система (Ликвор)',short:'Боковые, III и IV желудочки + водопровод',
+      desc:'Единая полостная система ЦНС, выстланная эпендимой и заполненная цереброспинальной жидкостью (ликвором). Включает парные боковые желудочки (I и II), отверстия Монро, III желудочек, водопровод Сильвия и ромбовидный IV желудочек.',
+      functions:['Циркуляция ликвора (~500 мл/сутки)','Гидравлическая амортизация мозга','Регуляция внутричерепного давления','Глимфатический дренаж метаболитов']}
+  },
+  thalamus:{
+    id:'thalamus',color:'#38bdf8',hex:0x38bdf8,latin:'Thalamus dorsalis',tag:'Diencephalon',
+    en:{name:'Thalamus (Paired Nuclei)',short:'Central sensory & motor relay gateway',
+      desc:'Paired ovoid nuclear complex of the diencephalon flanking the third ventricle. Relays all sensory pathways (except olfaction) via VPL, VPM, LGN (visual), and MGN (auditory) nuclei to the cerebral cortex.',
+      functions:['Somatosensory relay (VPL/VPM)','Visual (LGN) & Auditory (MGN) relay','Basal ganglia & cerebellar motor loops','Thalamocortical sleep-wake rhythms']},
+    ru:{name:'Таламус (Зрительные бугры)',short:'Центральный коллектор всех видов чувствительности',
+      desc:'Парный яйцевидный ядерный комплекс промежуточного мозга по бокам III желудочка. Переключает все сенсорные потоки (кроме обоняния) к коре полушарий через специфические ядра (VPL, VPM, ЛКТ, МКТ).',
+      functions:['Реле соматосенсорики (ядра VPL/VPM)','Зрительное (ЛКТ) и слуховое (МКТ) реле','Моторные петли с ганглиями и мозжечком','Генерация таламокортикальных ритмов']}
+  },
+  striatum:{
+    id:'striatum',color:'#818cf8',hex:0x818cf8,latin:'Corpus striatum (Caudate & Putamen)',tag:'Basal Ganglia',
+    en:{name:'Striatum (Basal Ganglia)',short:'Caudate nucleus & Putamen motor gating',
+      desc:'Principal input station of the extrapyramidal basal ganglia system, comprising the C-shaped caudate nucleus and lentiform putamen. Modulates initiation and scaling of voluntary movement via direct (D1) and indirect (D2) pathways.',
+      functions:['Direct & indirect motor gating','Regulation of plastic muscle tone','Suppression of involuntary movements','Procedural habit & reward learning']},
+    ru:{name:'Полосатое тело (Стриатум)',short:'Хвостатое ядро и скорлупа (Базальные ганглии)',
+      desc:'Главное входное звено экстрапирамидной системы, объединяющее дугообразное хвостатое ядро (Nucleus caudatus) и скорлупу (Putamen). Управляет запуском движений через прямой (D1) и непрямой (D2) дофаминовые пути.',
+      functions:['Прямой и непрямой моторные пути','Регуляция пластического тонуса мышц','Подавление насильственных гиперкинезов','Формирование двигательных автоматизмов']}
+  },
+  hippocampus_mesh:{
+    id:'hippocampus_mesh',color:'#fbbf24',hex:0xfbbf24,latin:'Hippocampus & Fornix',tag:'Archicortex',
+    en:{name:'Hippocampus & Fornix',short:'Episodic memory consolidation & Papez circuit',
+      desc:'Paired seahorse-shaped archicortical structures in the medial temporal lobes continuing into the arching crura and columns of the fornix toward the mammillary bodies (closed Papez memory circuit).',
+      functions:['Short-to-long-term memory consolidation','Spatial cognitive map (Place & Grid cells)','Papez emotional-memory loop','Adult dentate gyrus neurogenesis']},
+    ru:{name:'Гиппокамп и свод (Fornix)',short:'Консолидация памяти и замкнутый круг Пейпеца',
+      desc:'Парные структуры древней коры (Archicortex) в глубине височных долей, переходящие в дугообразные ножки и столбы свода (Fornix) к сосцевидным телам гипоталамуса — анатомический субстрат круга Пейпеца.',
+      functions:['Консолидация долговременной памяти','Пространственная карта (нейроны места)','Эмоционально-мнестический круг Пейпеца','Взрослый нейрогенез в зубчатой извилине']}
+  },
+  amygdala_mesh:{
+    id:'amygdala_mesh',color:'#f43f5e',hex:0xf43f5e,latin:'Corpus amygdaloideum',tag:'Limbic System',
+    en:{name:'Amygdaloid Complex',short:'Threat detection, fear conditioning & autonomic drive',
+      desc:'Almond-shaped nuclear complex situated in the anterior-medial temporal lobe immediately anterior to the hippocampal tail and head. Orchestrates rapid threat appraisal and hypothalamic-sympathetic activation.',
+      functions:['Rapid threat & fear evaluation','Autonomic fight-or-flight activation','Emotional tagging of episodic memories','Social & facial emotion recognition']},
+    ru:{name:'Миндалевидный комплекс (Амигдала)',short:'Детектор угроз, реакция страха и вегетатика',
+      desc:'Парный ядерный комплекс в передне-медиальном отделе височной доли прямо перед головкой гиппокампа. Мгновенно оценивает биологическую значимость стимулов и запускает вегетативный ответ через гипоталамус.',
+      functions:['Мгновенное распознавание опасности','Условно-рефлекторная память страха','Эмоциональная маркировка воспоминаний','Активация симпатоадреналовой оси']}
+  },
+  cranial_nerves:{
+    id:'cranial_nerves',color:'#fde047',hex:0xfde047,latin:'Nervi craniales (I–XII)',tag:'PNS / Stem',
+    en:{name:'Cranial Nerves (I–XII Roots)',short:'Olfactory, Optic Chiasm, Trigeminal & Bulbar roots',
+      desc:'12 pairs of cranial nerves emerging from the basal forebrain and brainstem: Olfactory tracts (I), Optic chiasm (II), Oculomotor (III), Trigeminal trunks (V) on the pons, Facial/Vestibulocochlear (VII/VIII) at the cerebellopontine angle, and Vagus/Hypoglossal (IX–XII) on the medulla.',
+      functions:['Special senses (Olfaction, Vision, Hearing, Taste)','Oculomotor & pupillary control (III, IV, VI)','Facial sensation & mastication (V)','Facial expression, swallowing & speech (VII, IX, X, XII)']},
+    ru:{name:'Черепные нервы (I–XII пары)',short:'Обонятельные тракты, хиазма, тройничный и бульбарные корешки',
+      desc:'12 пар черепных нервов на базальной поверхности мозга и ствола: обонятельные тракты (I), зрительный перекрёст — хиазма (II), глазодвигательные (III), мощные корешки тройничного нерва (V) на мосту, мостомозжечковый угол (VII–VIII) и бульбарная группа (IX–XII).',
+      functions:['Органы чувств (обоняние, зрение, слух, вкус)','Движения глаз и реакция зрачков (III, IV, VI)','Чувствительность лица и жевание (V пара)','Мимика, глотание, фонация и блуждающий нерв (VII, IX–XII)']}
+  }
+};
+
+/* ================================================================
+   SURFACE BRODMANN SUBZONES
    ================================================================ */
 const SUBZONES = [
-  {id:'pfc',region:'frontal',ba:'BA 9/46',dir:[-0.32,0.28,0.92],color:'#10b981',
+  {id:'pfc',region:'frontal',ba:'BA 9/46',dir:[-0.32,0.28,0.92],color:'#00e5a3',
     en:{name:'dlPFC',full:'Dorsolateral Prefrontal Cortex',note:'Middle frontal gyrus (BA 9/46). Central executive network governing working memory, cognitive flexibility, and goal-directed planning.'},
-    ru:{name:'ДЛПФК',full:'Дорсолатеральная префронтальная кора',note:'Средняя лобная извилина (поля 9, 46). Высший центр когнитивного контроля, рабочей памяти и целенаправленного планирования.'}},
+    ru:{name:'ДЛПФК',full:'Дорсолатеральная префронтальная кора',note:'Средняя лобная извилина (поля 9, 46). Высший центр исполнительного контроля, рабочей памяти и стратегического планирования.'}},
   {id:'broca',region:'frontal',ba:'BA 44/45',dir:[-0.78,0.06,0.58],color:'#34d399',
-    en:{name:'Broca',full:'Broca Motor Speech Area',note:'Inferior frontal gyrus (pars opercularis BA 44 & pars triangularis BA 45) of the dominant left hemisphere. Programs speech articulation and grammar.'},
-    ru:{name:'Брока',full:'Моторный центр речи Брока',note:'Задняя часть нижней лобной извилины (поля 44, 45) левого полушария. Обеспечивает моторное программирование артикуляции и грамматику речи.'}},
-  {id:'m1',region:'frontal',ba:'BA 4',dir:[-0.38,0.82,0.22],color:'#059669',
+    en:{name:'Broca',full:'Broca Motor Speech Area',note:'Inferior frontal gyrus (pars opercularis BA 44 & pars triangularis BA 45) of the dominant left hemisphere. Programs speech articulation and syntax.'},
+    ru:{name:'Брока',full:'Моторный центр речи Брока',note:'Задняя часть нижней лобной извилины (поля 44, 45) левого полушария. Обеспечивает моторное программирование артикуляции и синтаксис речи.'}},
+  {id:'m1',region:'frontal',ba:'BA 4',dir:[-0.38,0.82,0.22],color:'#10b981',
     en:{name:'M1',full:'Primary Motor Cortex (Precentral Gyrus)',note:'Anterior bank of the central sulcus (BA 4). Layer V giant pyramidal cells of Betz form the corticospinal tract controlling contralateral voluntary movement.'},
-    ru:{name:'M1',full:'Первичная моторная кора (Предцентральная извилина)',note:'Поле 4 Бродмана кпереди от Роландовой борозды. Гигантские пирамидные клетки Беца дают начало кортикоспинальному (пирамидному) пути.'}},
-  {id:'s1',region:'parietal',ba:'BA 1–3',dir:[-0.38,0.84,-0.08],color:'#38bdf8',
+    ru:{name:'M1',full:'Первичная моторная кора (Предцентральная извилина)',note:'Поле 4 Бродмана кпереди от Роландовой борозды. Гигантские пирамидные клетки Беца V слоя дают начало пирамидному кортикоспинальному пути.'}},
+  {id:'s1',region:'parietal',ba:'BA 1–3',dir:[-0.38,0.84,-0.08],color:'#00b8ff',
     en:{name:'S1',full:'Primary Somatosensory Cortex (Postcentral Gyrus)',note:'Posterior bank of the central sulcus (BA 3, 1, 2). Receives VPL/VPM thalamic projections of contralateral touch, pain, and proprioception.'},
-    ru:{name:'S1',full:'Первичная соматосенсорная кора (Постцентральная извилина)',note:'Поля 3, 1, 2 Бродмана позади Роландовой борозды. Принимает от таламуса сигналы тактильной, болевой и глубокой чувствительности.'}},
-  {id:'ppc',region:'parietal',ba:'BA 5/7',dir:[-0.35,0.75,-0.45],color:'#7dd3fc',
-    en:{name:'PPC',full:'Superior Parietal Lobule',note:'Associative somatosensory and visuomotor cortex (BA 5, 7). Guides stereognosis (recognizing objects by touch) and hand-eye coordination.'},
-    ru:{name:'ВТД',full:'Верхняя теменная долька',note:'Поля 5 и 7 Бродмана. Обеспечивает стереогноз (узнавание предметов на ощупь) и зрительно-моторную координацию движений руки.'}},
+    ru:{name:'S1',full:'Первичная соматосенсорная кора (Постцентральная извилина)',note:'Поля 3, 1, 2 Бродмана позади Роландовой борозды. Принимает от ядер таламуса сигналы тактильной, болевой и глубокой чувствительности.'}},
+  {id:'ppc',region:'parietal',ba:'BA 5/7',dir:[-0.35,0.75,-0.45],color:'#38bdf8',
+    en:{name:'PPC',full:'Superior Parietal Lobule',note:'Associative somatosensory and visuomotor cortex (BA 5, 7). Guides stereognosis (3D tactile object recognition) and hand-eye coordination.'},
+    ru:{name:'ВТД',full:'Верхняя теменная долька',note:'Поля 5 и 7 Бродмана. Обеспечивает стереогноз (узнавание предметов на ощупь) и зрительно-моторную координацию движений руки в пространстве.'}},
   {id:'ang',region:'parietal',ba:'BA 39/40',dir:[-0.72,0.36,-0.52],color:'#0284c7',
-    en:{name:'SMG/AG',full:'Supramarginal & Angular Gyri (Inferior Parietal)',note:'BA 39 & 40 at the temporo-parieto-occipital junction. Critical hub for praxis, reading, writing, calculation, and cross-modal synthesis.'},
-    ru:{name:'УИ',full:'Надкраевая и угловая извилины (Зона ТПО)',note:'Поля 39 и 40 на стыке теменной, височной и затылочной долей. Центр праксиса, чтения, письма, счёта и сложной семантики.'}},
+    en:{name:'SMG/AG',full:'Supramarginal & Angular Gyri (TPO Junction)',note:'BA 39 & 40 at the temporo-parieto-occipital junction. Critical hub for praxis, reading, writing, calculation, and cross-modal synthesis.'},
+    ru:{name:'УИ',full:'Надкраевая и угловая извилины (Зона ТПО)',note:'Поля 39 и 40 на стыке теменной, височной и затылочной долей. Центр праксиса, чтения, письма, счёта и кросс-модального синтеза.'}},
   {id:'a1',region:'temporal',ba:'BA 41/42',dir:[-0.94,-0.02,0.06],color:'#c084fc',
     en:{name:'A1',full:'Primary Auditory Cortex (Heschl Gyri)',note:'Transverse temporal gyri (BA 41, 42) on the superior temporal plane. Receives binaural acoustic inputs from the medial geniculate body.'},
     ru:{name:'A1',full:'Первичная слуховая кора (Извилины Гешля)',note:'Поля 41, 42 в глубине латеральной борозды. Принимает слуховые волокна от медиального коленчатого тела и анализирует частоту звука.'}},
   {id:'wern',region:'temporal',ba:'BA 22',dir:[-0.86,0.08,-0.32],color:'#a855f7',
     en:{name:'Wernicke',full:'Wernicke Sensory Speech Area',note:'Posterior superior temporal gyrus (BA 22). Decodes spoken phonemes into semantic meaning. Linked to Broca area via the arcuate fasciculus.'},
     ru:{name:'Вернике',full:'Сенсорный центр речи Вернике',note:'Задний отдел верхней височной извилины (поле 22). Обеспечивает распознавание фонем и понимание смысла устной и письменной речи.'}},
-  {id:'hip',region:'temporal',ba:'BA 28/34',dir:[-0.72,-0.32,-0.12],color:'#9333ea',
-    en:{name:'Hippo',full:'Parahippocampal & Medial Temporal Cortex',note:'Medial temporal lobe & hippocampal formation (Archicortex). Essential for Papez circuit consolidation of short-term into long-term memory.'},
-    ru:{name:'Гиппокамп',full:'Гиппокампальная и парагиппокампальная кора',note:'Медиальный отдел височной доли (круг Пейпеца). Отвечает за перевод кратковременной памяти в долговременную и пространственную память.'}},
+  {id:'hip',region:'temporal',ba:'BA 28/34',dir:[-0.72,-0.32,-0.12],color:'#fbbf24',
+    en:{name:'Entorhinal',full:'Parahippocampal & Entorhinal Cortex',note:'Medial temporal gateway (BA 28, 34) feeding cortical sensory associations via the perforant path into the deep 3D hippocampal formation.'},
+    ru:{name:'Энторин.',full:'Парагиппокампальная и энторинальная кора',note:'Кортикальные ворота памяти (поля 28, 34), передающие информацию из неокортекса по перфорантному пути в глубокий 3D-гиппокамп.'}},
   {id:'v1',region:'occipital',ba:'BA 17',dir:[-0.22,0.08,-0.98],color:'#facc15',
-    en:{name:'V1',full:'Primary Visual (Striate) Cortex',note:'Banks of the calcarine sulcus (BA 17). Performs primary retinotopic decoding of visual contours, contrast, and orientation columns.'},
-    ru:{name:'V1',full:'Первичная зрительная (стриарная) кора',note:'Поле 17 Бродмана по берегам шпорной борозды. Выполняет первичный ретинотопический анализ контуров, контраста и ориентации линий.'}},
-  {id:'v5',region:'occipital',ba:'BA 18/19',dir:[-0.52,0.18,-0.84],color:'#eab308',
-    en:{name:'V2–V5',full:'Extrastriate Visual Association Cortex',note:'Peristriate and parastriate cortex (BA 18, 19). Integrates simple visual features into holistic images, color, and motion trajectories.'},
-    ru:{name:'V2–V5',full:'Вторичная и третичная зрительная кора',note:'Поля 18 и 19 Бродмана. Синтезируют целостные зрительные образы, распознают цвет, движение объектов и зрительную символику.'}},
+    en:{name:'V1',full:'Primary Visual (Striate) Cortex',note:'Banks of the calcarine sulcus (BA 17, stria of Gennari). Performs primary retinotopic decoding of visual contours, contrast, and orientation.'},
+    ru:{name:'V1',full:'Первичная зрительная (стриарная) кора',note:'Поле 17 Бродмана по берегам шпорной борозды (полоска Дженнари). Выполняет первичный ретинотопический анализ контуров и ориентации линий.'}},
+  {id:'v5',region:'occipital',ba:'BA 18/19',dir:[-0.52,0.18,-0.84],color:'#f59e0b',
+    en:{name:'V2–V5',full:'Extrastriate Visual Association Cortex',note:'Peristriate and parastriate cortex (BA 18, 19). Integrates visual features into holistic images, color constancy, and motion trajectories.'},
+    ru:{name:'V2–V5',full:'Вторичная и третичная зрительная кора',note:'Поля 18 и 19 Бродмана. Синтезируют целостные зрительные образы, распознают цвет, глубину и вектор движения объектов.'}},
   {id:'cb_lat',region:'cerebellum',ba:'Neocerebellum',dir:[-0.45,-0.55,-0.72],color:'#ec4899',
-    en:{name:'Cereb',full:'Cerebellar Hemisphere & Dentate Nucleus',note:'Lateral cerebellar hemisphere receiving corticopontocerebellar fibers. Coordinates fine distal limb movements and motor timing.'},
+    en:{name:'Cereb',full:'Cerebellar Hemisphere & Dentate Nucleus',note:'Lateral cerebellar hemisphere receiving corticopontocerebellar fibers. Coordinates fine distal limb movements and millisecond motor timing.'},
     ru:{name:'Мозжечок',full:'Полушарие мозжечка и зубчатое ядро',note:'Неоцеребеллум, связанный с корой полушарий через мост. Отвечает за плавность, соразмерность (метрию) и точность тонких движений.'}}
 ];
 
 /* ================================================================
-   ANATOMICAL WHITE MATTER TRACTS (STRICTLY INTERNAL ARCS)
+   fMRI TASK PARADIGMS
+   ================================================================ */
+const FMRI_TASKS = [
+  {
+    id:'reading',
+    sequence:['v1','v5','ang','wern','broca','m1'],
+    subcortical:['thalamus','callosum'],
+    en:{name:'Reading Aloud',short:'Visual → Semantic → Articulatory chain',
+      desc:'Sequential BOLD activation starting in primary visual cortex (V1), orthographic decoding in angular gyrus (BA 39), semantic comprehension in Wernicke area, transfer via arcuate fasciculus to Broca area, and vocalization via M1.'},
+    ru:{name:'Чтение текста вслух',short:'Зрительный → Семантический → Речедвигательный тракт',
+      desc:'Последовательная активация: первичное восприятие графем в V1 → оптико-фонетическая перекодировка в угловой извилине (BA 39) → понимание смысла в зоне Вернике → передача по дугообразному пучку в зону Брока → артикуляция через моторную кору M1.'}
+  },
+  {
+    id:'reaching',
+    sequence:['v1','ppc','pfc','m1','s1','cb_lat'],
+    subcortical:['thalamus','striatum'],
+    en:{name:'Goal-Directed Reach & Grasp',short:'Dorsal visual stream → Basal Ganglia → Cerebellum',
+      desc:'Target localization via V1 and dorsal stream to Superior Parietal Lobule (BA 5/7), trajectory planning in dlPFC, execution via Striatum & M1, error-correction in Cerebellum, and tactile feedback in S1.'},
+    ru:{name:'Целенаправленный захват предмета',short:'Дорсальный поток → Стриатум → Мозжечок',
+      desc:'Оценка координат цели через V1 и верхнюю теменную дольку (BA 5/7) → моторный план в ДЛПФК → запуск движения через 3D-стриатум и кору M1 → коррекция точности в мозжечке → тактильный контроль захвата в S1.'}
+  },
+  {
+    id:'threat',
+    sequence:['a1','v5','hip','pfc','m1'],
+    subcortical:['thalamus','amygdala_mesh','hippocampus_mesh','cranial_nerves'],
+    en:{name:'Acute Threat Response',short:'Thalamo-Amygdala fast track → Prefrontal control',
+      desc:'Rapid acoustic/visual relay via Cranial Nerves II/VIII and Thalamus directly to the 3D Amygdala ("low road"), contextual check in Hippocampus, top-down regulation by dlPFC, and motor readiness in M1.'},
+    ru:{name:'Реакция на внезапную угрозу',short:'Таламо-амигдалярный путь → Префронтальный контроль',
+      desc:'Сверхбыстрый приём сигнала через ЧМН и таламус прямо на 3D-амигдалу («короткий путь страха») и кору A1/V5 → сверка контекста с памятью в гиппокампе → волевая оценка в ДЛПФК → моторная готовность в M1.'}
+  },
+  {
+    id:'memory',
+    sequence:['a1','wern','ang','pfc','hip'],
+    subcortical:['hippocampus_mesh','thalamus','callosum'],
+    en:{name:'Episodic Memory Consolidation',short:'Papez circuit & Prefrontal-Hippocampal loop',
+      desc:'Encoding of multimodal information from Wernicke and Angular gyrus into working memory (dlPFC), followed by long-term synaptic consolidation via Entorhinal cortex, 3D Hippocampus, Fornix, and Anterior Thalamus.'},
+    ru:{name:'Консолидация эпизодической памяти',short:'Круг Пейпеца и префронтально-гиппокампальная петля',
+      desc:'Удержание мультимодальной информации (Вернике, Угловая извилина) в рабочей памяти ДЛПФК с последующей записью в долговременную память через энторинальную кору, 3D-гиппокамп, свод (Fornix) и таламус.'}
+  }
+];
+
+/* ================================================================
+   WHITE MATTER TRACTS (DTI)
    ================================================================ */
 const PATHWAYS = [
   {a:'broca',b:'wern',name:{en:'Arcuate Fasciculus',ru:'Дугообразный пучок (Fasciculus arcuatus)'}},
   {a:'m1',b:'s1',name:{en:'U-Fibers (Sensorimotor Loop)',ru:'Короткие ассоциативные U-волокна'}},
-  {a:'pfc',b:'ppc',name:{en:'Superior Longitudinal Fasciculus',ru:'Верхний продольный пучок (SLF)'}},
+  {a:'pfc',b:'ppc',name:{en:'Superior Longitudinal Fasciculus (SLF)',ru:'Верхний продольный пучок (SLF)'}},
   {a:'v1',b:'ppc',name:{en:'Dorsal Visual Stream ("Where")',ru:'Дорсальный зрительный поток («Где»)'}},
-  {a:'v1',b:'wern',name:{en:'Inferior Longitudinal Fasciculus',ru:'Нижний продольный пучок (ILF)'}},
+  {a:'v1',b:'wern',name:{en:'Inferior Longitudinal Fasciculus (ILF)',ru:'Нижний продольный пучок (ILF)'}},
   {a:'hip',b:'pfc',name:{en:'Uncinate & Cingulum Tract',ru:'Крючковидный пучок и поясной тракт'}},
   {a:'a1',b:'wern',name:{en:'Auditory Association Fibers',ru:'Слуховые ассоциативные волокна'}},
   {a:'ang',b:'wern',name:{en:'Temporoparietal Semantic Tract',ru:'Височно-теменной семантический тракт'}},
-  {a:'m1',b:'cb_lat',name:{en:'Corticopontocerebellar Tract',ru:'Кортико-понто-церебеллярный путь'}}
+  {a:'m1',b:'cb_lat',name:{en:'Corticopontocerebellar Tract',ru:'Кортико-понто-церебеллярный путь'}},
+  {a:'v1',b:'v5',name:{en:'Occipital Visual Radiation',ru:'Внутризатылочные зрительные волокна'}},
+  {a:'pfc',b:'broca',name:{en:'Frontal Aslant Tract (FAT)',ru:'Косой лобный пучок (FAT)'}}
 ];
 
 /* ================================================================
-   TEXTBOOK NEUROLOGICAL PATHOLOGIES
+   CLINICAL PATHOLOGIES
    ================================================================ */
 const DISEASES = [
-  {id:'stroke',icon:'S',color:'#ef4444',hex:0xef4444,
+  {id:'stroke',icon:'S',color:'#f43f5e',hex:0xf43f5e,
     affected:['m1','s1','broca','wern'],regions:['frontal','parietal','temporal'],
-    en:{name:'Ischemic Stroke (MCA)',short:'Middle Cerebral Artery occlusion',
-      desc:'Acute thromboembolic occlusion of the left Middle Cerebral Artery supplying the lateral convexity of the hemisphere.',
-      mechanism:'Ischemia → ATP depletion → Na+/K+ pump failure → glutamate excitotoxicity → peri-infarct depolarizations',
-      neuro:['Glutamate ↑↑','GABA ↓','ACh ↓'],
-      symptoms:['Contralateral hemiparesis','Sensory hemihypesthesia','Broca/Wernicke aphasia','Central facial palsy'],
-      stages:['Hyperacute (<4.5h)','Acute (24–72h)','Subacute edema','Chronic cystic gliosis'],
+    en:{name:'Ischemic Stroke (MCA)',short:'Middle Cerebral Artery thromboembolism',
+      desc:'Acute thromboembolic occlusion of the left Middle Cerebral Artery (M1/M2 segments) supplying the lateral convexity of the hemisphere and internal capsule.',
+      mechanism:'Ischemic core (<10 ml/100g/min) → ATP depletion → Na+/K+ pump failure → glutamate excitotoxicity → peri-infarct spreading depolarizations in penumbra',
+      neuro:['Glutamate ↑↑↑','GABA ↓↓','Acetylcholine ↓'],
+      symptoms:['Contralateral brachiofacial hemiparesis','Sensory hemihypesthesia','Global / Broca / Wernicke aphasia','Contralateral gaze palsy'],
+      stages:['Hyperacute (<4.5h window)','Acute cytotoxic edema (24–72h)','Subacute organization','Chronic cystic gliosis'],
       metrics:{cognitive:0.4,motor:0.18,language:0.2,sensory:0.28,memory:0.6,connectivity:0.25}},
-    ru:{name:'Ишемический инсульт (СМА)',short:'Окклюзия средней мозговой артерии',
-      desc:'Острое нарушение кровообращения в бассейне средней мозговой артерии, питающей латеральную поверхность лобной, теменной и височной долей.',
-      mechanism:'Ишемия → дефицит АТФ → отказ Na+/K+-насосов → глутаматная эксайтотоксичность → некроз ядра и пенумбра',
-      neuro:['Глутамат ↑↑','ГАМК ↓','АХ ↓'],
-      symptoms:['Контралатеральный гемипарез','Гемигипестезия','Тотальная/моторная афазия','Центральный парез VII и XII пар'],
-      stages:['Гиперострый (<4.5ч)','Острый (1–3 сут)','Подострый','Хронический глиоз'],
+    ru:{name:'Ишемический инсульт (СМА)',short:'Тромбоэмболия средней мозговой артерии',
+      desc:'Острое нарушение мозгового кровообращения в бассейне левой средней мозговой артерии (сегменты M1/M2), питающей латеральную поверхность полушария и внутреннюю капсулу.',
+      mechanism:'Ядро ишемии → дефицит АТФ → отказ Na+/K+-АТФазы → глутаматная эксайтотоксичность → цитотоксический отёк и расширение зоны пенумбры',
+      neuro:['Глутамат ↑↑↑','ГАМК ↓↓','Ацетилхолин ↓'],
+      symptoms:['Контралатеральный брахиофациальный гемипарез','Гемигипестезия','Тотальная / моторная / сенсорная афазия','Парез взора в сторону очага'],
+      stages:['Терапевтическое окно (<4.5ч)','Острый отёк (1–3 сут)','Подострая резорбция','Хроническая кистозно-глиозная трансформация'],
       metrics:{cognitive:0.4,motor:0.18,language:0.2,sensory:0.28,memory:0.6,connectivity:0.25}}},
   {id:'alzheimer',icon:'A',color:'#a855f7',hex:0xa855f7,
     affected:['hip','ang','wern','pfc'],regions:['temporal','parietal','frontal'],
-    en:{name:'Alzheimer Disease',short:'Hippocampal & cortical neurodegeneration',
-      desc:'Progressive neurodegenerative dementia starting in the entorhinal cortex and hippocampus (Braak stages I–VI) and spreading to temporoparietal association cortex.',
-      mechanism:'Extracellular β-amyloid plaques + intracellular hyperphosphorylated Tau tangles → cholinergic death (Nucleus basalis of Meynert)',
-      neuro:['Acetylcholine ↓↓↓','Glutamate ↑','Somatostatin ↓'],
-      symptoms:['Anterograde episodic amnesia','Topographical disorientation','Apraxia & agnosia','Anomic aphasia'],
-      stages:['Preclinical','Mild Cognitive Impairment','Mild-Moderate Dementia','Severe Cortical Atrophy'],
+    en:{name:'Alzheimer Disease',short:'Hippocampal & temporoparietal neurodegeneration',
+      desc:'Primary neurodegenerative dementia beginning in the transentorhinal cortex and 3D hippocampus (Braak stages I–II), spreading to limbic (III–IV) and neocortical association areas (V–VI) with ex-vacuo ventriculomegaly.',
+      mechanism:'Extracellular Aβ42 neuritic plaques + intracellular hyperphosphorylated Tau neurofibrillary tangles → cholinergic death in nucleus basalis of Meynert',
+      neuro:['Acetylcholine ↓↓↓','Glutamate (NMDA) ↑','Somatostatin ↓'],
+      symptoms:['Anterograde episodic amnesia (Ribot law)','Visuospatial & topographical agnosia','Ideomotor apraxia','Anomic & transcortical sensory aphasia'],
+      stages:['Preclinical Amyloidosis','Mild Cognitive Impairment (MCI)','Mild-Moderate AD Dementia','Severe Diffuse Cortical Atrophy'],
       metrics:{cognitive:0.15,motor:0.78,language:0.28,sensory:0.85,memory:0.08,connectivity:0.2}},
-    ru:{name:'Болезнь Альцгеймера',short:'Атрофия гиппокампа и ассоциативной коры',
-      desc:'Первично-дегенеративная деменция (стадии Браака I–VI), начинающаяся с энторинальной коры и гиппокампа с переходом на височно-теменные доли.',
-      mechanism:'Сенильные β-амилоидные бляшки + нейрофибриллярные тау-клубки → гибель холинергических нейронов ядра Мейнерта',
-      neuro:['Ацетилхолин ↓↓↓','Глутамат ↑','Серотонин ↓'],
-      symptoms:['Фиксационная амнезия (закон Рибо)','Пространственная дезориентация','Апраксия и агнозия','Амнестическая афазия'],
-      stages:['Доклиническая','Умеренное снижение (MCI)','Мягкая деменция','Тотальная деменция'],
+    ru:{name:'Болезнь Альцгеймера',short:'Атрофия гиппокампа и височно-теменной коры',
+      desc:'Первично-дегенеративная деменция (стадии Браака I–VI), начинающаяся с энторинальной коры и 3D-гиппокампа с переходом на ассоциативную височно-теменную кору и заместительным расширением желудочков.',
+      mechanism:'Внеклеточные β-амилоидные бляшки (Aβ42) + внутриклеточные нейрофибриллярные тау-клубки → гибель холинергических нейронов базального ядра Мейнерта',
+      neuro:['Ацетилхолин ↓↓↓','Глутамат (NMDA) ↑','Соматостатин ↓'],
+      symptoms:['Фиксационная амнезия (закон Рибо)','Пространственная агнозия и дезориентация','Идеомоторная и конструктивная апраксия','Амнестическая и акустико-мнестическая афазия'],
+      stages:['Доклинический амилоидоз','Умеренное когнитивное расстройство (MCI)','Мягкая и умеренная деменция','Тяжёлая тотальная деменция'],
       metrics:{cognitive:0.15,motor:0.78,language:0.28,sensory:0.85,memory:0.08,connectivity:0.2}}},
   {id:'parkinson',icon:'P',color:'#3b82f6',hex:0x3b82f6,
     affected:['m1','pfc'],regions:['frontal','brainstem'],
-    en:{name:'Parkinson Disease',short:'Substantia nigra dopaminergic loss',
-      desc:'Degeneration of melanin-containing dopaminergic neurons in the pars compacta of the substantia nigra (midbrain) with α-synuclein Lewy bodies.',
-      mechanism:'Nigrostriatal dopamine depletion → disinhibition of subthalamic nucleus → excessive GPi/SNr inhibition of motor thalamus & cortex',
+    en:{name:'Parkinson Disease',short:'Nigrostriatal dopaminergic degeneration',
+      desc:'Progressive synucleinopathy characterized by loss of pigmented dopaminergic neurons in the substantia nigra pars compacta projecting to the 3D Striatum (putamen & caudate).',
+      mechanism:'α-Synuclein Lewy bodies → nigrostriatal dopamine depletion → hyperactivity of indirect pathway (STN/GPi) → excessive inhibition of VL/VA motor thalamus and M1',
       neuro:['Dopamine ↓↓↓','Acetylcholine ↑↑','GABA ↑'],
-      symptoms:['Hypokinesia & bradykinesia','Cogwheel muscular rigidity','4–6 Hz resting tremor','Postural instability'],
-      stages:['Hoehn-Yahr I (Unilateral)','Hoehn-Yahr II (Bilateral)','Hoehn-Yahr III (Postural)','Hoehn-Yahr IV–V'],
+      symptoms:['Hypokinesia & progressive bradykinesia','Lead-pipe & cogwheel muscular rigidity','4–6 Hz pill-rolling resting tremor','Postural instability & festinating gait'],
+      stages:['Hoehn-Yahr I (Unilateral)','Hoehn-Yahr II (Bilateral)','Hoehn-Yahr III (Postural impairment)','Hoehn-Yahr IV–V (Severe disability)'],
       metrics:{cognitive:0.62,motor:0.2,language:0.72,sensory:0.78,memory:0.6,connectivity:0.45}},
-    ru:{name:'Болезнь Паркинсона',short:'Дегенерация чёрной субстанции среднего мозга',
-      desc:'Гибель меланинсодержащих дофаминергических нейронов компактной части чёрной субстанции ствола мозга с накоплением телец Леви (α-синуклеин).',
-      mechanism:'Дефицит дофамина в стриатуме → растормаживание субталамического ядра → избыточная блокада моторного таламуса и коры M1',
+    ru:{name:'Болезнь Паркинсона',short:'Дегенерация нигростриарного дофаминового пути',
+      desc:'Хроническая синуклеинопатия с гибелью меланинсодержащих дофаминергических нейронов компактной части чёрной субстанции, иннервирующих 3D-стриатум (скорлупу и хвостатое ядро).',
+      mechanism:'Накопление телец Леви (α-синуклеин) → дефицит дофамина в стриатуме → гиперактивация субталамического ядра и бледного шара → торможение моторного таламуса и коры M1',
       neuro:['Дофамин ↓↓↓','Ацетилхолин ↑↑','ГАМК ↑'],
-      symptoms:['Олиго- и брадикинезия','Пластическая ригидность («зубчатое колесо»)','Тремор покоя (4–6 Гц)','Постуральная неустойчивость'],
-      stages:['Хён-Яр I (Гемипаркинсонизм)','Хён-Яр II (Двусторонняя)','Хён-Яр III (Постуральная)','Хён-Яр IV–V (Тяжёлая)'],
+      symptoms:['Гипокинезия и прогрессирующая брадикинезия','Пластическая ригидность («зубчатое колесо»)','Тремор покоя (4–6 Гц, «счёт монет»)','Постуральная неустойчивость и пропульсии'],
+      stages:['Хён-Яр I (Гемипаркинсонизм)','Хён-Яр II (Двусторонняя без постуральных)','Хён-Яр III (Постуральная неустойчивость)','Хён-Яр IV–V (Тяжёлая инвалидизация)'],
       metrics:{cognitive:0.62,motor:0.2,language:0.72,sensory:0.78,memory:0.6,connectivity:0.45}}},
   {id:'ms',icon:'M',color:'#f59e0b',hex:0xf59e0b,
     affected:['m1','s1','v1','cb_lat'],regions:['frontal','parietal','occipital','cerebellum'],
-    en:{name:'Multiple Sclerosis',short:'Multifocal CNS demyelination',
-      desc:'Chronic autoimmune demyelinating disease affecting periventricular white matter, optic nerves, corpus callosum, and cerebellar peduncles.',
-      mechanism:'Autoreactive CD4+ T-cells cross BBB → oligodendrocyte destruction → loss of saltatory conduction & secondary axonal loss',
+    en:{name:'Multiple Sclerosis',short:'Multifocal autoimmune CNS demyelination',
+      desc:'Disseminated in space and time autoimmune demyelination affecting periventricular white matter (Dawson fingers), corpus callosum, optic chiasm/nerves, and cerebellar peduncles.',
+      mechanism:'Autoreactive CD4+ Th1/Th17 cells breach BBB → anti-MOG/MBP attack on oligodendrocytes → loss of saltatory conduction & axonal transection',
       neuro:['Glutamate ↑','BDNF ↓↓','GABA ↓'],
-      symptoms:['Retrobulbar optic neuritis','Spastic paraparesis','Charcot triad (nystagmus, intention tremor, scanning speech)','Lhermitte sign'],
-      stages:['CIS','Relapsing-Remitting (RRMS)','Secondary Progressive (SPMS)','Primary Progressive (PPMS)'],
+      symptoms:['Retrobulbar optic neuritis (CN II)','Spastic paraparesis & Babinski sign','Charcot triad (nystagmus, intention tremor, scanning speech)','Internuclear ophthalmoplegia (MLF)'],
+      stages:['Clinically Isolated Syndrome (CIS)','Relapsing-Remitting (RRMS)','Secondary Progressive (SPMS)','Primary Progressive (PPMS)'],
       metrics:{cognitive:0.58,motor:0.38,language:0.68,sensory:0.32,memory:0.52,connectivity:0.2}},
-    ru:{name:'Рассеянный склероз',short:'Многоочаговая демиелинизация белого вещества',
-      desc:'Хроническое аутоиммунное заболевание с образованием бляшек демиелинизации в перивентрикулярном белом веществе, мозолистом теле, зрительных нервах и мозжечке.',
-      mechanism:'Прорыв ГЭБ Т-лимфоцитами → разрушение миелина олигодендроцитов → нарушение сальтаторного проведения импульсов',
-      neuro:['Глутамат ↑','BDNF ↓↓','ГАМК ↓'],
-      symptoms:['Ретробульбарный неврит','Спастические парезы','Триада Шарко (нистагм, интенционный тремор, скандированная речь)','Утрата брюшных рефлексов'],
-      stages:['КИС','Ремиттирующее течение','Вторично-прогрессирующее','Первично-прогрессирующее'],
+    ru:{name:'Рассеянный склероз',short:'Многоочаговая аутоиммунная демиелинизация ЦНС',
+      desc:'Диссеминированное «в пространстве и времени» поражение миелиновых оболочек перивентрикулярного белого вещества («пальцы Доусона»), мозолистого тела, зрительных нервов и ножек мозжечка.',
+      mechanism:'Прорыв ГЭБ аутореактивными Т-лимфоцитами → разрушение олигодендроцитов → срыв сальтаторного проведения по перехватам Ранвье и аксонопатия',
+      neuro:['Глутамат ↑','Нейротрофины (BDNF) ↓↓','ГАМК ↓'],
+      symptoms:['Ретробульбарный неврит (II пара ЧМН)','Нижний спастический парапарез','Триада Шарко (нистагм, интенционный тремор, скандированная речь)','Межъядерная офтальмоплегия'],
+      stages:['Клинически изолированный синдром (КИС)','Ремиттирующее течение (РРС)','Вторично-прогрессирующее (ВПРС)','Первично-прогрессирующее (ППРС)'],
       metrics:{cognitive:0.58,motor:0.38,language:0.68,sensory:0.32,memory:0.52,connectivity:0.2}}},
   {id:'epilepsy',icon:'E',color:'#f97316',hex:0xf97316,
     affected:['hip','m1','s1','a1'],regions:['temporal','frontal','parietal'],
-    en:{name:'Temporal-Cortical Epilepsy',short:'Paroxysmal hypersynchronous discharges',
-      desc:'Chronic disorder characterized by recurrent unprovoked seizures arising from hippocampal sclerosis or cortical dysplastic foci.',
-      mechanism:'Failure of GABAergic surround inhibition + NMDA/AMPA hyperexcitability → paroxysmal depolarizing shift (PDS)',
+    en:{name:'Temporal-Cortical Epilepsy',short:'Paroxysmal hypersynchronous neuronal discharges',
+      desc:'Recurrent unprovoked seizures driven by mesial temporal sclerosis (CA1/CA3 hippocampal neuronal loss) or neocortical dysplastic networks propagating via the fornix and corpus callosum.',
+      mechanism:'Deficit of GABA-A surround inhibition + excessive NMDA/AMPA Ca2+ influx → Paroxysmal Depolarizing Shift (PDS) → ictal synchronization',
       neuro:['Glutamate ↑↑↑','GABA ↓↓'],
-      symptoms:['Visceral/olfactory aura','Complex partial automatisms','Jacksonian motor march','Secondary tonic-clonic generalization'],
-      stages:['Interictal baseline','Focal Aura / Onset','Ictal Generalization','Postictal Inhibition'],
+      symptoms:['Epigastric rising & déjà-vu aura','Oroalimentary & manual automatisms','Jacksonian somatomotor march','Bilateral tonic-clonic generalization'],
+      stages:['Interictal spiking','Focal Aware (Aura)','Focal Impaired Awareness','Bilateral Tonic-Clonic / Status'],
       metrics:{cognitive:0.62,motor:0.45,language:0.58,sensory:0.5,memory:0.42,connectivity:0.5}},
-    ru:{name:'Височно-кортикальная эпилепсия',short:'Пароксизмальные гиперсинхронные разряды',
-      desc:'Формирование эпилептогенного очага (чаще при медиальном височном склерозе гиппокампа или кортикальной дисплазии) со спонтанной деполяризацией нейронов.',
-      mechanism:'Недостаточность ГАМК-торможения + гиперактивация NMDA-рецепторов → пароксизмальный деполяризационный сдвиг',
+    ru:{name:'Височно-кортикальная эпилепсия',short:'Пароксизмальные гиперсинхронные нейронные разряды',
+      desc:'Формирование эпилептогенного очага (чаще при медиальном височном склерозе секторов CA1/CA3 гиппокампа) с распространением судорожного разряда по своду и мозолистому телу.',
+      mechanism:'Дефицит ГАМК-А перифокального торможения + массивный вход Ca2+ через NMDA-каналы → пароксизмальный деполяризационный сдвиг (ПДС)',
       neuro:['Глутамат ↑↑↑','ГАМК ↓↓'],
-      symptoms:['Эпигастральная/обонятельная аура','Ороалиментарные автоматизмы','Джексоновский моторный марш','Тонико-клонические судороги'],
-      stages:['Интериктальный период','Фокальная аура','Иктальная генерализация','Постиктальное оглушение'],
+      symptoms:['Вегетативно-висцеральная аура и déjà vu','Ороалиментарные и жестовые автоматизмы','Джексоновский моторный марш','Вторично-генерализованный судорожный приступ'],
+      stages:['Интериктальная эпиактивность','Фокальная аура','Фокальный приступ с нарушением осознанности','Билатеральный судорожный / Эпистатус'],
       metrics:{cognitive:0.62,motor:0.45,language:0.58,sensory:0.5,memory:0.42,connectivity:0.5}}},
   {id:'tbi',icon:'T',color:'#8b5cf6',hex:0x8b5cf6,
     affected:['pfc','m1','hip'],regions:['frontal','temporal'],
-    en:{name:'Traumatic Brain Injury (DAI)',short:'Coup-contrecoup & diffuse axonal injury',
-      desc:'Biomechanical trauma affecting the frontobasal and temporopolar cortices against bony cranial ridges, plus rotational shearing of white matter axons.',
-      mechanism:'Linear/rotational acceleration → cytoskeletal neurofilament rupture → secondary cytotoxic & vasogenic cerebral edema',
-      neuro:['Glutamate ↑↑','Dopamine ↓','ACh ↓'],
-      symptoms:['Coma / Loss of consciousness','Retrograde & anterograde amnesia','Frontal disinhibition syndrome','Intracranial hypertension'],
-      stages:['Concussion','Mild Contusion','Severe Contusion / DAI','Chronic Post-Traumatic Encephalopathy'],
+    en:{name:'Traumatic Brain Injury (DAI)',short:'Coup-contrecoup contusion & diffuse axonal shearing',
+      desc:'Biomechanical trauma impacting the orbitofrontal and temporopolar cortices against the sphenoid ridge, combined with rotational shearing of axons in the corpus callosum and brainstem.',
+      mechanism:'Angular acceleration → cytoskeletal neurofilament rupture & axoplasmic transport block → secondary cytotoxic/vasogenic edema & ICP elevation',
+      neuro:['Glutamate ↑↑','Dopamine ↓','Acetylcholine ↓'],
+      symptoms:['Coma (GCS ≤ 8) / Loss of consciousness','Retrograde & anterograde amnesia','Orbitofrontal disinhibition','Anisocoria (CN III compression) & intracranial hypertension'],
+      stages:['Concussion (mTBI)','Mild-Moderate Cortical Contusion','Severe DAI & Brainstem Compression','Chronic Traumatic Encephalopathy (CTE)'],
       metrics:{cognitive:0.38,motor:0.48,language:0.62,sensory:0.58,memory:0.42,connectivity:0.32}},
-    ru:{name:'Черепно-мозговая травма (Ушиб / ДАП)',short:'Удар-противоудар и аксональное повреждение',
-      desc:'Механическое повреждение базальных отделов лобных и полюсов височных долей о костные выступы черепа в сочетании с ротационным разрывом аксонов.',
-      mechanism:'Угловое ускорение → разрыв цитоскелета аксонов в мозолистом теле и стволе → вторичный отёк и ишемия мозга',
-      neuro:['Глутамат ↑↑','Дофамин ↓','АХ ↓'],
-      symptoms:['Утрата сознания / кома','Ретро- и антероградная амнезия','Лобно-базальный психоорганический синдром','Внутричерепная гипертензия'],
-      stages:['Сотрясение мозга','Ушиб лёгкой/средней степени','Тяжёлый ушиб / ДАП','Хроническая посттравматическая энцефалопатия'],
+    ru:{name:'Черепно-мозговая травма (ДАП)',short:'Очаговый ушиб и диффузное аксональное повреждение',
+      desc:'Механическое повреждение полюсов лобных и височных долей по механизму удара-противоудара в сочетании с ротационным разрывом длинных аксонов мозолистого тела и ствола мозга.',
+      mechanism:'Угловое ускорение → разрыв цитоскелета аксонов (шары ретракции) → вторичный отёк-набухание мозга, ликворная гипертензия и вклинение',
+      neuro:['Глутамат ↑↑','Дофамин ↓','Ацетилхолин ↓'],
+      symptoms:['Кома (ШКГ ≤ 8) / Утрата сознания','Ретро- и антероградная амнезия','Лобно-базальный синдром расторможенности','Анизокория (компрессия III пары) и гипертензия'],
+      stages:['Сотрясение мозга','Ушиб мозга лёгкой/средней степени','Тяжёлый ушиб и ДАП','Хроническая травматическая энцефалопатия'],
       metrics:{cognitive:0.38,motor:0.48,language:0.62,sensory:0.58,memory:0.42,connectivity:0.32}}},
   {id:'huntington',icon:'H',color:'#22c55e',hex:0x22c55e,
     affected:['pfc','m1'],regions:['frontal'],
-    en:{name:'Huntington Disease',short:'Autosomal dominant striatal-cortical atrophy',
-      desc:'CAG trinucleotide repeat expansion (>36 repeats) on chromosome 4p16.3 causing selective death of GABAergic medium spiny neurons in the caudate and putamen.',
-      mechanism:'Mutant huntingtin protein aggregates → loss of indirect basal ganglia pathway → thalamic disinhibition → choreic hyperkinesia',
-      neuro:['GABA ↓↓↓','Acetylcholine ↓↓','Dopamine ↑↑'],
-      symptoms:['Choreoathetosis','Motor impersistence','Subcortical frontal dementia','Affective & behavioral disturbances'],
-      stages:['Premanifest carrier','Early Hyperkinetic','Middle Functional Decline','Advanced Akinetic-Rigid'],
+    en:{name:'Huntington Disease',short:'Autosomal dominant Striatal & cortical degeneration',
+      desc:'CAG trinucleotide repeat expansion (>36 repeats) in the HTT gene on chromosome 4p16.3 causing selective atrophy of the 3D Striatum (caudate head flattening) and enlargement of lateral ventricles.',
+      mechanism:'Mutant huntingtin aggregates → selective death of enkephalin/GABAergic medium spiny neurons (indirect pathway) → thalamic disinhibition → chorea',
+      neuro:['GABA ↓↓↓','Acetylcholine ↓↓','Dopamine (relative) ↑↑'],
+      symptoms:['Generalized choreoathetosis','Motor impersistence & oculomotor apraxia','Dysexecutive subcortical dementia','Depression & behavioral impulsivity'],
+      stages:['Premanifest gene carrier','Early Hyperkinetic Stage','Middle Functional Decline','Advanced Akinetic-Rigid Stage'],
       metrics:{cognitive:0.38,motor:0.18,language:0.58,sensory:0.7,memory:0.45,connectivity:0.38}},
-    ru:{name:'Хорея Гентингтона',short:'Генетическая атрофия стриатума и лобной коры',
-      desc:'Аутосомно-доминантная экспансия CAG-повторов в гене HTT (4-я хромосома) с гибелью ГАМК-ергических шипиковых нейронов хвостатого ядра и скорлупы.',
-      mechanism:'Токсичный мутантный хантингтин → выпадение непрямого пути базальных ганглиев → растормаживание моторного таламуса',
-      neuro:['ГАМК ↓↓↓','Ацетилхолин ↓↓','Дофамин ↑↑'],
-      symptoms:['Хореический гиперкинез','Моторная неловкость и гримасничанье','Подкорково-лобная деменция','Эмоциональная лабильность'],
-      stages:['Доклиническое носительство','Ранняя гиперкинетическая','Развёрнутая стадия','Терминальная акинетико-ригидная'],
+    ru:{name:'Болезнь Гентингтона',short:'Генетическая атрофия 3D-стриатума и коры',
+      desc:'Аутосомно-доминантная экспансия тринуклеотидных CAG-повторов (>36) в гене HTT (хромосома 4p16.3) с селективной атрофией головки хвостатого ядра и скорлупы и расширением передних рогов боковых желудочков.',
+      mechanism:'Токсичный белок хантингтин → гибель ГАМК-ергических средних шипиковых нейронов стриатума → выпадение непрямого пути → хореический гиперкинез',
+      neuro:['ГАМК ↓↓↓','Ацетилхолин ↓↓','Дофамин (относительно) ↑↑'],
+      symptoms:['Генерализованный хореический гиперкинез','Моторная неловкость и глазодвигательная апраксия','Подкорково-лобная деменция','Аффективные и поведенческие расстройства'],
+      stages:['Доклиническое носительство','Ранняя гиперкинетическая стадия','Развёрнутая стадия','Терминальная акинетико-ригидная стадия'],
       metrics:{cognitive:0.38,motor:0.18,language:0.58,sensory:0.7,memory:0.45,connectivity:0.38}}},
   {id:'als',icon:'L',color:'#eab308',hex:0xeab308,
     affected:['m1','broca'],regions:['frontal','brainstem'],
     en:{name:'Amyotrophic Lateral Sclerosis',short:'Upper & lower motor neuron degeneration',
-      desc:'Selective degeneration of upper motor neurons (Betz cells in BA 4) and lower motor neurons (cranial nerve nuclei V, VII, IX–XII in brainstem and spinal anterior horns).',
-      mechanism:'TDP-43 / SOD1 proteinopathy + astroglial EAAT2 glutamate transporter loss → excitotoxic death of motor neurons',
-      neuro:['Glutamate ↑↑','GABA ↓'],
-      symptoms:['Combined spastic & flaccid paresis','Diffuse muscle fasciculations & atrophy','Bulbar & pseudobulbar dysarthria/dysphagia','Preserved ocular & sensory functions'],
-      stages:['Focal Limb/Bulbar Onset','Contralateral Spread','Generalized Tetraparesis','Respiratory Muscle Failure'],
+      desc:'Selective progressive degeneration of upper motor neurons (Betz cells in BA 4) and lower motor neurons (cranial nerve motor nuclei V, VII, IX, X, XII in brainstem and spinal anterior horns).',
+      mechanism:'TDP-43 / SOD1 / C9orf72 proteinopathy + astroglial EAAT2 glutamate transporter loss → excitotoxic death of corticospinal and corticobulbar tracts',
+      neuro:['Glutamate ↑↑↑','GABA ↓'],
+      symptoms:['Combined spastic hyperreflexia & flaccid atrophy','Diffuse muscle fasciculations','Bulbar & pseudobulbar dysarthria/dysphagia (CN IX–XII)','Intact sensory & ocular (CN III, IV, VI) function'],
+      stages:['Focal Limb or Bulbar Onset','Contralateral Regional Spread','Generalized Tetraparesis','Diaphragmatic Respiratory Failure'],
       metrics:{cognitive:0.86,motor:0.08,language:0.48,sensory:0.95,memory:0.9,connectivity:0.35}},
     ru:{name:'Боковой амиотрофический склероз',short:'Сочетанная гибель верхних и нижних мотонейронов',
-      desc:'Избирательная дегенерация центральных мотонейронов (клетки Беца в M1) и периферических мотонейронов двигательных ядер ствола мозга (IX, X, XII) и передних рогов.',
-      mechanism:'Агрегация TDP-43 / SOD1 + дефект обратного захвата глутамата астроцитами → гибель пирамидного тракта и мотонейронов',
-      neuro:['Глутамат ↑↑','ГАМК ↓'],
-      symptoms:['Сочетание спастических и вялых парезов','Фасцикуляции и амиотрофии','Бульбарно-псевдобульбарный синдром (дизартрия, дисфагия)','Полная сохранность чувствительности'],
-      stages:['Локальный дебют','Распространение парезов','Генерализованный тетрапарез','Слабость дыхательной мускулатуры'],
+      desc:'Избирательное поражение центральных мотонейронов (клетки Беца в M1) и периферических мотонейронов двигательных ядер черепных нервов ствола (V, VII, IX, X, XII пары) и передних рогов спинного мозга.',
+      mechanism:'Протеинопатия TDP-43 / SOD1 + дефицит астроцитарного переносчика глутамата EAAT2 → дегенерация кортикоспинального и кортикобульбарного путей',
+      neuro:['Глутамат ↑↑↑','ГАМК ↓'],
+      symptoms:['Сочетание спастических и вялых атрофических парезов','Диффузные фасцикуляции мышц','Бульбарно-псевдобульбарный синдром (дизартрия, дисфагия)','Сохранность чувствительности и движений глаз'],
+      stages:['Локальный спинальный или бульбарный дебют','Генерализация парезов','Глубокий тетрапарез и анартрия','Дыхательная недостаточность диафрагмы'],
       metrics:{cognitive:0.86,motor:0.08,language:0.48,sensory:0.95,memory:0.9,connectivity:0.35}}},
-  {id:'migraine',icon:'G',color:'#06b6d4',hex:0x06b6d4,
+  {id:'migraine',icon:'G',color:'#00e5ff',hex:0x00e5ff,
     affected:['v1','v5','ppc'],regions:['occipital','parietal','brainstem'],
-    en:{name:'Migraine with Visual Aura',short:'Cortical spreading depression of Leão',
-      desc:'Neurovascular paroxysm initiated by a wave of neuronal and glial depolarization propagating forward from the occipital pole (BA 17–19) at 3–5 mm/min.',
-      mechanism:'Cortical Spreading Depression (CSD) → activation of trigeminovascular afferents → meningeal release of CGRP & neurogenic inflammation',
-      neuro:['CGRP ↑↑↑','Serotonin (5-HT) ↓','Glutamate ↑'],
-      symptoms:['Fortification spectra (scintillating scotoma)','Unilateral pulsating hemicrania','Photophobia & phonophobia','Cutaneous allodynia'],
-      stages:['Hypothalamic Prodrome','Occipital Visual Aura (20–60m)','Trigeminovascular Headache','Postdrome Exhaustion'],
+    en:{name:'Migraine with Visual Aura',short:'Cortical spreading depression of Leão & CN V activation',
+      desc:'Neurovascular disorder initiated by a self-propagating wave (3–5 mm/min) of neuronal and glial depolarization across the occipital visual cortex (BA 17–19) activating the trigeminovascular system (CN V).',
+      mechanism:'Cortical Spreading Depression (CSD) → trigeminal ganglion (CN V1) activation → dural release of CGRP, Substance P & neurogenic vasodilation',
+      neuro:['CGRP ↑↑↑','Serotonin (5-HT1B/1D) ↓','Glutamate ↑'],
+      symptoms:['Fortification spectra (scintillating scotoma)','Unilateral pulsating hemicrania','Photophobia, phonophobia & nausea','Trigeminal cutaneous allodynia'],
+      stages:['Hypothalamic Prodrome','Occipital Cortical Aura (20–60 min)','Trigeminovascular Headache Phase','Postdrome Resolution'],
       metrics:{cognitive:0.75,motor:0.85,language:0.72,sensory:0.38,memory:0.75,connectivity:0.62}},
-    ru:{name:'Мигрень со зрительной аурой',short:'Распространяющаяся депрессия коры Лео',
-      desc:'Нейроваскулярный пароксизм, запускаемый волной деполяризации нейронов (3–5 мм/мин), идущей от затылочного полюса (V1–V5) вперёд по коре.',
-      mechanism:'Волна кортикальной депрессии Лео (CSD) → стимуляция волокон тройничного нерва → выброс пептида CGRP в сосудах оболочек мозга',
-      neuro:['CGRP ↑↑↑','Серотонин (5-HT) ↓','Глутамат ↑'],
-      symptoms:['Мерцающая скотома и зигзаги (тейхопсия)','Пульсирующая гемикрания','Фото- и фонофобия','Кожная аллодиния'],
-      stages:['Продром','Зрительная аура (20–60 мин)','Фаза пульсирующей головной боли','Постдром'],
+    ru:{name:'Мигрень со зрительной аурой',short:'Распространяющаяся депрессия Лео и система V пары ЧМН',
+      desc:'Нейроваскулярный пароксизм, запускаемый волной деполяризации нейронов и глии (3–5 мм/мин) от затылочного полюса (V1–V5) с последующим возбуждением ядра и волокон тройничного нерва (V пара ЧМН).',
+      mechanism:'Волна кортикальной депрессии Лео (CSD) → активация первой ветви тройничного нерва (CN V1) → выброс пептида CGRP и нейрогенное воспаление сосудов оболочек',
+      neuro:['Пептид CGRP ↑↑↑','Серотонин (5-HT) ↓','Глутамат ↑'],
+      symptoms:['Мерцающая скотома и фортификационный спектр','Односторонняя пульсирующая гемикрания','Фотофобия, фонофобия и тошнота','Тригеминальная кожная аллодиния'],
+      stages:['Гипоталамический продром','Затылочная зрительная аура (20–60 мин)','Тригемино-васкулярная фаза боли','Постдром'],
       metrics:{cognitive:0.75,motor:0.85,language:0.72,sensory:0.38,memory:0.75,connectivity:0.62}}}
 ];
 
 /* ================================================================
-   THREE.JS SCENE SETUP
+   THREE.JS SCENE & CLIPPING PLANES
    ================================================================ */
 const canvas = document.getElementById('canvas3d');
 const viewport = document.getElementById('viewport');
@@ -987,6 +1219,11 @@ renderer.setClearColor(0x000000, 0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.15;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.localClippingEnabled = true;
+
+const clipPlaneX = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 1.2);
+const clipPlaneY = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1.2);
+const activeClipPlanes = [clipPlaneX, clipPlaneY];
 
 const scene = new THREE.Scene();
 
@@ -995,16 +1232,16 @@ camera.position.set(-2.3, 0.4, 1.8);
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.dampingFactor = 0.055;
+controls.dampingFactor = 0.06;
 controls.rotateSpeed = 0.85;
 controls.zoomSpeed = 1.05;
-controls.minDistance = 1.35;
+controls.minDistance = 1.15;
 controls.maxDistance = 8.5;
 controls.enablePan = false;
 controls.target.set(0, 0, 0);
 
-scene.add(new THREE.AmbientLight(0x99aacc, 0.75));
-scene.add(new THREE.HemisphereLight(0xddeeff, 0x10121a, 0.9));
+scene.add(new THREE.AmbientLight(0x99aacc, 0.78));
+scene.add(new THREE.HemisphereLight(0xddeeff, 0x10121a, 0.92));
 
 const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
 keyLight.position.set(4, 6, 5);
@@ -1014,7 +1251,7 @@ const fillLight = new THREE.DirectionalLight(0x88aaff, 1.0);
 fillLight.position.set(-5, 1, 3);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.1);
+const rimLight = new THREE.DirectionalLight(0x00e5ff, 1.15);
 rimLight.position.set(0, 4, -6);
 scene.add(rimLight);
 
@@ -1026,42 +1263,258 @@ const brainState = {
   size: new THREE.Vector3(2, 2, 2),
   radius: 1,
   model: null,
-  surfaceMeshes: [],
-  surfaceMaterials: [],
-  neuralMaterials: []
+  surfaceMeshes: []
 };
 
 /* ================================================================
-   LOBE CLASSIFICATION (MATCHING TEXTBOOK TOPOGRAPHY)
+   LOBE CLASSIFICATION
    ================================================================ */
 const LOBE_INDEX = { frontal: 0, parietal: 1, temporal: 2, occipital: 3, cerebellum: 4, brainstem: 5 };
 const LOBE_COLORS = [
-  new THREE.Color('#10b981'), // frontal
-  new THREE.Color('#38bdf8'), // parietal
-  new THREE.Color('#a855f7'), // temporal
-  new THREE.Color('#eab308'), // occipital
-  new THREE.Color('#ec4899'), // cerebellum
-  new THREE.Color('#06b6d4')  // brainstem
+  new THREE.Color('#00e5a3'),
+  new THREE.Color('#00b8ff'),
+  new THREE.Color('#a855f7'),
+  new THREE.Color('#f59e0b'),
+  new THREE.Color('#ec4899'),
+  new THREE.Color('#06b6d4')
 ];
 
 function classifyLobe(x, y, z) {
-  // Brainstem: lowest central-posterior stalk
   if (y < -0.42 && Math.abs(x) < 0.28 && z < 0.15) return 'brainstem';
-  // Cerebellum: posterior inferior fossa
   if (y < -0.18 && z < -0.12) return 'cerebellum';
-  // Frontal lobe: anterior to central sulcus (slanted plane z > 0.08 - y*0.18)
   if (z > 0.08 - y * 0.18 && y > -0.25) return 'frontal';
-  // Occipital lobe: posterior pole
   if (z < -0.48 && y >= -0.18) return 'occipital';
-  // Temporal lobe: lateral inferior below Sylvian fissure
   if (y < 0.14 && Math.abs(x) > 0.25 && z <= 0.25 && z >= -0.52) return 'temporal';
-  // Parietal lobe: superior posterior
   if (y >= 0.08) return 'parietal';
   return z >= 0 ? 'frontal' : 'temporal';
 }
 
 /* ================================================================
-   GLB LOAD + AUTO-ORIENTATION + DUAL DISPLAY MODES
+   PROCEDURAL 3D SUBCORTICAL MESH GENERATOR (7 ANATOMICAL SYSTEMS)
+   ================================================================ */
+const subcorticalGroup = new THREE.Group();
+brainGroup.add(subcorticalGroup);
+const subcorticalGroups = {};
+const subcorticalClickMeshes = [];
+
+function buildSubcorticalMeshes() {
+  function makeMat(hexColor, opacity) {
+    return new THREE.MeshPhysicalMaterial({
+      color: hexColor,
+      emissive: hexColor,
+      emissiveIntensity: 0.3,
+      roughness: 0.28,
+      metalness: 0.15,
+      clearcoat: 0.65,
+      transparent: true,
+      opacity: opacity || 0.88,
+      side: THREE.DoubleSide,
+      clippingPlanes: activeClipPlanes
+    });
+  }
+
+  function registerMesh(group, id, focusTargetPos) {
+    group.userData.focusPos = focusTargetPos;
+    group.traverse(function(c) {
+      if (c.isMesh) {
+        c.userData = { type: 'subcortical', id: id };
+        subcorticalClickMeshes.push(c);
+      }
+    });
+    subcorticalGroup.add(group);
+    subcorticalGroups[id] = group;
+  }
+
+  // 1. CORPUS CALLOSUM
+  const ccGroup = new THREE.Group();
+  const ccMat = makeMat(SUBCORTICAL.callosum.hex, 0.85);
+  for (let i = -5; i <= 5; i++) {
+    const xOff = i * 0.022;
+    const wScale = 1 - Math.abs(i) * 0.06;
+    const ccCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(xOff, -0.02, 0.28 * wScale),
+      new THREE.Vector3(xOff, 0.11, 0.31 * wScale),
+      new THREE.Vector3(xOff, 0.21, 0.10 * wScale),
+      new THREE.Vector3(xOff, 0.19, -0.15 * wScale),
+      new THREE.Vector3(xOff, 0.08, -0.32 * wScale)
+    ]);
+    ccGroup.add(new THREE.Mesh(new THREE.TubeGeometry(ccCurve, 32, 0.023 * wScale, 10, false), ccMat));
+  }
+  registerMesh(ccGroup, 'callosum', new THREE.Vector3(0, 0.16, 0.05));
+
+  // 2. VENTRICULAR SYSTEM (Lateral C-shaped ventricles + III + Aqueduct + IV)
+  const ventGroup = new THREE.Group();
+  const ventMat = makeMat(SUBCORTICAL.ventricles.hex, 0.86);
+  [-1, 1].forEach(function(side) {
+    // Anterior horn -> Body -> Atrium -> Inferior temporal horn
+    const latCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.06, 0.06, 0.24),
+      new THREE.Vector3(side * 0.08, 0.14, 0.08),
+      new THREE.Vector3(side * 0.11, 0.11, -0.14),
+      new THREE.Vector3(side * 0.17, -0.02, -0.22),
+      new THREE.Vector3(side * 0.20, -0.14, -0.06)
+    ]);
+    ventGroup.add(new THREE.Mesh(new THREE.TubeGeometry(latCurve, 36, 0.026, 12, false), ventMat));
+    // Posterior occipital horn spur
+    const occHorn = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.13, 0.04, -0.18),
+      new THREE.Vector3(side * 0.10, 0.01, -0.34)
+    ]);
+    ventGroup.add(new THREE.Mesh(new THREE.TubeGeometry(occHorn, 14, 0.018, 10, false), ventMat));
+  });
+  // III Ventricle midline disc + Cerebral Aqueduct + IV Ventricle diamond
+  const v3Geo = new THREE.SphereGeometry(0.065, 18, 14);
+  v3Geo.scale(0.28, 0.95, 1.35);
+  const v3Mesh = new THREE.Mesh(v3Geo, ventMat);
+  v3Mesh.position.set(0, -0.02, -0.02);
+  ventGroup.add(v3Mesh);
+
+  const aqCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, -0.06, -0.08),
+    new THREE.Vector3(0, -0.26, -0.18),
+    new THREE.Vector3(0, -0.44, -0.22)
+  ]);
+  ventGroup.add(new THREE.Mesh(new THREE.TubeGeometry(aqCurve, 20, 0.012, 8, false), ventMat));
+
+  const v4Geo = new THREE.OctahedronGeometry(0.055, 1);
+  v4Geo.scale(0.85, 1.3, 0.75);
+  const v4Mesh = new THREE.Mesh(v4Geo, ventMat);
+  v4Mesh.position.set(0, -0.46, -0.23);
+  ventGroup.add(v4Mesh);
+  registerMesh(ventGroup, 'ventricles', new THREE.Vector3(-0.12, 0.04, -0.04));
+
+  // 3. THALAMUS
+  const thGroup = new THREE.Group();
+  const thMat = makeMat(SUBCORTICAL.thalamus.hex, 0.9);
+  [-1, 1].forEach(function(side) {
+    const thGeo = new THREE.SphereGeometry(0.105, 24, 18);
+    thGeo.scale(0.76, 0.9, 1.35);
+    const thMesh = new THREE.Mesh(thGeo, thMat);
+    thMesh.position.set(side * 0.105, 0.0, -0.04);
+    thMesh.rotation.y = side * -0.15;
+    thGroup.add(thMesh);
+  });
+  const adhGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.14, 12);
+  adhGeo.rotateZ(Math.PI * 0.5);
+  const adhMesh = new THREE.Mesh(adhGeo, thMat);
+  adhMesh.position.set(0, 0.01, -0.02);
+  thGroup.add(adhMesh);
+  registerMesh(thGroup, 'thalamus', new THREE.Vector3(-0.10, 0.0, -0.04));
+
+  // 4. STRIATUM
+  const stGroup = new THREE.Group();
+  const stMat = makeMat(SUBCORTICAL.striatum.hex, 0.88);
+  [-1, 1].forEach(function(side) {
+    const caudCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.13, 0.04, 0.24),
+      new THREE.Vector3(side * 0.15, 0.16, 0.08),
+      new THREE.Vector3(side * 0.17, 0.12, -0.14),
+      new THREE.Vector3(side * 0.22, -0.06, -0.18),
+      new THREE.Vector3(side * 0.24, -0.14, -0.02)
+    ]);
+    stGroup.add(new THREE.Mesh(new THREE.TubeGeometry(caudCurve, 32, 0.03, 10, false), stMat));
+
+    const headGeo = new THREE.SphereGeometry(0.05, 16, 14);
+    headGeo.scale(0.8, 1.1, 1.3);
+    const headMesh = new THREE.Mesh(headGeo, stMat);
+    headMesh.position.set(side * 0.13, 0.05, 0.23);
+    stGroup.add(headMesh);
+
+    const putGeo = new THREE.SphereGeometry(0.092, 20, 16);
+    putGeo.scale(0.46, 0.95, 1.45);
+    const putMesh = new THREE.Mesh(putGeo, stMat);
+    putMesh.position.set(side * 0.23, -0.01, 0.06);
+    stGroup.add(putMesh);
+  });
+  registerMesh(stGroup, 'striatum', new THREE.Vector3(-0.20, 0.04, 0.10));
+
+  // 5. HIPPOCAMPUS & FORNIX
+  const hipGroup = new THREE.Group();
+  const hipMat = makeMat(SUBCORTICAL.hippocampus_mesh.hex, 0.92);
+  [-1, 1].forEach(function(side) {
+    const hCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.22, -0.22, 0.08),
+      new THREE.Vector3(side * 0.26, -0.20, -0.06),
+      new THREE.Vector3(side * 0.23, -0.10, -0.20),
+      new THREE.Vector3(side * 0.12, 0.06, -0.18),
+      new THREE.Vector3(side * 0.04, 0.11, -0.02),
+      new THREE.Vector3(side * 0.03, -0.05, 0.09)
+    ]);
+    hipGroup.add(new THREE.Mesh(new THREE.TubeGeometry(hCurve, 40, 0.027, 12, false), hipMat));
+
+    const pawGeo = new THREE.SphereGeometry(0.044, 16, 14);
+    pawGeo.scale(1.1, 0.8, 1.3);
+    const pawMesh = new THREE.Mesh(pawGeo, hipMat);
+    pawMesh.position.set(side * 0.22, -0.22, 0.09);
+    hipGroup.add(pawMesh);
+  });
+  registerMesh(hipGroup, 'hippocampus_mesh', new THREE.Vector3(-0.22, -0.16, -0.06));
+
+  // 6. AMYGDALA
+  const amGroup = new THREE.Group();
+  const amMat = makeMat(SUBCORTICAL.amygdala_mesh.hex, 0.94);
+  [-1, 1].forEach(function(side) {
+    const amGeo = new THREE.SphereGeometry(0.056, 20, 16);
+    amGeo.scale(0.95, 0.88, 1.22);
+    const amMesh = new THREE.Mesh(amGeo, amMat);
+    amMesh.position.set(side * 0.22, -0.19, 0.16);
+    amGroup.add(amMesh);
+  });
+  registerMesh(amGroup, 'amygdala_mesh', new THREE.Vector3(-0.22, -0.19, 0.16));
+
+  // 7. CRANIAL NERVES (I-XII BASAL & BRAINSTEM ROOTS)
+  const cnGroup = new THREE.Group();
+  const cnMat = makeMat(SUBCORTICAL.cranial_nerves.hex, 0.94);
+  [-1, 1].forEach(function(side) {
+    // CN I: Olfactory tract + bulb under frontal lobe
+    const cn1 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.06, -0.16, 0.18),
+      new THREE.Vector3(side * 0.05, -0.17, 0.46)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn1, 12, 0.011, 8, false), cnMat));
+
+    // CN II: Optic nerve + Chiasm + Optic tract
+    const cn2 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.11, -0.18, 0.32),
+      new THREE.Vector3(side * 0.02, -0.19, 0.14),
+      new THREE.Vector3(side * 0.10, -0.16, 0.02)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn2, 16, 0.016, 8, false), cnMat));
+
+    // CN III: Oculomotor emerging from interpeduncular fossa
+    const cn3 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.03, -0.26, -0.02),
+      new THREE.Vector3(side * 0.09, -0.27, 0.16)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn3, 10, 0.010, 8, false), cnMat));
+
+    // CN V: Thick Trigeminal trunk on lateral pons + Gasserian ganglion
+    const cn5 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.11, -0.38, -0.08),
+      new THREE.Vector3(side * 0.20, -0.36, 0.06),
+      new THREE.Vector3(side * 0.24, -0.34, 0.16)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn5, 14, 0.020, 10, false), cnMat));
+
+    // CN VII & VIII: Facial & Vestibulocochlear at cerebellopontine angle
+    const cn78 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.11, -0.46, -0.12),
+      new THREE.Vector3(side * 0.24, -0.45, -0.06)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn78, 10, 0.013, 8, false), cnMat));
+
+    // CN IX, X, XI, XII: Bulbar rootlets emerging from medulla oblongata
+    const cn912 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side * 0.08, -0.58, -0.14),
+      new THREE.Vector3(side * 0.19, -0.60, -0.06)
+    ]);
+    cnGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cn912, 10, 0.012, 8, false), cnMat));
+  });
+  registerMesh(cnGroup, 'cranial_nerves', new THREE.Vector3(-0.15, -0.36, 0.08));
+}
+
+/* ================================================================
+   GLB LOAD + AUTO-ORIENTATION
    ================================================================ */
 const MODEL_URL = 'low-poly_human_brain_model.glb';
 const modelLoaderEl = document.getElementById('modelLoader');
@@ -1076,7 +1529,6 @@ gltfLoader.load(
   function(gltf) {
     const model = gltf.scene;
 
-    // 1. Scale and center model at origin
     const bbox = new THREE.Box3().setFromObject(model);
     const size = bbox.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
@@ -1089,7 +1541,7 @@ gltfLoader.load(
     model.position.set(-center2.x, -center2.y, -center2.z);
     model.updateMatrixWorld(true);
 
-    // 2. Auto-detect brainstem & AP axis so Frontal is ALWAYS +Z and Left Hemisphere is -X
+    // Auto-orient AP axis & Brainstem
     const allVerts = [];
     const vTmp = new THREE.Vector3();
     model.traverse(function(c) {
@@ -1105,14 +1557,11 @@ gltfLoader.load(
     if (allVerts.length > 0) {
       const fBox = new THREE.Box3().setFromPoints(allVerts);
       const fSize = fBox.getSize(new THREE.Vector3());
-      // If X is longer than Z, the model's nose-to-back axis is along X
       if (fSize.x > fSize.z * 1.08) {
         model.rotation.y = Math.PI * 0.5;
         model.updateMatrixWorld(true);
       }
-      // Check lowest vertices (brainstem): in human anatomy, brainstem/cerebellum is posterior (-Z)
-      let lowZSum = 0;
-      let lowCount = 0;
+      let lowZSum = 0, lowCount = 0;
       const minY = fBox.min.y;
       const yThresh = minY + fSize.y * 0.25;
       model.traverse(function(c) {
@@ -1128,7 +1577,6 @@ gltfLoader.load(
         }
       });
       if (lowCount > 0 && (lowZSum / lowCount) > 0.05) {
-        // Stem is at +Z, rotate 180 deg around Y so Frontal is +Z and Stem/Cerebellum is -Z
         model.rotation.y += Math.PI;
         model.updateMatrixWorld(true);
       }
@@ -1140,14 +1588,10 @@ gltfLoader.load(
     brainState.radius = brainState.size.length() * 0.5;
     brainState.loaded = true;
 
-    // 3. Prepare BOTH materials for each mesh:
-    //    - Surface Material: preserves original texture (veins/sulci) + DoubleSide for accurate raycasting
-    //    - Neural Material: translucent holographic lobe-tinted shell
     model.traverse(function(child) {
       if (child.isMesh && child.geometry) {
         brainState.surfaceMeshes.push(child);
 
-        // Bake lobe vertex colors onto geometry
         const posAttr = child.geometry.attributes.position;
         const count = posAttr.count;
         const colors = new Float32Array(count * 3);
@@ -1161,31 +1605,32 @@ gltfLoader.load(
         }
         child.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        // Original Vascular Surface Material
         let surfMat;
         if (child.material) {
           surfMat = child.material.clone();
           surfMat.side = THREE.DoubleSide;
           surfMat.roughness = 0.55;
           surfMat.metalness = 0.1;
+          surfMat.clippingPlanes = activeClipPlanes;
         } else {
           surfMat = new THREE.MeshStandardMaterial({
             color: 0xb89aa8,
             roughness: 0.55,
             metalness: 0.1,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            clippingPlanes: activeClipPlanes
           });
         }
 
-        // Internal Neural Holographic Material
         const neurMat = new THREE.MeshStandardMaterial({
           vertexColors: true,
           roughness: 0.35,
           metalness: 0.25,
           transparent: true,
-          opacity: 0.18,
+          opacity: 0.13,
           depthWrite: false,
-          side: THREE.DoubleSide
+          side: THREE.DoubleSide,
+          clippingPlanes: activeClipPlanes
         });
 
         child.userData.surfMat = surfMat;
@@ -1196,6 +1641,7 @@ gltfLoader.load(
 
     brainGroup.add(model);
 
+    buildSubcorticalMeshes();
     buildUniformCorticalNeurons();
     buildMarkers();
     buildInternalPathways();
@@ -1217,12 +1663,12 @@ gltfLoader.load(
   function(error) {
     console.error('Model load error:', error);
     loaderTextEl.textContent = T('loadError');
-    loaderTextEl.style.color = '#ef4444';
+    loaderTextEl.style.color = '#f43f5e';
   }
 );
 
 /* ================================================================
-   OUTWARD-INWARD RAYCASTING (GUARANTEES POINTS SIT ON CORTEX!)
+   OUTWARD-INWARD RAYCASTING FOR EXACT CORTICAL SURFACE PLACEMENT
    ================================================================ */
 const rayHelper = new THREE.Raycaster();
 
@@ -1232,7 +1678,6 @@ function getSurfaceHit(dirArray) {
     return { point: dir.clone().multiplyScalar(0.85), normal: dir.clone() };
   }
 
-  // Cast from OUTSIDE the brain INWARD toward the anatomical center
   const origin = dir.clone().multiplyScalar(brainState.radius * 3.0);
   const inward = dir.clone().negate();
   rayHelper.set(origin, inward);
@@ -1240,7 +1685,6 @@ function getSurfaceHit(dirArray) {
 
   const hits = rayHelper.intersectObjects(brainState.surfaceMeshes, true);
   if (hits.length > 0) {
-    // First hit from outside is guaranteed to be the outer cortical pial surface
     const point = hits[0].point.clone();
     const normal = dir.clone();
     return { point: point.add(normal.clone().multiplyScalar(0.008)), normal: normal };
@@ -1250,14 +1694,12 @@ function getSurfaceHit(dirArray) {
 }
 
 /* ================================================================
-   TRIANGLE-AREA WEIGHTED NEURON SAMPLING (NO CLUMPING AT STEM!)
+   TRIANGLE-AREA WEIGHTED NEURON CLOUD (SINGLE DRAW CALL)
    ================================================================ */
 function buildUniformCorticalNeurons() {
   const triangles = [];
   let totalArea = 0;
-  const vA = new THREE.Vector3();
-  const vB = new THREE.Vector3();
-  const vC = new THREE.Vector3();
+  const vA = new THREE.Vector3(), vB = new THREE.Vector3(), vC = new THREE.Vector3();
   const tri = new THREE.Triangle();
 
   brainState.surfaceMeshes.forEach(function(mesh) {
@@ -1294,7 +1736,7 @@ function buildUniformCorticalNeurons() {
 
   if (triangles.length === 0) return;
 
-  const NEURON_COUNT = 9000;
+  const NEURON_COUNT = 8000;
   const positions = new Float32Array(NEURON_COUNT * 3);
   const colors = new Float32Array(NEURON_COUNT * 3);
   const scales = new Float32Array(NEURON_COUNT);
@@ -1322,15 +1764,10 @@ function buildUniformCorticalNeurons() {
 
   for (let i = 0; i < NEURON_COUNT; i++) {
     const surfPt = sampleTriangle();
-    // Place neurons uniformly inside cortical gray matter & subcortical layers (0.55 to 0.98 depth)
-    const depth = Math.random() < 0.72 ? (0.88 + Math.random() * 0.11) : (0.48 + Math.random() * 0.4);
-    const px = surfPt.x * depth;
-    const py = surfPt.y * depth;
-    const pz = surfPt.z * depth;
-
-    positions[i * 3] = px;
-    positions[i * 3 + 1] = py;
-    positions[i * 3 + 2] = pz;
+    const depth = Math.random() < 0.8 ? (0.91 + Math.random() * 0.08) : (0.62 + Math.random() * 0.28);
+    positions[i * 3] = surfPt.x * depth;
+    positions[i * 3 + 1] = surfPt.y * depth;
+    positions[i * 3 + 2] = surfPt.z * depth;
 
     const lid = classifyLobe(surfPt.x, surfPt.y, surfPt.z);
     const lIdx = LOBE_INDEX[lid];
@@ -1341,7 +1778,7 @@ function buildUniformCorticalNeurons() {
     colors[i * 3 + 1] = baseCol.g * (1 - whiteMix) + whiteMix;
     colors[i * 3 + 2] = baseCol.b * (1 - whiteMix) + whiteMix;
 
-    scales[i] = 0.65 + Math.random() * 1.15;
+    scales[i] = 0.6 + Math.random() * 1.1;
     phases[i] = Math.random() * Math.PI * 2;
     lobeIds[i] = lIdx;
   }
@@ -1356,9 +1793,11 @@ function buildUniformCorticalNeurons() {
   nebulaUniforms = {
     uTime: { value: 0 },
     uActiveLobe: { value: -1.0 },
-    uDiseaseColor: { value: new THREE.Color(0xef4444) },
+    uDiseaseColor: { value: new THREE.Color(0xf43f5e) },
     uDiseaseMix: { value: 0.0 },
-    uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) }
+    uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+    uClipX: { value: 1.2 },
+    uClipY: { value: 1.2 }
   };
 
   const mat = new THREE.ShaderMaterial({
@@ -1373,31 +1812,37 @@ function buildUniformCorticalNeurons() {
       uniform vec3 uDiseaseColor;
       uniform float uDiseaseMix;
       uniform float uPixelRatio;
+      uniform float uClipX;
+      uniform float uClipY;
       varying vec3 vColor;
       varying float vAlpha;
+      varying float vClip;
 
       void main() {
-        float pulse = 0.7 + 0.3 * sin(uTime * 2.0 + aPhase);
-        float lobeMatch = (uActiveLobe < -0.5) ? 1.0 : (abs(aLobe - uActiveLobe) < 0.1 ? 1.4 : 0.15);
+        vClip = max(position.x - uClipX, position.y - uClipY);
+        float pulse = 0.72 + 0.28 * sin(uTime * 2.0 + aPhase);
+        float lobeMatch = (uActiveLobe < -0.5) ? 1.0 : (abs(aLobe - uActiveLobe) < 0.1 ? 1.45 : 0.14);
 
-        vec3 finalCol = mix(aColor, uDiseaseColor, uDiseaseMix * 0.7);
+        vec3 finalCol = mix(aColor, uDiseaseColor, uDiseaseMix * 0.72);
         vColor = finalCol * (lobeMatch > 1.0 ? 1.25 : 1.0);
         vAlpha = pulse * lobeMatch;
 
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * mvPosition;
-        gl_PointSize = (11.5 * aScale * pulse * uPixelRatio * (lobeMatch > 1.0 ? 1.2 : 1.0)) / -mvPosition.z;
+        gl_PointSize = (10.5 * aScale * pulse * uPixelRatio * (lobeMatch > 1.0 ? 1.2 : 1.0)) / -mvPosition.z;
       }
     `,
     fragmentShader: `
       varying vec3 vColor;
       varying float vAlpha;
+      varying float vClip;
 
       void main() {
+        if (vClip > 0.0) discard;
         float d = length(gl_PointCoord - vec2(0.5));
         if (d > 0.5) discard;
         float glow = pow(smoothstep(0.5, 0.0, d), 1.6);
-        gl_FragColor = vec4(vColor, glow * vAlpha * 0.85);
+        gl_FragColor = vec4(vColor, glow * vAlpha * 0.78);
       }
     `,
     transparent: true,
@@ -1410,14 +1855,14 @@ function buildUniformCorticalNeurons() {
 }
 
 /* ================================================================
-   CLEAN FLUSH CORTICAL MARKERS (NO PROTRUDING SPIKES!)
+   CORTICAL BEACON MARKERS
    ================================================================ */
 const subzoneGroup = new THREE.Group();
 brainGroup.add(subzoneGroup);
 const subzoneAnchors = {};
 const subzoneHitProxies = [];
 
-const outerRingGeo = new THREE.RingGeometry(0.026, 0.033, 32);
+const outerRingGeo = new THREE.RingGeometry(0.025, 0.032, 32);
 const innerDotGeo = new THREE.CircleGeometry(0.011, 24);
 const hitProxyGeo = new THREE.PlaneGeometry(0.11, 0.11);
 
@@ -1434,7 +1879,7 @@ function buildMarkers() {
       color: color,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.92,
       depthTest: false
     });
     const outerRing = new THREE.Mesh(outerRingGeo, ringMat);
@@ -1469,7 +1914,7 @@ function buildMarkers() {
 }
 
 /* ================================================================
-   INTERNAL WHITE MATTER TRACTS (SMOOTH SUBCORTICAL ARCS)
+   DTI MULTI-STRAND WHITE MATTER TRACTS
    ================================================================ */
 const pathwaysGroup = new THREE.Group();
 brainGroup.add(pathwaysGroup);
@@ -1491,1077 +1936,10 @@ function buildInternalPathways() {
     const ancB = subzoneAnchors[bId];
     if (!ancA || !ancB) return;
 
-    // Start and end slightly inside the cortex (white matter layer)
     const a = ancA.group.position.clone().multiplyScalar(0.92);
     const b = ancB.group.position.clone().multiplyScalar(0.92);
-    // Curve dips anatomically into subcortical white matter (corona radiata / centrum semiovale)
-    const mid1 = a.clone().lerp(b, 0.33).multiplyScalar(0.68);
-    const mid2 = a.clone().lerp(b, 0.66).multiplyScalar(0.68);
+    const mid1 = a.clone().lerp(b, 0.33).multiplyScalar(0.66);
+    const mid2 = a.clone().lerp(b, 0.66).multiplyScalar(0.66);
 
     const curve = new THREE.CatmullRomCurve3([a, mid1, mid2, b]);
     const cA = ancA.color;
-    const cB = ancB.color;
-
-    const pts = curve.getPoints(40);
-    const posArr = new Float32Array(pts.length * 3);
-    const colArr = new Float32Array(pts.length * 3);
-
-    for (let i = 0; i < pts.length; i++) {
-      const u = i / (pts.length - 1);
-      posArr[i * 3] = pts[i].x;
-      posArr[i * 3 + 1] = pts[i].y;
-      posArr[i * 3 + 2] = pts[i].z;
-
-      const c = cA.clone().lerp(cB, u);
-      colArr[i * 3] = c.r;
-      colArr[i * 3 + 1] = c.g;
-      colArr[i * 3 + 2] = c.b;
-    }
-
-    const lGeo = new THREE.BufferGeometry();
-    lGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
-    lGeo.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
-    const lMat = new THREE.LineBasicMaterial({
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.45,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
-    const line = new THREE.Line(lGeo, lMat);
-    pathwaysGroup.add(line);
-    pathwayData.push({ line: line, a: aId, b: bId });
-
-    // Synaptic pulse particles along internal tract
-    const SAMPLES = 70;
-    const curvePts = curve.getPoints(SAMPLES);
-    const speed = 0.25 + (idx % 3) * 0.05;
-    const offset = idx * 0.19;
-
-    for (let i = 0; i <= SAMPLES; i++) {
-      const u = i / SAMPLES;
-      streakPositions.push(curvePts[i].x, curvePts[i].y, curvePts[i].z);
-      const c = cA.clone().lerp(cB, u);
-      streakColors.push(c.r, c.g, c.b);
-      streakProgress.push(u);
-      streakSpeeds.push(speed);
-      streakOffsets.push(offset);
-    }
-  });
-
-  const streakGeo = new THREE.BufferGeometry();
-  streakGeo.setAttribute('position', new THREE.Float32BufferAttribute(streakPositions, 3));
-  streakGeo.setAttribute('aColor', new THREE.Float32BufferAttribute(streakColors, 3));
-  streakGeo.setAttribute('aProgress', new THREE.Float32BufferAttribute(streakProgress, 1));
-  streakGeo.setAttribute('aSpeed', new THREE.Float32BufferAttribute(streakSpeeds, 1));
-  streakGeo.setAttribute('aOffset', new THREE.Float32BufferAttribute(streakOffsets, 1));
-
-  impulseUniforms = {
-    uTime: { value: 0 },
-    uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
-    uDiseaseColor: { value: new THREE.Color(0xef4444) },
-    uDiseaseMix: { value: 0.0 }
-  };
-
-  const streakMat = new THREE.ShaderMaterial({
-    uniforms: impulseUniforms,
-    vertexShader: `
-      attribute vec3 aColor;
-      attribute float aProgress;
-      attribute float aSpeed;
-      attribute float aOffset;
-      uniform float uTime;
-      uniform float uPixelRatio;
-      uniform vec3 uDiseaseColor;
-      uniform float uDiseaseMix;
-      varying vec3 vColor;
-      varying float vIntensity;
-
-      void main() {
-        float head = fract(uTime * aSpeed + aOffset);
-        float dist = fract(head - aProgress);
-        float trail = smoothstep(0.18, 0.0, dist);
-        vIntensity = pow(trail, 1.5);
-
-        vec3 baseCol = mix(aColor, uDiseaseColor, uDiseaseMix);
-        vColor = mix(baseCol, vec3(1.0), pow(trail, 3.0) * 0.7);
-
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_Position = projectionMatrix * mvPosition;
-        gl_PointSize = (14.0 * vIntensity * uPixelRatio + 1.5) / -mvPosition.z;
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vColor;
-      varying float vIntensity;
-
-      void main() {
-        if (vIntensity < 0.02) discard;
-        float d = length(gl_PointCoord - vec2(0.5));
-        if (d > 0.5) discard;
-        float glow = smoothstep(0.5, 0.0, d);
-        gl_FragColor = vec4(vColor, glow * vIntensity * 0.9);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  });
-
-  impulseBeamSystem = new THREE.Points(streakGeo, streakMat);
-  pathwaysGroup.add(impulseBeamSystem);
-}
-
-/* ================================================================
-   HTML LABELS (POSITIONED TIGHTLY OVER CORTEX BEACONS)
-   ================================================================ */
-const labelsLayer = document.getElementById('labelsLayer');
-const htmlLabels = {};
-
-function buildHtmlLabels() {
-  labelsLayer.innerHTML = '';
-  SUBZONES.forEach(function(sz) {
-    const el = document.createElement('button');
-    el.className = 'zone-label';
-    el.dataset.id = sz.id;
-    el.style.setProperty('--ldot-color', sz.color);
-    el.innerHTML =
-      '<span class="ldot"></span>' +
-      '<span class="lname">' + sz[LANG].name + '</span>' +
-      '<span class="lba">' + sz.ba + '</span>';
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-      onZoneClick(sz.id);
-    });
-    el.addEventListener('pointerenter', function() {
-      state.hoveredSubzone = sz.id;
-    });
-    el.addEventListener('pointerleave', function() {
-      if (state.hoveredSubzone === sz.id) state.hoveredSubzone = null;
-    });
-    el.addEventListener('touchstart', function(e) {
-      e.stopPropagation();
-    }, { passive: true });
-    labelsLayer.appendChild(el);
-    htmlLabels[sz.id] = el;
-  });
-}
-
-/* ================================================================
-   STATE & DISPLAY MODES (SURFACE VESSELS vs INTERNAL NEURONS)
-   ================================================================ */
-const state = {
-  viewMode: 'surface', // 'surface' | 'neural'
-  selectedRegion: null,
-  selectedSubzone: null,
-  hoveredRegion: null,
-  hoveredSubzone: null,
-  currentDisease: null,
-  severity: 50,
-  chips: { labels: true, rotate: false }
-};
-let camTween = null;
-
-function applyDisplayMode() {
-  const isNeural = state.viewMode === 'neural';
-
-  brainState.surfaceMeshes.forEach(function(mesh) {
-    if (mesh.userData.surfMat && mesh.userData.neurMat) {
-      mesh.material = isNeural ? mesh.userData.neurMat : mesh.userData.surfMat;
-    }
-  });
-
-  if (nebulaPoints) nebulaPoints.visible = isNeural;
-  pathwaysGroup.visible = isNeural;
-
-  document.getElementById('modeSurface').classList.toggle('active', !isNeural);
-  document.getElementById('modeNeural').classList.toggle('active', isNeural);
-
-  applyDiseaseToBrain();
-}
-
-document.querySelectorAll('.mode-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    state.viewMode = btn.dataset.mode;
-    applyDisplayMode();
-  });
-});
-
-/* ================================================================
-   RIGHT CURTAIN PANEL CONTROL (AUTO OPEN ON SELECTION)
-   ================================================================ */
-const panelLeft = document.getElementById('panelLeft');
-const panelRight = document.getElementById('panelRight');
-const scrim = document.getElementById('scrim');
-
-function openRightCurtain() {
-  panelRight.classList.add('open');
-}
-function closeRightCurtain() {
-  panelRight.classList.remove('open');
-}
-function openLeftMobile() {
-  panelLeft.classList.add('open');
-  scrim.classList.add('show');
-}
-function closeLeftMobile() {
-  panelLeft.classList.remove('open');
-  scrim.classList.remove('show');
-}
-
-document.getElementById('menuBtn').addEventListener('click', openLeftMobile);
-document.getElementById('closeLeft').addEventListener('click', closeLeftMobile);
-scrim.addEventListener('click', closeLeftMobile);
-
-document.getElementById('closeRight').addEventListener('click', function() {
-  closeRightCurtain();
-});
-
-/* ================================================================
-   RESIZE & CAMERA
-   ================================================================ */
-let vpWidth = 1;
-let vpHeight = 1;
-
-function resize() {
-  const w = viewport.clientWidth;
-  const h = viewport.clientHeight;
-  if (w === 0 || h === 0) return;
-  vpWidth = w;
-  vpHeight = h;
-
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-
-  const aspect = w / h;
-  if (aspect < 0.55) camera.fov = 60;
-  else if (aspect < 0.8) camera.fov = 52;
-  else if (aspect < 1.2) camera.fov = 45;
-  else camera.fov = 38;
-
-  camera.updateProjectionMatrix();
-}
-
-if (window.ResizeObserver) {
-  new ResizeObserver(function() {
-    requestAnimationFrame(resize);
-  }).observe(viewport);
-} else {
-  window.addEventListener('resize', resize);
-}
-
-function resetCamera() {
-  const aspect = vpWidth / vpHeight;
-  const radius = brainState.radius || 1;
-
-  let d;
-  if (aspect < 0.6) d = radius * 3.1;
-  else if (aspect < 0.85) d = radius * 2.65;
-  else if (aspect < 1.25) d = radius * 2.25;
-  else d = radius * 1.95;
-
-  d = Math.max(1.6, Math.min(6.0, d));
-
-  controls.minDistance = radius * 1.15;
-  controls.maxDistance = radius * 5.0;
-
-  // Position camera at lateral-anterior angle to clearly view left hemisphere lobes
-  const targetDir = new THREE.Vector3(-0.78, 0.18, 0.6).normalize();
-  camTween = {
-    from: camera.position.clone(),
-    to: targetDir.multiplyScalar(d),
-    fromT: controls.target.clone(),
-    toT: new THREE.Vector3(0, 0, 0),
-    t: 0
-  };
-}
-
-document.getElementById('resetCamBtn').addEventListener('click', function() {
-  clearSelection();
-  resetCamera();
-});
-
-function focusOn(point) {
-  const worldPt = point.clone().applyMatrix4(brainGroup.matrixWorld);
-  const dir = worldPt.normalize();
-  const radius = brainState.radius || 1;
-  const dist = Math.max(radius * 1.75, 1.65);
-  camTween = {
-    from: camera.position.clone(),
-    to: dir.multiplyScalar(dist),
-    fromT: controls.target.clone(),
-    toT: new THREE.Vector3(0, 0, 0),
-    t: 0
-  };
-}
-
-/* ================================================================
-   RAYCASTING & SELECTION
-   ================================================================ */
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-
-function updatePointer(e) {
-  const r = canvas.getBoundingClientRect();
-  pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-  pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-}
-
-function raycastBeacons() {
-  raycaster.setFromCamera(pointer, camera);
-  const activeProxies = subzoneHitProxies.filter(function(p) {
-    return p.parent && p.parent.visible;
-  });
-  return raycaster.intersectObjects(activeProxies, false);
-}
-
-let downPos = null;
-canvas.addEventListener('pointerdown', function(e) {
-  downPos = { x: e.clientX, y: e.clientY };
-});
-
-canvas.addEventListener('pointermove', function(e) {
-  if (downPos) return;
-  updatePointer(e);
-  const hits = raycastBeacons();
-  if (hits.length > 0) {
-    const id = hits[0].object.userData.id;
-    if (state.hoveredSubzone !== id) {
-      state.hoveredSubzone = id;
-      canvas.style.cursor = 'pointer';
-    }
-  } else if (state.hoveredSubzone) {
-    state.hoveredSubzone = null;
-    canvas.style.cursor = 'grab';
-  }
-});
-
-canvas.addEventListener('pointerup', function(e) {
-  if (!downPos) return;
-  const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
-  downPos = null;
-  if (moved > 10) return;
-
-  updatePointer(e);
-  const hits = raycastBeacons();
-
-  if (hits.length > 0) {
-    onZoneClick(hits[0].object.userData.id);
-    return;
-  }
-
-  // Click directly on brain surface mesh to select corresponding lobe!
-  raycaster.setFromCamera(pointer, camera);
-  const surfHits = raycaster.intersectObjects(brainState.surfaceMeshes, true);
-  if (surfHits.length > 0) {
-    const localPt = surfHits[0].point.clone();
-    brainGroup.worldToLocal(localPt);
-    const lid = classifyLobe(localPt.x, localPt.y, localPt.z);
-    if (REGIONS[lid]) {
-      selectRegion(lid);
-      return;
-    }
-  }
-
-  // Clicked empty background -> clear selection & hide right curtain
-  clearSelection();
-});
-
-function clearSelection() {
-  state.selectedSubzone = null;
-  state.selectedRegion = null;
-  state.currentDisease = null;
-  setStatus('ready', T('ready'));
-  applyDiseaseToBrain();
-  applyHighlight();
-  updateRegionListUI();
-  updateDiseaseListUI();
-  updateSeverityUI();
-  closeRightCurtain();
-}
-
-function selectRegion(rid) {
-  state.selectedRegion = rid;
-  state.selectedSubzone = null;
-  state.currentDisease = null;
-  setStatus('ready', T('ready'));
-  const hit = getSurfaceHit(REGIONS[rid].dir);
-  focusOn(hit.point);
-  applyDiseaseToBrain();
-  applyHighlight();
-  renderAnalytics();
-  updateRegionListUI();
-  updateDiseaseListUI();
-  updateSeverityUI();
-  openRightCurtain();
-  closeLeftMobile();
-}
-
-function onZoneClick(id) {
-  const sz = SUBZONES.find(function(s) { return s.id === id; });
-  if (!sz) return;
-  state.selectedSubzone = id;
-  state.selectedRegion = sz.region;
-  state.currentDisease = null;
-  setStatus('ready', T('ready'));
-  if (subzoneAnchors[id]) focusOn(subzoneAnchors[id].group.position.clone());
-  applyDiseaseToBrain();
-  applyHighlight();
-  renderAnalytics();
-  updateRegionListUI();
-  updateDiseaseListUI();
-  updateSeverityUI();
-  openRightCurtain();
-  closeLeftMobile();
-}
-
-/* ================================================================
-   HIGHLIGHT & FOCUS INDICATOR
-   ================================================================ */
-function applyHighlight() {
-  const activeRegion = state.selectedRegion || state.hoveredRegion;
-
-  if (nebulaUniforms) {
-    nebulaUniforms.uActiveLobe.value = activeRegion ? LOBE_INDEX[activeRegion] : -1.0;
-  }
-
-  Object.keys(subzoneAnchors).forEach(function(id) {
-    const anc = subzoneAnchors[id];
-    const on = !activeRegion || anc.region === activeRegion;
-    anc.group.visible = on;
-  });
-
-  pathwayData.forEach(function(pw) {
-    const isConn = !state.selectedSubzone || pw.a === state.selectedSubzone || pw.b === state.selectedSubzone;
-    pw.line.material.opacity = isConn ? 0.65 : 0.1;
-  });
-
-  Object.keys(htmlLabels).forEach(function(id) {
-    htmlLabels[id].classList.toggle('active', state.selectedSubzone === id);
-  });
-
-  // Update non-clickable Focus Indicator
-  const fv = document.getElementById('focusValue');
-  const fInd = document.getElementById('focusIndicator');
-  if (state.currentDisease) {
-    fv.textContent = state.currentDisease[LANG].name;
-    fInd.style.setProperty('--f-color', state.currentDisease.color);
-  } else if (state.selectedSubzone) {
-    const sz = SUBZONES.find(function(s) { return s.id === state.selectedSubzone; });
-    fv.textContent = sz[LANG].full;
-    fInd.style.setProperty('--f-color', sz.color);
-  } else if (activeRegion) {
-    const r = REGIONS[activeRegion];
-    fv.textContent = r[LANG].name;
-    fInd.style.setProperty('--f-color', r.color);
-  } else {
-    fv.textContent = T('fullBrain');
-    fInd.style.setProperty('--f-color', 'rgba(255,255,255,0.35)');
-  }
-}
-
-/* ================================================================
-   DISEASE EFFECTS
-   ================================================================ */
-function applyDiseaseToBrain() {
-  const d = state.currentDisease;
-  const sev = state.severity / 100;
-
-  brainState.surfaceMeshes.forEach(function(mesh) {
-    if (mesh.material && mesh.material.emissive) {
-      if (!d) {
-        mesh.material.emissive.setHex(0x000000);
-        mesh.material.emissiveIntensity = 0;
-      } else {
-        mesh.material.emissive.setHex(d.hex);
-        mesh.material.emissiveIntensity = sev * 0.38;
-      }
-    }
-  });
-
-  if (nebulaUniforms) {
-    if (d) {
-      nebulaUniforms.uDiseaseColor.value.setHex(d.hex);
-      nebulaUniforms.uDiseaseMix.value = sev;
-    } else {
-      nebulaUniforms.uDiseaseMix.value = 0.0;
-    }
-  }
-
-  if (impulseUniforms) {
-    if (d) {
-      impulseUniforms.uDiseaseColor.value.setHex(d.hex);
-      impulseUniforms.uDiseaseMix.value = sev * 0.85;
-    } else {
-      impulseUniforms.uDiseaseMix.value = 0.0;
-    }
-  }
-
-  const affectedSet = {};
-  if (d) d.affected.forEach(function(id) { affectedSet[id] = true; });
-
-  Object.keys(subzoneAnchors).forEach(function(id) {
-    const anc = subzoneAnchors[id];
-    if (!d) {
-      anc.group.visible = true;
-      anc.outerRing.material.color.copy(anc.color);
-    } else if (affectedSet[id]) {
-      anc.group.visible = true;
-      anc.outerRing.material.color.setHex(d.hex);
-    } else {
-      anc.group.visible = false;
-    }
-  });
-}
-
-/* ================================================================
-   PROJECT 3D LABELS DIRECTLY ONTO ANATOMICAL CORTEX POINTS
-   ================================================================ */
-const _v = new THREE.Vector3();
-const _camDir = new THREE.Vector3();
-const _worldNorm = new THREE.Vector3();
-
-function projectLabels() {
-  const w = vpWidth;
-  const h = vpHeight;
-  const active = state.selectedRegion || state.hoveredRegion;
-
-  Object.keys(htmlLabels).forEach(function(id) {
-    const el = htmlLabels[id];
-    const anc = subzoneAnchors[id];
-    if (!anc || !anc.group.visible || !state.chips.labels) {
-      el.classList.add('hidden');
-      return;
-    }
-
-    const sz = SUBZONES.find(function(s) { return s.id === id; });
-    const isActive = active && sz.region === active;
-    const isSelected = state.selectedSubzone === id;
-    const isHovered = state.hoveredSubzone === id;
-
-    // Occlusion check: hide labels on the far side of the brain unless selected
-    anc.group.getWorldPosition(_v);
-    _worldNorm.copy(anc.normal).transformDirection(brainGroup.matrixWorld).normalize();
-    _camDir.copy(camera.position).sub(_v).normalize();
-    const facing = _worldNorm.dot(_camDir);
-
-    if (facing < -0.15 && !isSelected && !isActive) {
-      el.classList.add('hidden');
-      return;
-    }
-
-    _v.project(camera);
-    if (_v.z > 1) {
-      el.classList.add('hidden');
-      return;
-    }
-
-    el.classList.remove('hidden');
-
-    // Exact screen projection right above the cortical point (no wild radial push!)
-    let x = (_v.x * 0.5 + 0.5) * w;
-    let y = (-_v.y * 0.5 + 0.5) * h - 18;
-
-    x = Math.max(48, Math.min(w - 48, x));
-    y = Math.max(28, Math.min(h - 28, y));
-
-    const scale = (isSelected || isHovered) ? 1.06 : 1;
-    el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) translate(-50%,-50%) scale(' + scale + ')';
-  });
-}
-
-/* ================================================================
-   ANIMATION LOOP & FPS COUNTER
-   ================================================================ */
-const clock = new THREE.Clock();
-const fpsEl = document.getElementById('fpsCounter');
-let frameCount = 0;
-let fpsAccum = 0;
-
-function animate() {
-  requestAnimationFrame(animate);
-  const rawDt = clock.getDelta();
-  const dt = Math.min(rawDt, 0.05);
-  const t = clock.elapsedTime;
-
-  frameCount++;
-  fpsAccum += rawDt;
-  if (fpsAccum >= 0.5) {
-    if (fpsEl) fpsEl.textContent = Math.round(frameCount / fpsAccum) + ' FPS';
-    frameCount = 0;
-    fpsAccum = 0;
-  }
-
-  if (camTween) {
-    camTween.t = Math.min(1, camTween.t + dt * 2.5);
-    const e = 1 - Math.pow(1 - camTween.t, 3);
-    camera.position.lerpVectors(camTween.from, camTween.to, e);
-    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
-    if (camTween.t >= 1) camTween = null;
-  }
-
-  if (nebulaUniforms) nebulaUniforms.uTime.value = t;
-  if (impulseUniforms) impulseUniforms.uTime.value = t;
-
-  Object.keys(subzoneAnchors).forEach(function(id) {
-    const anc = subzoneAnchors[id];
-    if (!anc.group.visible) return;
-    const isSel = state.selectedSubzone === id;
-    const isHov = state.hoveredSubzone === id;
-    const pulse = 1 + Math.sin(t * 2.8 + id.length) * 0.1;
-    const s = isSel ? pulse * 1.45 : (isHov ? pulse * 1.25 : pulse);
-    anc.outerRing.scale.setScalar(s);
-  });
-
-  if (state.chips.rotate && brainState.loaded) {
-    brainGroup.rotation.y += dt * 0.18;
-  }
-
-  controls.update();
-  renderer.render(scene, camera);
-  projectLabels();
-}
-
-/* ================================================================
-   UI - LEFT PANEL LISTS
-   ================================================================ */
-function renderRegionList() {
-  const el = document.getElementById('regionList');
-  el.innerHTML = '';
-  Object.keys(REGIONS).forEach(function(rid) {
-    const r = REGIONS[rid];
-    const btn = document.createElement('button');
-    btn.className = 'region-item';
-    btn.dataset.region = r.id;
-    btn.style.setProperty('--r-color', r.color);
-    btn.innerHTML =
-      '<span class="region-dot"></span>' +
-      '<span class="region-info">' +
-        '<span class="region-name">' + r[LANG].name + '</span>' +
-        '<span class="region-meta">' + r[LANG].short + '</span>' +
-      '</span>' +
-      '<span class="region-ba">' + r.ba + '</span>';
-
-    btn.addEventListener('pointerenter', function() {
-      if (!state.selectedRegion) {
-        state.hoveredRegion = r.id;
-        applyHighlight();
-      }
-    });
-    btn.addEventListener('pointerleave', function() {
-      if (state.hoveredRegion === r.id) {
-        state.hoveredRegion = null;
-        applyHighlight();
-      }
-    });
-    btn.addEventListener('click', function() {
-      if (state.selectedRegion === r.id && !state.selectedSubzone) {
-        clearSelection();
-        resetCamera();
-      } else {
-        selectRegion(r.id);
-      }
-    });
-    el.appendChild(btn);
-  });
-  updateRegionListUI();
-}
-
-function updateRegionListUI() {
-  document.querySelectorAll('.region-item').forEach(function(el) {
-    el.classList.toggle('active', el.dataset.region === state.selectedRegion);
-  });
-}
-
-function renderDiseaseList() {
-  const el = document.getElementById('diseaseList');
-  el.innerHTML = '';
-
-  const h = document.createElement('button');
-  h.className = 'disease-item';
-  h.dataset.disease = 'healthy';
-  h.style.setProperty('--d-color', '#10b981');
-  h.innerHTML =
-    '<span class="disease-icon" style="background:#10b981">+</span>' +
-    '<span class="disease-body">' +
-      '<span class="disease-name">' + T('healthy') + '</span>' +
-      '<span class="disease-desc">' + T('healthyDesc') + '</span>' +
-    '</span>';
-  h.addEventListener('click', function() { selectDisease(null); });
-  el.appendChild(h);
-
-  DISEASES.forEach(function(d) {
-    const btn = document.createElement('button');
-    btn.className = 'disease-item';
-    btn.dataset.disease = d.id;
-    btn.style.setProperty('--d-color', d.color);
-    btn.innerHTML =
-      '<span class="disease-icon">' + d.icon + '</span>' +
-      '<span class="disease-body">' +
-        '<span class="disease-name">' + d[LANG].name + '</span>' +
-        '<span class="disease-desc">' + d[LANG].short + '</span>' +
-      '</span>';
-    btn.addEventListener('click', function() { selectDisease(d.id); });
-    el.appendChild(btn);
-  });
-  updateDiseaseListUI();
-}
-
-function updateDiseaseListUI() {
-  const active = state.currentDisease ? state.currentDisease.id : 'healthy';
-  document.querySelectorAll('.disease-item').forEach(function(el) {
-    el.classList.toggle('active', el.dataset.disease === active);
-  });
-}
-
-function selectDisease(id) {
-  if (id) {
-    state.currentDisease = DISEASES.find(function(d) { return d.id === id; });
-    state.selectedRegion = null;
-    state.selectedSubzone = null;
-    setStatus('alert', T('alert'));
-    document.getElementById('severityContainer').style.display = 'block';
-    applySeverity(state.severity);
-    openRightCurtain();
-  } else {
-    clearSelection();
-  }
-  updateDiseaseListUI();
-  updateRegionListUI();
-  closeLeftMobile();
-}
-
-/* ================================================================
-   SEVERITY
-   ================================================================ */
-function updateSeverityUI() {
-  document.getElementById('severityContainer').style.display = state.currentDisease ? 'block' : 'none';
-}
-
-function applySeverity(value) {
-  state.severity = value;
-  const slider = document.getElementById('severitySlider');
-  const valEl = document.getElementById('severityValue');
-  const stages = document.getElementById('severityStages');
-
-  slider.value = value;
-  slider.style.setProperty('--p', value + '%');
-  valEl.textContent = value + '%';
-
-  const idx = Math.min(3, Math.floor(value / 25));
-  const children = stages.children;
-  for (let i = 0; i < children.length; i++) {
-    children[i].classList.toggle('active', i === idx);
-  }
-
-  applyDiseaseToBrain();
-  applyHighlight();
-  renderAnalytics();
-}
-
-document.getElementById('severitySlider').addEventListener('input', function(e) {
-  applySeverity(+e.target.value);
-});
-
-/* ================================================================
-   RIGHT CURTAIN ANALYTICS RENDER
-   ================================================================ */
-function renderAnalytics() {
-  const el = document.getElementById('analyticsContent');
-  if (state.currentDisease) { renderDiseaseAnalytics(el); return; }
-  if (state.selectedSubzone) { renderSubzoneAnalytics(el); return; }
-  if (state.selectedRegion) { renderRegionAnalytics(el); return; }
-  el.innerHTML = '';
-}
-
-function renderRegionAnalytics(el) {
-  const r = REGIONS[state.selectedRegion];
-  const d = r[LANG];
-  const subs = SUBZONES.filter(function(s) { return s.region === r.id; });
-
-  el.innerHTML =
-    '<div class="analytics-header">' +
-      '<div><h2>' + d.name + '</h2><span class="subtitle">' + d.latin + '</span></div>' +
-      '<span class="ba-badge">' + r.ba + '</span>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">' + T('anatomy') + '</div>' +
-      '<p>' + d.desc + '</p>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">' + T('hemispheres') + '</div>' +
-      '<p>' + d.hemi + '</p>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">' + T('functions') + '</div>' +
-      '<div class="tags">' + d.functions.map(function(f) { return '<span class="tag">' + f + '</span>'; }).join('') + '</div>' +
-    '</div>' +
-    (subs.length ? (
-      '<div class="card">' +
-        '<div class="card-title">' + T('subzones') + '<span class="badge">' + subs.length + '</span></div>' +
-        subs.map(function(s) {
-          return '<button class="sub-item" data-sub="' + s.id + '">' +
-            '<span class="pin" style="background:' + s.color + '"></span>' +
-            '<span class="sub-item-info">' +
-              '<span class="sub-item-title">' + s[LANG].full + '</span>' +
-              '<span class="sub-item-sub">' + s.ba + '</span>' +
-            '</span>' +
-            '<span class="go">→</span>' +
-          '</button>';
-        }).join('') +
-      '</div>'
-    ) : '');
-
-  el.querySelectorAll('.sub-item').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      onZoneClick(btn.dataset.sub);
-    });
-  });
-}
-
-function renderSubzoneAnalytics(el) {
-  const sz = SUBZONES.find(function(s) { return s.id === state.selectedSubzone; });
-  if (!sz) return;
-  const d = sz[LANG];
-  const region = REGIONS[sz.region];
-
-  const connectedTracts = PATHWAYS.filter(function(pw) {
-    return pw.a === sz.id || pw.b === sz.id;
-  });
-
-  el.innerHTML =
-    '<button class="back-btn" id="backToLobeBtn">← ' + T('backToLobe') + ' (' + region[LANG].name + ')</button>' +
-    '<div class="analytics-header">' +
-      '<div><h2>' + d.full + '</h2><span class="subtitle">' + region[LANG].name + ' · ' + region[LANG].latin + '</span></div>' +
-      '<span class="ba-badge">' + sz.ba + '</span>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">' + T('anatomy') + '</div>' +
-      '<p>' + d.note + '</p>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">' + T('hemispheres') + '</div>' +
-      '<p>' + region[LANG].hemi + '</p>' +
-    '</div>' +
-    (connectedTracts.length ? (
-      '<div class="card">' +
-        '<div class="card-title">' + T('connections') + '<span class="badge">' + connectedTracts.length + '</span></div>' +
-        connectedTracts.map(function(tr) {
-          const targetId = tr.a === sz.id ? tr.b : tr.a;
-          const targetSz = SUBZONES.find(function(s) { return s.id === targetId; });
-          if (!targetSz) return '';
-          return '<button class="sub-item" data-sub="' + targetSz.id + '">' +
-            '<span class="pin" style="background:' + targetSz.color + '"></span>' +
-            '<span class="sub-item-info">' +
-              '<span class="sub-item-title">' + targetSz[LANG].full + '</span>' +
-              '<span class="sub-item-sub">' + tr.name[LANG] + '</span>' +
-            '</span>' +
-            '<span class="go">→</span>' +
-          '</button>';
-        }).join('') +
-      '</div>'
-    ) : '');
-
-  const backBtn = document.getElementById('backToLobeBtn');
-  if (backBtn) {
-    backBtn.addEventListener('click', function() {
-      selectRegion(region.id);
-    });
-  }
-
-  el.querySelectorAll('.sub-item').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      onZoneClick(btn.dataset.sub);
-    });
-  });
-}
-
-function renderDiseaseAnalytics(el) {
-  const d = state.currentDisease;
-  const data = d[LANG];
-  const sev = state.severity;
-  const stageIdx = Math.min(3, Math.floor(sev / 25));
-  const stageLabels = ['I', 'II', 'III', 'IV'];
-  const stageLabel = stageLabels[stageIdx];
-
-  const affectedZones = d.affected.map(function(id) {
-    return SUBZONES.find(function(s) { return s.id === id; });
-  }).filter(Boolean);
-
-  const metricMap = [
-    ['cognitive', 'metricCognitive'],
-    ['motor', 'metricMotor'],
-    ['language', 'metricLanguage'],
-    ['sensory', 'metricSensory'],
-    ['memory', 'metricMemory'],
-    ['connectivity', 'metricConnectivity']
-  ];
-
-  const metricsHtml = metricMap.map(function(pair) {
-    const key = pair[0];
-    const labelKey = pair[1];
-    const base = d.en.metrics[key];
-    const impairment = 1 - base;
-    const current = Math.max(0, base - impairment * (sev / 100));
-    const pct = Math.round(current * 100);
-    const cls = current > 0.72 ? 'good' : (current > 0.45 ? 'warn' : 'bad');
-    return '<div class="metric-row">' +
-      '<div class="metric-top">' +
-        '<span class="metric-label">' + T(labelKey) + '</span>' +
-        '<span class="metric-value ' + cls + '">' + pct + '%</span>' +
-      '</div>' +
-      '<div class="metric-bar"><div class="metric-fill ' + cls + '" style="width:' + pct + '%"></div></div>' +
-    '</div>';
-  }).join('');
-
-  const progBar = data.stages.map(function(_, i) {
-    const cls = i === stageIdx ? 'current' : (i < stageIdx ? 'past' : '');
-    return '<div class="progression-step ' + cls + '"></div>';
-  }).join('');
-
-  const progLabels = data.stages.map(function(_, i) {
-    return '<span class="' + (i === stageIdx ? 'active' : '') + '">' + (i + 1) + '</span>';
-  }).join('');
-
-  el.innerHTML =
-    '<div class="analytics-header"><div><h2>' + data.name + '</h2><span class="subtitle">' + data.short + '</span></div></div>' +
-    '<div class="card">' +
-      '<div class="card-title">Stage ' + stageLabel + '<span class="badge">' + sev + '%</span></div>' +
-      '<p>' + data.desc + '</p></div>' +
-    '<div class="card"><div class="card-title">' + T('progression') + '</div>' +
-      '<div class="progression-bar">' + progBar + '</div>' +
-      '<div class="progression-labels">' + progLabels + '</div>' +
-      '<p style="font-size:0.78rem"><strong>' + data.stages[stageIdx] + '</strong></p></div>' +
-    '<div class="card"><div class="card-title">' + T('mechanism') + '</div><p>' + data.mechanism + '</p></div>' +
-    '<div class="card"><div class="card-title">' + T('affected') + '</div>' +
-      affectedZones.map(function(sz) {
-        return '<button class="sub-item" data-sub="' + sz.id + '">' +
-          '<span class="pin" style="background:' + d.color + '"></span>' +
-          '<span class="sub-item-info">' +
-            '<span class="sub-item-title">' + sz[LANG].full + '</span>' +
-            '<span class="sub-item-sub">' + sz.ba + '</span>' +
-          '</span>' +
-          '<span class="go">→</span>' +
-        '</button>';
-      }).join('') +
-    '</div>' +
-    '<div class="card"><div class="card-title">' + T('neuro') + '</div>' +
-      '<div class="tags">' + data.neuro.map(function(n) { return '<span class="tag warn">' + n + '</span>'; }).join('') + '</div></div>' +
-    '<div class="card"><div class="card-title">' + T('symptoms') + '</div>' +
-      '<div class="tags">' + data.symptoms.map(function(s) { return '<span class="tag danger">' + s + '</span>'; }).join('') + '</div></div>' +
-    '<div class="card"><div class="card-title">' + T('metrics') + '</div>' + metricsHtml + '</div>';
-
-  el.querySelectorAll('.sub-item').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      onZoneClick(btn.dataset.sub);
-    });
-  });
-}
-
-/* ================================================================
-   STATUS, CHIPS, THEME & LANGUAGE
-   ================================================================ */
-function setStatus(type, text) {
-  const el = document.getElementById('statusIndicator');
-  el.className = 'status-indicator' + (type === 'alert' ? ' danger' : '');
-  el.textContent = text;
-}
-
-document.querySelectorAll('.chip').forEach(function(chip) {
-  chip.addEventListener('click', function() {
-    const key = chip.dataset.toggle;
-    state.chips[key] = !state.chips[key];
-    chip.classList.toggle('on', state.chips[key]);
-    if (key === 'labels') projectLabels();
-  });
-});
-
-function setTheme(theme, save) {
-  if (save === undefined) save = true;
-  document.documentElement.setAttribute('data-theme', theme);
-  const icon = document.getElementById('themeIcon');
-  if (theme === 'light') {
-    icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
-  } else {
-    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-  }
-  if (save) {
-    try { localStorage.setItem('nc-theme', theme); } catch (e) {}
-  }
-}
-
-document.getElementById('themeBtn').addEventListener('click', function() {
-  const cur = document.documentElement.getAttribute('data-theme');
-  setTheme(cur === 'dark' ? 'light' : 'dark');
-});
-
-function setLanguage(lang) {
-  LANG = lang;
-  document.documentElement.setAttribute('data-lang', lang);
-
-  document.getElementById('modeSurface').textContent = T('modeSurface');
-  document.getElementById('modeNeural').textContent = T('modeNeural');
-  document.getElementById('chipLabels').textContent = T('labels');
-  document.getElementById('chipRotate').textContent = T('rotate');
-  document.getElementById('focusTag').textContent = T('focus');
-  document.getElementById('lobesTitle').textContent = T('lobes');
-  document.getElementById('diseasesTitle').textContent = T('diseases');
-  document.getElementById('severityLabel').textContent = T('severity');
-  document.getElementById('leftTitle').textContent = T('atlas');
-  document.getElementById('rightTitle').textContent = T('analytics');
-  setStatus(state.currentDisease ? 'alert' : 'ready', state.currentDisease ? T('alert') : T('ready'));
-
-  Object.keys(htmlLabels).forEach(function(id) {
-    const el = htmlLabels[id];
-    const sz = SUBZONES.find(function(s) { return s.id === id; });
-    if (sz) {
-      const nameEl = el.querySelector('.lname');
-      if (nameEl) nameEl.textContent = sz[LANG].name;
-    }
-  });
-
-  renderRegionList();
-  renderDiseaseList();
-  applyHighlight();
-  renderAnalytics();
-}
-
-document.querySelectorAll('.lang-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    setLanguage(btn.dataset.lang);
-  });
-});
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeLeftMobile();
-    clearSelection();
-  }
-});
-
-/* ================================================================
-   INIT
-   ================================================================ */
-function init() {
-  let savedTheme = 'dark';
-  try {
-    const stored = localStorage.getItem('nc-theme');
-    if (stored === 'light' || stored === 'dark') savedTheme = stored;
-  } catch (e) {}
-  setTheme(savedTheme, false);
-  setLanguage('ru');
-
-  resize();
-  animate();
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-</script>
-</body>
-</html>
